@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, TrendingUp, Sparkles } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
 import BottomNav from '../BottomNav';
@@ -154,9 +154,9 @@ const ConsumerHomeScreen = ({
             </div>
           </div>
           <div className="flex items-center gap-2 bg-background/10 rounded-xl px-3 py-2 mb-4">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-sm font-medium">{rewards.streak} day streak</span>
-            <span className="text-xs bg-background/20 px-2 py-0.5 rounded-full ml-auto">2x points</span>
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">12 jobs completed</span>
+            <span className="text-xs bg-background/20 px-2 py-0.5 rounded-full ml-auto">Top 10%</span>
           </div>
           <button 
             onClick={() => onNavigate('rewards')} 
@@ -297,6 +297,20 @@ const ConsumerHomeScreen = ({
           </motion.div>
         )}
       </div>
+
+      {/* Floating Action Button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => { onResetRequestForm(); onNavigate('post-request'); }}
+        className="fixed bottom-24 right-6 w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center z-40"
+        style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}
+      >
+        <Plus className="w-6 h-6" />
+      </motion.button>
 
       <BottomNav active="home" userType="consumer" onNavigate={onNavigate} />
     </div>
