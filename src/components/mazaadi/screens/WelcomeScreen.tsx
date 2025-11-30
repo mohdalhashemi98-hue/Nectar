@@ -1,12 +1,11 @@
 import { ChevronRight, Home, Briefcase, Shield, Award, Gift } from 'lucide-react';
-import { UserType, ScreenType } from '@/types/mazaadi';
+import { UserType } from '@/types/mazaadi';
 
 interface WelcomeScreenProps {
   onSelectUserType: (type: UserType) => void;
-  onNavigate: (screen: ScreenType) => void;
 }
 
-const WelcomeScreen = ({ onSelectUserType, onNavigate }: WelcomeScreenProps) => (
+const WelcomeScreen = ({ onSelectUserType }: WelcomeScreenProps) => (
   <div className="flex flex-col h-screen bg-gradient-to-br from-background via-card to-primary/5 relative overflow-hidden">
     {/* Decorative blobs */}
     <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl animate-pulse-scale" />
@@ -36,7 +35,7 @@ const WelcomeScreen = ({ onSelectUserType, onNavigate }: WelcomeScreenProps) => 
       
       <div className="w-full max-w-sm space-y-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
         <button
-          onClick={() => { onSelectUserType('consumer'); onNavigate('consumer-home'); }}
+          onClick={() => onSelectUserType('consumer')}
           className="group w-full bg-card border-2 border-border hover:border-primary py-5 px-5 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-center justify-between">
@@ -54,7 +53,7 @@ const WelcomeScreen = ({ onSelectUserType, onNavigate }: WelcomeScreenProps) => 
         </button>
 
         <button
-          onClick={() => { onSelectUserType('vendor'); onNavigate('vendor-home'); }}
+          onClick={() => onSelectUserType('vendor')}
           className="group w-full bg-gradient-primary text-primary-foreground py-5 px-5 rounded-3xl shadow-lg hover:shadow-glow transition-all duration-300"
         >
           <div className="flex items-center justify-between">
