@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap, LucideIcon } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
+import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
 
 const categoryIcons: Record<string, LucideIcon> = {
   Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap
@@ -45,7 +47,14 @@ const ConsumerHomeScreen = ({
   onSelectJob,
   onResetRequestForm
 }: ConsumerHomeScreenProps) => {
-  const searchResults = searchQuery.length > 0 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const searchResults = searchQuery.length > 0
     ? categories.filter(c => 
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.description.toLowerCase().includes(searchQuery.toLowerCase())
@@ -53,6 +62,10 @@ const ConsumerHomeScreen = ({
     : [];
 
   const activeJobs = jobs.filter(j => j.status === 'In Progress' || j.status === 'Awaiting Completion');
+
+  if (isLoading) {
+    return <ConsumerHomeSkeleton />;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-background">
