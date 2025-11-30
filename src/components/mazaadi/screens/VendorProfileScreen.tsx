@@ -39,9 +39,9 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-foreground text-background relative overflow-hidden pb-24">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-background/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
+      <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden pb-24">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
         
         <div className="px-6 py-5 relative z-10">
           <motion.div 
@@ -49,12 +49,12 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between"
           >
-            <button onClick={onBack} className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors">
+            <button onClick={onBack} className="p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
             <button 
               onClick={handleToggleFavorite}
-              className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
+              className="p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
             >
               <Heart className={`w-5 h-5 ${vendor.favorite ? 'fill-current' : ''}`} />
             </button>
@@ -78,14 +78,14 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
               <div className="flex items-center gap-2 mb-1">
                 <h1 className="font-display text-xl font-bold text-foreground">{vendor.name}</h1>
                 {vendor.verified && (
-                  <div className="w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
-                    <CheckCircle className="w-3 h-3 text-background" />
+                  <div className="w-5 h-5 bg-verified rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-3 h-3 text-verified-foreground" />
                   </div>
                 )}
               </div>
               <p className="text-muted-foreground text-sm">{vendor.specialty}</p>
               <div className="flex items-center gap-1 mt-1">
-                <Star className="w-4 h-4 text-foreground fill-foreground" />
+                <Star className="w-4 h-4 text-primary fill-primary" />
                 <span className="font-bold text-foreground">{vendor.rating}</span>
                 <span className="text-muted-foreground text-sm">({vendor.reviews} reviews)</span>
               </div>
@@ -113,14 +113,14 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             <Button 
               onClick={handleContact}
               variant="outline" 
-              className="flex-1 border-foreground/20 hover:bg-secondary"
+              className="flex-1 border-primary/20 hover:bg-primary/10"
             >
               <MessageCircle className="w-4 h-4 mr-2" />
               Message
             </Button>
             <Button 
               onClick={handleHireNow}
-              className="flex-1 bg-foreground text-background hover:bg-foreground/90"
+              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Hire Now
             </Button>
@@ -215,7 +215,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                   <div className="text-xs text-muted-foreground">{work.date}</div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Star className="w-3 h-3 text-foreground fill-foreground" />
+                  <Star className="w-3 h-3 text-primary fill-primary" />
                   <span className="text-sm font-bold text-foreground">{work.rating}</span>
                 </div>
               </div>
@@ -229,7 +229,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
         <div className="flex gap-3">
           <Button 
             variant="outline" 
-            className="flex-1 border-foreground/20"
+            className="flex-1 border-primary/20"
             onClick={() => window.open(`tel:${vendor.phone}`)}
           >
             <Phone className="w-4 h-4 mr-2" />
@@ -237,7 +237,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </Button>
           <Button 
             onClick={handleHireNow}
-            className="flex-1 bg-foreground text-background hover:bg-foreground/90"
+            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Quick Hire
           </Button>

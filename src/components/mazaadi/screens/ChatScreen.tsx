@@ -60,7 +60,7 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
         
         <div className="flex items-center gap-3 flex-1">
           <div className="relative">
-            <div className="w-12 h-12 rounded-2xl bg-foreground flex items-center justify-center text-background font-bold">
+            <div className="w-12 h-12 rounded-3xl bg-primary flex items-center justify-center text-primary-foreground font-bold">
               {conversation.avatar}
             </div>
             {conversation.online && (
@@ -108,9 +108,9 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
           >
             <div className={`max-w-[80%] ${msg.sender === 'user' ? 'order-2' : 'order-1'}`}>
               <div
-                className={`px-4 py-3 rounded-2xl ${
+                className={`px-4 py-3 rounded-3xl ${
                   msg.sender === 'user'
-                    ? 'bg-foreground text-background rounded-br-md'
+                    ? 'bg-primary text-primary-foreground rounded-br-md'
                     : 'bg-card border border-border text-foreground rounded-bl-md'
                 }`}
               >
@@ -164,10 +164,10 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
             disabled={!message.trim()}
             className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
               message.trim()
-                ? 'bg-foreground text-background'
+                ? 'bg-primary text-primary-foreground'
                 : 'bg-secondary text-muted-foreground'
             }`}
-            style={{ boxShadow: message.trim() ? 'var(--shadow-md)' : 'none' }}
+            style={{ boxShadow: message.trim() ? 'var(--shadow-golden)' : 'none' }}
           >
             <Send className="w-5 h-5" />
           </motion.button>
