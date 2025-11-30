@@ -18,9 +18,9 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-foreground text-background p-6 pb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-background/5 rounded-full blur-xl" />
+      <div className="bg-gradient-golden text-primary-foreground p-6 pb-20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/10 rounded-full blur-xl" />
         
         <div className="relative z-10">
           <motion.div 
@@ -30,11 +30,11 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
           >
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">Messages</h1>
-              <p className="opacity-60 text-sm">
+              <p className="opacity-70 text-sm">
                 {unreadCount > 0 ? `${unreadCount} unread messages` : 'All caught up!'}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-background/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-3xl bg-primary-foreground/20 flex items-center justify-center">
               <MessageSquare className="w-6 h-6" />
             </div>
           </motion.div>
@@ -51,14 +51,14 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
               { icon: MessageSquare, value: unreadCount, label: 'Unread' },
               { icon: MessageSquare, value: conversations.length, label: 'Total' }
             ].map((stat, idx) => (
-              <div key={idx} className="flex-1 bg-background/10 rounded-2xl p-3">
+              <div key={idx} className="flex-1 bg-primary-foreground/20 rounded-3xl p-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-background/10 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
                     <stat.icon className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="font-display text-xl font-bold">{stat.value}</p>
-                    <p className="text-[10px] opacity-60">{stat.label}</p>
+                    <p className="text-[10px] opacity-70">{stat.label}</p>
                   </div>
                 </div>
               </div>
@@ -72,11 +72,11 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
             transition={{ delay: 0.15 }}
             className="relative"
           >
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-60" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-70" />
             <input
               type="text"
               placeholder="Search conversations..."
-              className="w-full pl-12 pr-4 py-3 rounded-2xl bg-background/10 backdrop-blur-sm placeholder:opacity-60 border border-background/10 focus:outline-none focus:border-background/30 transition-colors text-background"
+              className="w-full pl-12 pr-4 py-3 rounded-3xl bg-primary-foreground/20 backdrop-blur-sm placeholder:opacity-70 border border-primary-foreground/10 focus:outline-none focus:border-primary-foreground/30 transition-colors text-primary-foreground"
             />
           </motion.div>
         </div>
@@ -108,7 +108,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
               <div className="flex items-center gap-4">
                 {/* Avatar */}
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-2xl bg-foreground flex items-center justify-center text-background font-bold text-lg">
+                  <div className="w-14 h-14 rounded-3xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
                     {conversation.avatar}
                   </div>
                   {conversation.online && (
@@ -124,7 +124,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
                     </h3>
                     <span className={`text-xs ${
                       conversation.unread 
-                        ? 'bg-foreground text-background px-2 py-0.5 rounded-full font-medium' 
+                        ? 'bg-primary text-primary-foreground px-2 py-0.5 rounded-full font-medium' 
                         : 'text-muted-foreground'
                     }`}>
                       {conversation.time}
@@ -135,7 +135,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
                       {conversation.lastMessage}
                     </p>
                     {conversation.unread && (
-                      <div className="w-2.5 h-2.5 rounded-full bg-foreground flex-shrink-0" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary flex-shrink-0" />
                     )}
                   </div>
                 </div>

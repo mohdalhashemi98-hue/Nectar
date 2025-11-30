@@ -170,7 +170,7 @@ const VendorHomeScreen = ({
                 initial={{ height: 0 }}
                 animate={{ height: `${height}%` }}
                 transition={{ delay: 0.3 + idx * 0.05, duration: 0.4 }}
-                className={`w-full rounded-t-lg ${idx === 5 ? 'bg-foreground' : 'bg-foreground/20'}`}
+                className={`w-full rounded-t-lg ${idx === 5 ? 'bg-primary' : 'bg-primary/20'}`}
               />
               <span className="text-[10px] text-muted-foreground">
                 {['M', 'T', 'W', 'T', 'F', 'S', 'S'][idx]}

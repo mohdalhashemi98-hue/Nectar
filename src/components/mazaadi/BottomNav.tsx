@@ -41,13 +41,13 @@ const BottomNav = ({ active, userType, onNavigate }: BottomNavProps) => {
               onClick={() => onNavigate(item.screen)}
               whileTap={{ scale: 0.9 }}
               className={`relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-200 ${
-                isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground/70'
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary/70'
               }`}
             >
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-secondary rounded-xl"
+                  className="absolute inset-0 bg-primary/10 rounded-xl"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}

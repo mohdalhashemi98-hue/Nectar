@@ -29,9 +29,9 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-foreground text-background relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-background/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
+      <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
         
         <div className="px-6 py-5 relative z-10">
           <motion.div 
@@ -39,7 +39,7 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4 mb-5"
           >
-            <button onClick={onBack} className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors">
+            <button onClick={onBack} className="p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
             <h1 className="font-display text-xl font-bold">Company Profile</h1>
@@ -50,32 +50,32 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-background/10 rounded-3xl p-5"
+            className="bg-primary-foreground/20 rounded-3xl p-5"
           >
             <div className="flex items-start gap-4">
               <div className="relative">
-                <div className="w-20 h-20 bg-background text-foreground rounded-2xl flex items-center justify-center text-2xl font-bold">
+                <div className="w-20 h-20 bg-primary-foreground text-primary rounded-2xl flex items-center justify-center text-2xl font-bold">
                   AM
                 </div>
-                <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-background/20 rounded-full flex items-center justify-center">
+                <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary-foreground/30 rounded-full flex items-center justify-center">
                   <Camera className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="flex-1">
                 <h2 className="text-lg font-bold">Al-Mansouri Services</h2>
-                <p className="opacity-60 text-sm mb-2">Professional Home Services</p>
+                <p className="opacity-70 text-sm mb-2">Professional Home Services</p>
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 bg-background/10 px-2 py-1 rounded-lg">
-                    <Star className="w-3.5 h-3.5 fill-background" />
+                  <div className="flex items-center gap-1 bg-primary-foreground/20 px-2 py-1 rounded-lg">
+                    <Star className="w-3.5 h-3.5 fill-primary-foreground" />
                     <span className="text-sm font-bold">4.9</span>
                   </div>
-                  <span className="opacity-60 text-xs">• 156 reviews</span>
+                  <span className="opacity-70 text-xs">• 156 reviews</span>
                   <span className="text-xs flex items-center gap-1">
                     <CheckCircle className="w-3 h-3" /> Verified
                   </span>
                 </div>
               </div>
-              <button className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors">
+              <button className="p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors">
                 <Edit2 className="w-4 h-4" />
               </button>
             </div>
@@ -87,9 +87,9 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
                 { value: '500+', label: 'Jobs' },
                 { value: '98%', label: 'Success' },
               ].map((stat, idx) => (
-                <div key={idx} className="bg-background/10 rounded-xl p-3 text-center">
+                <div key={idx} className="bg-primary-foreground/20 rounded-xl p-3 text-center">
                   <div className="font-display text-lg font-bold">{stat.value}</div>
-                  <div className="text-xs opacity-60">{stat.label}</div>
+                  <div className="text-xs opacity-70">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -129,7 +129,7 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display text-lg font-bold text-foreground">Our Services</h3>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-foreground text-background rounded-xl text-sm font-semibold hover:bg-foreground/90 transition-colors">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors">
               <Plus className="w-4 h-4" />
               Add
             </button>
@@ -202,11 +202,11 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
               <motion.div 
                 key={idx}
                 whileHover={{ scale: 1.02 }}
-                className="aspect-square bg-foreground rounded-2xl flex items-center justify-center relative overflow-hidden group cursor-pointer"
+                className="aspect-square bg-primary rounded-2xl flex items-center justify-center relative overflow-hidden group cursor-pointer"
               >
-                <span className="text-background font-semibold text-sm">{item.label}</span>
-                <button className="absolute bottom-2 right-2 w-7 h-7 bg-background/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Plus className="w-4 h-4 text-background" />
+                <span className="text-primary-foreground font-semibold text-sm">{item.label}</span>
+                <button className="absolute bottom-2 right-2 w-7 h-7 bg-primary-foreground/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Plus className="w-4 h-4 text-primary-foreground" />
                 </button>
               </motion.div>
             ))}

@@ -47,15 +47,15 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
   if (authScreen === 'otp') {
     return (
-      <div className="flex flex-col h-screen bg-foreground">
+      <div className="flex flex-col h-screen bg-gradient-golden">
         <div className="flex-1 flex flex-col justify-center px-6">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => setAuthScreen('signup')} 
-            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-background" />
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
           </motion.button>
 
           <motion.div 
@@ -63,11 +63,11 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-background/10 rounded-3xl mb-4">
-              <Smartphone className="w-10 h-10 text-background" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-foreground/20 rounded-3xl mb-4">
+              <Smartphone className="w-10 h-10 text-primary-foreground" />
             </div>
-            <h1 className="font-display text-3xl font-bold text-background">Verify Phone</h1>
-            <p className="text-background/60 mt-2">
+            <h1 className="font-display text-3xl font-bold text-primary-foreground">Verify Phone</h1>
+            <p className="text-primary-foreground/70 mt-2">
               Enter the 6-digit code sent to<br />{authData.phone || '+971 50 XXX XXXX'}
             </p>
           </motion.div>
@@ -85,7 +85,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
                   key={idx}
                   type="text"
                   maxLength={1}
-                  className="w-12 h-14 text-center text-2xl font-bold bg-secondary border-2 border-transparent rounded-xl focus:border-foreground focus:outline-none transition-colors"
+                  className="w-12 h-14 text-center text-2xl font-bold bg-secondary border-2 border-transparent rounded-xl focus:border-primary focus:outline-none transition-colors"
                 />
               ))}
             </div>
@@ -100,7 +100,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
             <div className="text-center">
               <span className="text-muted-foreground">Didn't receive code? </span>
-              <button className="text-foreground font-semibold hover:underline">Resend</button>
+              <button className="text-primary font-semibold hover:underline">Resend</button>
             </div>
           </motion.div>
         </div>
@@ -110,15 +110,15 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
   if (authScreen === 'signup') {
     return (
-      <div className="flex flex-col h-screen bg-foreground">
+      <div className="flex flex-col h-screen bg-gradient-golden">
         <div className="flex-1 flex flex-col justify-center px-6">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => setAuthScreen('login')} 
-            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-background" />
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
           </motion.button>
           
           <motion.div 
@@ -126,8 +126,8 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <h1 className="font-display text-3xl font-bold text-background">Create Account</h1>
-            <p className="text-background/60 mt-1">
+            <h1 className="font-display text-3xl font-bold text-primary-foreground">Create Account</h1>
+            <p className="text-primary-foreground/70 mt-1">
               {userType === 'vendor' ? 'Join as a Professional' : 'Join Nectar today'}
             </p>
           </motion.div>
@@ -212,7 +212,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
             <div className="mt-6 text-center">
               <span className="text-muted-foreground">Already have an account? </span>
-              <button onClick={() => setAuthScreen('login')} className="text-foreground font-semibold hover:underline">Log In</button>
+              <button onClick={() => setAuthScreen('login')} className="text-primary font-semibold hover:underline">Log In</button>
             </div>
           </motion.div>
         </div>
@@ -221,16 +221,16 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
   }
 
   return (
-    <div className="flex flex-col h-screen bg-foreground">
+    <div className="flex flex-col h-screen bg-gradient-golden">
       <div className="flex-1 flex flex-col justify-center px-6">
         {onBack && (
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={onBack} 
-            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-background" />
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
           </motion.button>
         )}
         
@@ -240,8 +240,8 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
           className="text-center mb-8"
         >
           <img src={nectarLogo} alt="Nectar" className="w-20 h-20 mx-auto mb-4 object-contain" />
-          <h1 className="font-display text-3xl font-bold text-background">Nectar</h1>
-          <p className="text-background/60 mt-1">
+          <h1 className="font-display text-3xl font-bold text-primary-foreground">Nectar</h1>
+          <p className="text-primary-foreground/70 mt-1">
             {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}
           </p>
         </motion.div>
@@ -288,7 +288,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
               </div>
             </div>
 
-            <button className="text-sm text-muted-foreground font-medium hover:text-foreground transition-colors">
+            <button className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors">
               Forgot password?
             </button>
 
@@ -305,7 +305,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
             <span className="text-muted-foreground">Don't have an account? </span>
             <button
               onClick={() => setAuthScreen('signup')}
-              className="text-foreground font-semibold hover:underline"
+              className="text-primary font-semibold hover:underline"
             >
               Sign Up
             </button>
