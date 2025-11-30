@@ -1,16 +1,18 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Sparkles } from 'lucide-react';
-import { Job, ScreenType } from '@/types/mazaadi';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Sparkles } from 'lucide-react';
+import { Job, ScreenType, UserType } from '@/types/mazaadi';
 import { useState } from 'react';
+import BottomNav from '../BottomNav';
 
 interface JobsScreenProps {
   jobs: Job[];
+  userType: UserType;
   onBack: () => void;
   onNavigate: (screen: ScreenType) => void;
   onSelectJob: (job: Job) => void;
 }
 
-const JobsScreen = ({ jobs, onBack, onNavigate, onSelectJob }: JobsScreenProps) => {
+const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScreenProps) => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
   const filters = [
@@ -57,7 +59,7 @@ const JobsScreen = ({ jobs, onBack, onNavigate, onSelectJob }: JobsScreenProps) 
   const activeCount = jobs.filter(j => j.status === 'In Progress' || j.status === 'Awaiting Completion').length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-foreground text-background p-6 pb-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
@@ -69,12 +71,6 @@ const JobsScreen = ({ jobs, onBack, onNavigate, onSelectJob }: JobsScreenProps) 
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4 mb-6"
           >
-            <button 
-              onClick={onBack}
-              className="w-10 h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-background/20 transition-all"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">My Jobs</h1>
               <p className="opacity-60 text-sm">{jobs.length} total jobs</p>
@@ -227,6 +223,8 @@ const JobsScreen = ({ jobs, onBack, onNavigate, onSelectJob }: JobsScreenProps) 
           })
         )}
       </div>
+
+      <BottomNav active="transactions" userType={userType} onNavigate={onNavigate} />
     </div>
   );
 };
