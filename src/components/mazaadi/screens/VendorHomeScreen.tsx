@@ -4,6 +4,7 @@ import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap
 import { VendorStats, AvailableJob, ScreenType } from '@/types/mazaadi';
 import BottomNav from '../BottomNav';
 import { VendorHomeSkeleton } from '../ScreenSkeleton';
+import nectarLogo from '@/assets/nectar-logo.png';
 
 interface VendorHomeScreenProps {
   vendorStats: VendorStats;
@@ -32,10 +33,10 @@ const VendorHomeScreen = ({
   return (
   <div className="flex flex-col h-screen bg-background">
     {/* Header */}
-    <div className="bg-foreground text-background relative overflow-hidden">
+    <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
       {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-background/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-36 h-36 bg-background/5 rounded-full blur-2xl" />
+      <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-36 h-36 bg-primary-foreground/10 rounded-full blur-2xl" />
       
       <div className="px-6 py-5 relative z-10">
         <motion.div 
@@ -43,17 +44,20 @@ const VendorHomeScreen = ({
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-5"
         >
-          <div>
-            <h1 className="font-display text-2xl font-bold mb-1">Ahmad Al-Mansouri</h1>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 bg-background/10 px-2 py-0.5 rounded-lg">
-                <Star className="w-4 h-4 fill-background text-background" />
-                <span className="font-bold">{vendorStats.rating}</span>
+          <div className="flex items-center gap-3">
+            <img src={nectarLogo} alt="Nectar" className="w-10 h-10 object-contain" />
+            <div>
+              <h1 className="font-display text-2xl font-bold mb-1">Ahmad Al-Mansouri</h1>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 bg-primary-foreground/20 px-2 py-0.5 rounded-lg">
+                  <Star className="w-4 h-4 fill-primary-foreground text-primary-foreground" />
+                  <span className="font-bold">{vendorStats.rating}</span>
+                </div>
+                <span className="opacity-70">({vendorStats.reviews} reviews)</span>
               </div>
-              <span className="opacity-60">({vendorStats.reviews} reviews)</span>
             </div>
           </div>
-          <button onClick={() => onNavigate('profile')} className="p-3 bg-background/10 rounded-2xl hover:bg-background/20 transition-colors">
+          <button onClick={() => onNavigate('profile')} className="p-3 bg-primary-foreground/20 rounded-3xl hover:bg-primary-foreground/30 transition-colors">
             <Settings className="w-5 h-5" />
           </button>
         </motion.div>
@@ -70,12 +74,12 @@ const VendorHomeScreen = ({
             { value: `${(vendorStats.totalEarnings / 1000).toFixed(0)}K`, label: 'AED Earned', icon: DollarSign },
             { value: `${vendorStats.completionRate}%`, label: 'Success', icon: Target }
           ].map((stat, idx) => (
-            <div key={idx} className="bg-background/10 backdrop-blur-xl rounded-2xl p-3 text-center border border-background/10">
-              <div className="w-8 h-8 mx-auto mb-1 rounded-xl bg-background/10 flex items-center justify-center">
+            <div key={idx} className="bg-primary-foreground/20 backdrop-blur-xl rounded-3xl p-3 text-center border border-primary-foreground/10">
+              <div className="w-8 h-8 mx-auto mb-1 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
                 <stat.icon className="w-4 h-4" />
               </div>
               <div className="font-display text-xl font-bold">{stat.value}</div>
-              <div className="text-xs opacity-60">{stat.label}</div>
+              <div className="text-xs opacity-70">{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -97,8 +101,8 @@ const VendorHomeScreen = ({
         <div className="grid grid-cols-2 gap-3">
           <div className="card-elevated p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-background" />
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <DollarSign className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="text-xs text-muted-foreground">Earnings</div>
             </div>
@@ -110,8 +114,8 @@ const VendorHomeScreen = ({
           
           <div className="card-elevated p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-background" />
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="text-xs text-muted-foreground">Jobs Done</div>
             </div>
@@ -184,7 +188,7 @@ const VendorHomeScreen = ({
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-bold text-foreground">Available Jobs</h3>
-          <span className="px-3 py-1 bg-foreground text-background rounded-full text-xs font-semibold">
+          <span className="px-3 py-1 bg-primary text-primary-foreground rounded-full text-xs font-semibold">
             {availableJobs.length} new
           </span>
         </div>
@@ -204,7 +208,7 @@ const VendorHomeScreen = ({
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-semibold text-foreground">{job.title}</h4>
                     {job.urgent && (
-                      <span className="px-2 py-0.5 bg-foreground text-background rounded-lg text-xs font-semibold flex items-center gap-1">
+                      <span className="px-2 py-0.5 bg-primary text-primary-foreground rounded-lg text-xs font-semibold flex items-center gap-1">
                         <Zap className="w-3 h-3" />
                         URGENT
                       </span>
