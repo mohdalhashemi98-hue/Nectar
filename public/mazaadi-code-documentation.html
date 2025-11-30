@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazaadi App - Code Documentation for Presentation</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 40px 20px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+        }
+        h1 { 
+            font-size: 2.5rem; 
+            border-bottom: 3px solid #000; 
+            padding-bottom: 16px;
+            margin-bottom: 32px;
+        }
+        h2 { 
+            font-size: 1.75rem; 
+            margin-top: 48px;
+            background: #000;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+        h3 { 
+            font-size: 1.25rem;
+            margin-top: 32px;
+            color: #333;
+        }
+        pre { 
+            background: #1a1a1a; 
+            color: #f0f0f0;
+            padding: 20px; 
+            border-radius: 12px; 
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        code { 
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+        .section { 
+            background: #fff; 
+            padding: 32px; 
+            border-radius: 16px; 
+            margin: 24px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .feature-list { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .feature-item { 
+            background: #f0f0f0; 
+            padding: 20px; 
+            border-radius: 12px;
+            border-left: 4px solid #000;
+        }
+        .feature-item h4 { margin: 0 0 8px 0; }
+        .feature-item p { margin: 0; color: #666; font-size: 14px; }
+        .badge {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 4px;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .screen-card {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        .user-flow {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+        .flow-arrow {
+            text-align: center;
+            font-size: 24px;
+            margin: 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #000;
+            color: #fff;
+        }
+        tr:nth-child(even) { background: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+<h1>🤝 Mazaadi - Service Marketplace Platform</h1>
+
+<div class="section">
+    <h2>📋 Executive Summary</h2>
+    <p><strong>Mazaadi</strong> is a modern service marketplace application that connects consumers with verified professionals. The platform enables job posting, service requests, vendor-to-consumer interactions, messaging, reviews, and rewards systems.</p>
+    
+    <h3>Key Value Propositions</h3>
+    <div class="feature-list">
+        <div class="feature-item">
+            <h4>🏠 For Consumers</h4>
+            <p>Post jobs, browse services, connect with verified professionals, leave reviews, earn cashback rewards</p>
+        </div>
+        <div class="feature-item">
+            <h4>💼 For Professionals</h4>
+            <p>Manage company profile, showcase portfolio, accept job requests, build reputation, grow business</p>
+        </div>
+        <div class="feature-item">
+            <h4>🔒 Trust & Safety</h4>
+            <p>Verified professionals, licensed services, quality assurance, secure messaging</p>
+        </div>
+        <div class="feature-item">
+            <h4>💰 Rewards System</h4>
+            <p>Tiered membership (Silver, Gold, Platinum, Diamond), cashback up to 12%, points system</p>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>🛠️ Technology Stack</h2>
+    <div class="tech-stack">
+        <span class="badge">React 18</span>
+        <span class="badge">TypeScript</span>
+        <span class="badge">Vite</span>
+        <span class="badge">Tailwind CSS</span>
+        <span class="badge">Framer Motion</span>
+        <span class="badge">React Router</span>
+        <span class="badge">TanStack Query</span>
+        <span class="badge">Radix UI</span>
+        <span class="badge">Lucide Icons</span>
+    </div>
+    
+    <h3>Design System</h3>
+    <ul>
+        <li><strong>Color Palette:</strong> Monochrome design with blacks, whites, and neutral tones</li>
+        <li><strong>Typography:</strong> Syne (Display) + Plus Jakarta Sans (Body)</li>
+        <li><strong>Components:</strong> Custom design system with semantic tokens</li>
+        <li><strong>Animations:</strong> Smooth transitions powered by Framer Motion</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>📱 Application Architecture</h2>
+    
+    <h3>User Types & Navigation Flow</h3>
+    <div class="user-flow">
+        <strong>Welcome Screen</strong> → User selects role (Consumer or Professional)
+        <div class="flow-arrow">↓</div>
+        <strong>Login Screen</strong> → Authentication
+        <div class="flow-arrow">↓</div>
+        <strong>Home Screen</strong> → Differentiated by user type
+    </div>
+    
+    <h3>Screen Inventory</h3>
+    <table>
+        <tr>
+            <th>Screen</th>
+            <th>Consumer Access</th>
+            <th>Vendor Access</th>
+            <th>Description</th>
+        </tr>
+        <tr><td>Welcome</td><td>✓</td><td>✓</td><td>Role selection with animated UI</td></tr>
+        <tr><td>Login</td><td>✓</td><td>✓</td><td>Authentication screen</td></tr>
+        <tr><td>Consumer Home</td><td>✓</td><td>-</td><td>Dashboard with jobs, vendors, rewards</td></tr>
+        <tr><td>Vendor Home</td><td>-</td><td>✓</td><td>Stats dashboard, available jobs</td></tr>
+        <tr><td>Post Job</td><td>✓</td><td>-</td><td>Create service requests</td></tr>
+        <tr><td>Vendor Profile</td><td>✓</td><td>-</td><td>View & hire vendors</td></tr>
+        <tr><td>Company Profile</td><td>-</td><td>✓</td><td>Manage business profile</td></tr>
+        <tr><td>Messages</td><td>✓</td><td>✓</td><td>Conversation list</td></tr>
+        <tr><td>Chat</td><td>✓</td><td>✓</td><td>Real-time messaging</td></tr>
+        <tr><td>Jobs/Transactions</td><td>✓</td><td>✓</td><td>Job history & status</td></tr>
+        <tr><td>Rewards</td><td>✓</td><td>-</td><td>Points, tiers, achievements</td></tr>
+        <tr><td>Profile</td><td>✓</td><td>✓</td><td>User settings & info</td></tr>
+        <tr><td>Review</td><td>✓</td><td>-</td><td>Rate completed jobs</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>💻 Core Code Structure</h2>
+    
+    <h3>Main Application Router (MazaadiApp.tsx)</h3>
+    <pre><code>// State Management
+const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [userType, setUserType] = useState&lt;UserType&gt;(null);
+const [currentScreen, setCurrentScreen] = useState&lt;ScreenType&gt;('welcome');
+
+// Navigation Functions
+const navigateTo = (screen: ScreenType) => {
+  if (currentScreen !== screen) {
+    setNavigationHistory(prev => [...prev, currentScreen]);
+  }
+  setCurrentScreen(screen);
+};
+
+const goBack = () => {
+  if (navigationHistory.length > 0) {
+    const newHistory = [...navigationHistory];
+    const lastScreen = newHistory.pop();
+    setNavigationHistory(newHistory);
+    setCurrentScreen(lastScreen || 'welcome');
+  }
+};
+
+// Screen Rendering
+const renderScreen = () => {
+  switch (currentScreen) {
+    case 'welcome': return &lt;WelcomeScreen /&gt;;
+    case 'login': return &lt;LoginScreen /&gt;;
+    case 'consumer-home': return &lt;ConsumerHomeScreen /&gt;;
+    case 'vendor-home': return &lt;VendorHomeScreen /&gt;;
+    // ... more screens
+  }
+};</code></pre>
+
+    <h3>Welcome Screen (WelcomeScreen.tsx)</h3>
+    <pre><code>const WelcomeScreen = ({ onSelectUserType }: WelcomeScreenProps) => (
+  &lt;div className="flex flex-col h-screen bg-background"&gt;
+    {/* Decorative background elements */}
+    &lt;div className="absolute top-0 right-0 w-96 h-96 bg-foreground/[0.02] rounded-full blur-3xl" /&gt;
+    
+    {/* Logo & Tagline */}
+    &lt;motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}&gt;
+      &lt;h1 className="font-display text-5xl font-bold"&gt;Mazaadi&lt;/h1&gt;
+      &lt;p&gt;Find. Connect. Complete.&lt;/p&gt;
+    &lt;/motion.div&gt;
+
+    {/* Stats */}
+    {['24K+ Active Pros', '4.9★ Avg Rating', '12% Cashback'].map(stat => (
+      &lt;motion.div&gt;{stat}&lt;/motion.div&gt;
+    ))}
+
+    {/* User Type Selection */}
+    &lt;button onClick={() => onSelectUserType('consumer')}&gt;
+      I need help - Post a job & get offers
+    &lt;/button&gt;
+    &lt;button onClick={() => onSelectUserType('vendor')}&gt;
+      I'm a Pro - Find jobs & earn money
+    &lt;/button&gt;
+
+    {/* Trust Badges */}
+    &lt;div&gt;Verified • Licensed • Quality&lt;/div&gt;
+  &lt;/div&gt;
+);</code></pre>
+
+    <h3>Consumer Home Screen (ConsumerHomeScreen.tsx)</h3>
+    <pre><code>const ConsumerHomeScreen = ({ userProfile, rewards, previousVendors, jobs }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Skeleton loading for polished UX
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) return &lt;ConsumerHomeSkeleton /&gt;;
+
+  return (
+    &lt;div className="flex flex-col h-screen bg-background"&gt;
+      {/* Header with greeting & notifications */}
+      &lt;h1&gt;Hi, {userProfile.name.split(' ')[0]}&lt;/h1&gt;
+      
+      {/* Search Bar */}
+      &lt;input placeholder="Search services..." /&gt;
+      
+      {/* Rewards Card */}
+      &lt;div className="bg-foreground text-background rounded-3xl"&gt;
+        {rewards.tier} Member - {rewards.cashbackRate}% cashback
+        {rewards.points.toLocaleString()} points
+      &lt;/div&gt;
+      
+      {/* Quick Action - Post Job */}
+      &lt;button className="btn-primary"&gt;Post a Job&lt;/button&gt;
+      
+      {/* Quick Re-hire Previous Vendors */}
+      {previousVendors.map(vendor => (
+        &lt;VendorCard key={vendor.id} vendor={vendor} /&gt;
+      ))}
+      
+      {/* Service Categories Grid */}
+      {categories.map(cat => &lt;CategoryButton category={cat} /&gt;)}
+      
+      {/* Active Jobs */}
+      {activeJobs.map(job => &lt;JobCard job={job} /&gt;)}
+      
+      {/* Floating Action Button */}
+      &lt;FAB onClick={() => navigateTo('post-request')} /&gt;
+      
+      &lt;BottomNav active="home" /&gt;
+    &lt;/div&gt;
+  );
+};</code></pre>
+</div>
+
+<div class="section">
+    <h2>🎨 Design System</h2>
+    
+    <h3>CSS Variables (index.css)</h3>
+    <pre><code>:root {
+  /* Monochrome Color Palette */
+  --background: 0 0% 100%;        /* Pure white */
+  --foreground: 0 0% 7%;          /* Near black */
+  --card: 0 0% 100%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --border: 0 0% 90%;
+  --primary: 0 0% 7%;
+  --secondary: 0 0% 96%;
+  --accent: 0 0% 92%;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(0 0% 7%), hsl(0 0% 20%));
+  --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 96%));
+}
+
+/* Component Classes */
+.btn-primary {
+  @apply bg-foreground text-background font-semibold py-4 px-6 
+         rounded-2xl transition-all duration-300 hover:opacity-90;
+}
+
+.card-elevated {
+  @apply bg-card rounded-3xl border border-border;
+  box-shadow: var(--shadow-md);
+}
+
+.input-modern {
+  @apply w-full bg-secondary border-0 rounded-2xl py-4 px-5 
+         focus:ring-2 focus:ring-foreground/20;
+}</code></pre>
+</div>
+
+<div class="section">
+    <h2>📊 Data Models</h2>
+    
+    <h3>TypeScript Types (types/mazaadi.ts)</h3>
+    <pre><code>export type UserType = 'consumer' | 'vendor' | null;
+
+export type ScreenType = 
+  | 'welcome' | 'login' 
+  | 'consumer-home' | 'vendor-home'
+  | 'post-request' | 'vendor-profile' | 'company-profile'
+  | 'messages-list' | 'chat'
+  | 'transactions' | 'rewards' | 'profile' | 'review';
+
+export interface Vendor {
+  id: string;
+  name: string;
+  avatar: string;
+  rating: number;
+  reviews: number;
+  specialty: string;
+  verified: boolean;
+  favorite: boolean;
+  completedJobs: number;
+  responseTime: string;
+  hourlyRate: number;
+}
+
+export interface Job {
+  id: string;
+  title: string;
+  category: string;
+  status: 'Pending' | 'In Progress' | 'Awaiting Completion' | 'Completed' | 'Cancelled';
+  vendor: string;
+  amount: number;
+  date: string;
+  offers: number;
+  rating?: number;
+  pointsEarned: number;
+}
+
+export interface Rewards {
+  tier: 'Silver' | 'Gold' | 'Platinum' | 'Diamond';
+  points: number;
+  cashbackRate: number;
+  totalSaved: number;
+  lifetimePoints: number;
+  currentStreak: number;
+}
+
+export interface Conversation {
+  id: string;
+  name: string;
+  avatar: string;
+  lastMessage: string;
+  time: string;
+  unread: number;
+  online: boolean;
+}</code></pre>
+</div>
+
+<div class="section">
+    <h2>✨ Key Features</h2>
+    
+    <h3>1. Skeleton Loading States</h3>
+    <pre><code>// ScreenSkeleton.tsx
+export const ConsumerHomeSkeleton = () => (
+  &lt;div className="flex flex-col h-screen bg-background animate-pulse"&gt;
+    &lt;div className="h-32 bg-muted rounded-b-3xl" /&gt;
+    &lt;div className="p-6 space-y-4"&gt;
+      &lt;div className="h-40 bg-muted rounded-3xl" /&gt;
+      &lt;div className="grid grid-cols-3 gap-3"&gt;
+        {[...Array(6)].map((_, i) => (
+          &lt;div key={i} className="h-24 bg-muted rounded-2xl" /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);</code></pre>
+
+    <h3>2. Service Categories</h3>
+    <pre><code>const categories = [
+  { name: 'Cleaning', icon: 'Sparkles', description: 'Home & Office' },
+  { name: 'Repairs', icon: 'Wrench', description: 'Fix anything' },
+  { name: 'Moving', icon: 'Package', description: 'Relocation help' },
+  { name: 'Beauty', icon: 'Scissors', description: 'Personal care' },
+  { name: 'Tech', icon: 'Monitor', description: 'IT Support' },
+  { name: 'Delivery', icon: 'Truck', description: 'Pickup & drop' },
+  { name: 'AC Service', icon: 'Wind', description: 'HVAC maintenance' },
+  { name: 'Plumbing', icon: 'Droplets', description: 'Water & pipes' },
+  { name: 'Electrical', icon: 'Zap', description: 'Power & wiring' },
+  { name: 'Other', icon: 'FileText', description: 'Custom requests' }
+];</code></pre>
+
+    <h3>3. Rewards Tier System</h3>
+    <pre><code>const tierConfig = {
+  Silver: { icon: '🥈', color: '#C0C0C0', nextTier: 'Gold', pointsNeeded: 1000 },
+  Gold: { icon: '🥇', color: '#FFD700', nextTier: 'Platinum', pointsNeeded: 5000 },
+  Platinum: { icon: '💎', color: '#E5E4E2', nextTier: 'Diamond', pointsNeeded: 15000 },
+  Diamond: { icon: '👑', color: '#B9F2FF', nextTier: null, pointsNeeded: null }
+};
+
+// Cashback rates by tier
+// Silver: 5%, Gold: 8%, Platinum: 10%, Diamond: 12%</code></pre>
+</div>
+
+<div class="section">
+    <h2>📁 File Structure</h2>
+    <pre><code>src/
+├── components/
+│   ├── mazaadi/
+│   │   ├── MazaadiApp.tsx          # Main app container & router
+│   │   ├── BottomNav.tsx           # Navigation bar
+│   │   ├── ScreenSkeleton.tsx      # Loading skeletons
+│   │   ├── PointsBadge.tsx         # Points display
+│   │   ├── EmptyState.tsx          # Empty state UI
+│   │   └── screens/
+│   │       ├── WelcomeScreen.tsx   # Landing/role selection
+│   │       ├── LoginScreen.tsx     # Authentication
+│   │       ├── ConsumerHomeScreen.tsx
+│   │       ├── VendorHomeScreen.tsx
+│   │       ├── PostJobScreen.tsx   # Job creation form
+│   │       ├── VendorProfileScreen.tsx
+│   │       ├── CompanyProfileScreen.tsx
+│   │       ├── MessagesScreen.tsx
+│   │       ├── ChatScreen.tsx
+│   │       ├── JobsScreen.tsx
+│   │       ├── RewardsScreen.tsx
+│   │       ├── ProfileScreen.tsx
+│   │       └── ReviewScreen.tsx
+│   └── ui/                         # Shadcn UI components
+├── data/
+│   └── mazaadi-data.ts             # Mock data & configurations
+├── types/
+│   └── mazaadi.ts                  # TypeScript interfaces
+├── hooks/                          # Custom React hooks
+├── lib/
+│   └── utils.ts                    # Utility functions
+├── pages/
+│   ├── Index.tsx                   # Main entry page
+│   └── NotFound.tsx
+├── index.css                       # Design system & global styles
+└── App.tsx                         # React Router setup</code></pre>
+</div>
+
+<div class="section">
+    <h2>🎯 Presentation Talking Points</h2>
+    
+    <h3>Problem Statement</h3>
+    <ul>
+        <li>Difficulty finding reliable service professionals</li>
+        <li>Lack of transparency in pricing and quality</li>
+        <li>No centralized platform for service marketplace</li>
+    </ul>
+    
+    <h3>Solution</h3>
+    <ul>
+        <li>Unified platform connecting consumers with verified professionals</li>
+        <li>Transparent reviews, ratings, and pricing</li>
+        <li>Gamified rewards system to encourage loyalty</li>
+        <li>Seamless communication through in-app messaging</li>
+    </ul>
+    
+    <h3>Target Market</h3>
+    <ul>
+        <li><strong>Consumers:</strong> Urban residents needing home services</li>
+        <li><strong>Vendors:</strong> Independent professionals and small service businesses</li>
+        <li><strong>Geography:</strong> UAE market (AED currency, local services)</li>
+    </ul>
+    
+    <h3>Competitive Advantages</h3>
+    <ul>
+        <li>Modern, intuitive mobile-first design</li>
+        <li>Dual-sided marketplace with balanced features</li>
+        <li>Rewarding loyalty program with real cashback</li>
+        <li>Verified professionals with quality guarantees</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>📈 Platform Statistics (Demo Data)</h2>
+    <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Active Professionals</td><td>24,000+</td></tr>
+        <tr><td>Average Rating</td><td>4.9 ★</td></tr>
+        <tr><td>Maximum Cashback</td><td>12%</td></tr>
+        <tr><td>Service Categories</td><td>10</td></tr>
+        <tr><td>Response Time (avg)</td><td>Under 30 min</td></tr>
+    </table>
+</div>
+
+<footer style="text-align: center; margin-top: 60px; padding: 20px; color: #666;">
+    <p><strong>Mazaadi</strong> - Find. Connect. Complete.</p>
+    <p>Built with React, TypeScript, and Tailwind CSS</p>
+    <p>Documentation generated for presentation purposes</p>
+</footer>
+
+</body>
+</html>
