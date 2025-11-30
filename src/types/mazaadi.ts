@@ -207,4 +207,5 @@ export type ScreenType =
   | 'quick-rehire'
   | 'request-detail'
   | 'notifications'
-  | 'profile';
+  | 'profile'
+  | 'company-profile';

@@ -14,6 +14,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import JobsScreen from './screens/JobsScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import ChatScreen from './screens/ChatScreen';
+import CompanyProfileScreen from './screens/CompanyProfileScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -138,6 +139,15 @@ const MazaadiApp = () => {
         return (
           <RewardsScreen
             rewards={rewards}
+            userType={userType}
+            onBack={goBack}
+            onNavigate={navigateTo}
+          />
+        );
+      
+      case 'company-profile':
+        return (
+          <CompanyProfileScreen
             userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
