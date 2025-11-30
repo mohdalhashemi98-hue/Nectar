@@ -171,6 +171,7 @@ const MazaadiApp = () => {
         return (
           <JobsScreen
             jobs={jobs}
+            userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
             onSelectJob={setSelectedJob}
@@ -181,6 +182,7 @@ const MazaadiApp = () => {
         return (
           <MessagesScreen
             conversations={initialConversations}
+            userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
             onSelectConversation={(conv) => {
@@ -200,6 +202,7 @@ const MazaadiApp = () => {
         ) : (
           <MessagesScreen
             conversations={initialConversations}
+            userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
             onSelectConversation={(conv) => {
@@ -235,6 +238,7 @@ const MazaadiApp = () => {
         ) : (
           <JobsScreen
             jobs={jobs}
+            userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
             onSelectJob={setSelectedJob}
