@@ -15,9 +15,9 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-foreground text-background p-6 pb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-background/5 rounded-full blur-xl" />
+      <div className="bg-gradient-golden text-primary-foreground p-6 pb-20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/10 rounded-full blur-xl" />
         
         <div className="relative z-10">
           <motion.div 
@@ -27,9 +27,9 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
           >
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">My Rewards</h1>
-              <p className="opacity-60 text-sm">{rewards.cashbackRate}% cashback rate</p>
+              <p className="opacity-70 text-sm">{rewards.cashbackRate}% cashback rate</p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-background/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-3xl bg-primary-foreground/20 flex items-center justify-center">
               <Gift className="w-6 h-6" />
             </div>
           </motion.div>
@@ -39,19 +39,19 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-background/10 backdrop-blur-sm rounded-2xl p-4 border border-background/10"
+            className="bg-primary-foreground/20 backdrop-blur-sm rounded-3xl p-4 border border-primary-foreground/10"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{tierConfig[rewards.tier].icon}</span>
                 <div>
                   <div className="text-xl font-bold">{rewards.tier}</div>
-                  <div className="opacity-60 text-sm">Member</div>
+                  <div className="opacity-70 text-sm">Member</div>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold">{rewards.points.toLocaleString()}</div>
-                <div className="opacity-60 text-sm">points</div>
+                <div className="opacity-70 text-sm">points</div>
               </div>
             </div>
 
@@ -60,16 +60,16 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
                 <span>{rewards.tier}</span>
                 <span>{rewards.nextTier}</span>
               </div>
-              <div className="h-2 bg-background/20 rounded-full overflow-hidden">
+              <div className="h-2 bg-primary-foreground/30 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${rewards.tierProgress}%` }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="h-full bg-background rounded-full" 
+                  className="h-full bg-primary-foreground rounded-full" 
                 />
               </div>
             </div>
-            <div className="text-xs opacity-60">{rewards.pointsToNextTier} pts to {rewards.nextTier}</div>
+            <div className="text-xs opacity-70">{rewards.pointsToNextTier} pts to {rewards.nextTier}</div>
           </motion.div>
         </div>
       </div>
@@ -110,21 +110,21 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
           className="card-elevated p-4"
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-foreground flex items-center justify-center">
-              <Target className="w-5 h-5 text-background" />
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <Target className="w-5 h-5 text-primary-foreground" />
             </div>
             <div className="flex-1">
               <div className="font-semibold text-foreground">{rewards.weeklyChallenge.title}</div>
               <div className="text-xs text-muted-foreground">Ends in {rewards.weeklyChallenge.endsIn}</div>
             </div>
-            <div className="text-foreground font-bold">+{rewards.weeklyChallenge.reward}</div>
+            <div className="text-primary font-bold">+{rewards.weeklyChallenge.reward}</div>
           </div>
           <div className="h-2 bg-secondary rounded-full overflow-hidden">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${(rewards.weeklyChallenge.progress / rewards.weeklyChallenge.target) * 100}%` }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="h-full bg-foreground rounded-full" 
+              className="h-full bg-primary rounded-full" 
             />
           </div>
           <div className="text-xs text-muted-foreground mt-2">
