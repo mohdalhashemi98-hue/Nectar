@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserType, ScreenType, Vendor, Job, RequestDetails } from '@/types/mazaadi';
+import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation } from '@/types/mazaadi';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
@@ -11,6 +11,9 @@ import ConsumerHomeScreen from './screens/ConsumerHomeScreen';
 import VendorHomeScreen from './screens/VendorHomeScreen';
 import RewardsScreen from './screens/RewardsScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import JobsScreen from './screens/JobsScreen';
+import MessagesScreen from './screens/MessagesScreen';
+import ChatScreen from './screens/ChatScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -34,6 +37,7 @@ const MazaadiApp = () => {
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Form state
@@ -148,6 +152,48 @@ const MazaadiApp = () => {
             userType={userType}
             onNavigate={navigateTo}
             onLogout={handleLogout}
+          />
+        );
+      
+      case 'transactions':
+        return (
+          <JobsScreen
+            jobs={jobs}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectJob={setSelectedJob}
+          />
+        );
+      
+      case 'messages-list':
+        return (
+          <MessagesScreen
+            conversations={initialConversations}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectConversation={(conv) => {
+              setSelectedConversation(conv);
+              navigateTo('chat');
+            }}
+          />
+        );
+      
+      case 'chat':
+        return selectedConversation ? (
+          <ChatScreen
+            conversation={selectedConversation}
+            onBack={goBack}
+            onNavigate={navigateTo}
+          />
+        ) : (
+          <MessagesScreen
+            conversations={initialConversations}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectConversation={(conv) => {
+              setSelectedConversation(conv);
+              navigateTo('chat');
+            }}
           />
         );
       
