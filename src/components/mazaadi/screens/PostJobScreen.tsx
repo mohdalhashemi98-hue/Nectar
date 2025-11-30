@@ -77,8 +77,8 @@ const PostJobScreen = ({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-foreground text-background relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-background/5 rounded-full blur-3xl" />
+      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         
         <div className="px-6 py-5 relative z-10">
           <motion.div 
@@ -86,12 +86,12 @@ const PostJobScreen = ({
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4 mb-4"
           >
-            <button onClick={onBack} className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors">
+            <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
               <h1 className="font-display text-xl font-bold">Post a Job</h1>
-              <p className="text-background/60 text-sm">Find the right professional</p>
+              <p className="text-primary-foreground/60 text-sm">Find the right professional</p>
             </div>
           </motion.div>
 
@@ -105,7 +105,7 @@ const PostJobScreen = ({
                 transition={{ delay: s * 0.1 }}
                 className="flex-1"
               >
-                <div className={`h-1 rounded-full transition-all ${s <= step ? 'bg-background' : 'bg-background/20'}`} />
+                <div className={`h-1 rounded-full transition-all ${s <= step ? 'bg-white' : 'bg-white/20'}`} />
               </motion.div>
             ))}
           </div>
@@ -139,12 +139,12 @@ const PostJobScreen = ({
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-2xl text-left transition-all relative overflow-hidden ${
                       requestDetails.category === cat.id
-                        ? 'bg-foreground text-background'
-                        : 'bg-card border border-border hover:border-foreground/30'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-card border border-border hover:border-primary/30'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 ${
-                      requestDetails.category === cat.id ? 'bg-background/10' : 'bg-secondary'
+                      requestDetails.category === cat.id ? 'bg-white/20' : 'bg-secondary'
                     }`}>
                       <IconComponent className="w-5 h-5" />
                     </div>
@@ -215,7 +215,7 @@ const PostJobScreen = ({
                     <span className="text-2xl">📷</span>
                     <button
                       onClick={() => handlePhotoRemove(idx)}
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-foreground text-background rounded-full flex items-center justify-center"
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -254,7 +254,7 @@ const PostJobScreen = ({
                     onClick={() => setRequestDetails({ ...requestDetails, budget })}
                     className={`py-3 rounded-xl text-sm font-semibold transition-all ${
                       requestDetails.budget === budget
-                        ? 'bg-foreground text-background'
+                        ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-foreground hover:bg-secondary/80'
                     }`}
                   >
@@ -283,12 +283,12 @@ const PostJobScreen = ({
                     onClick={() => setRequestDetails({ ...requestDetails, urgency: option.id as 'flexible' | 'today' | 'urgent' })}
                     className={`w-full p-4 rounded-2xl text-left transition-all flex items-center gap-4 ${
                       requestDetails.urgency === option.id
-                        ? 'bg-foreground text-background'
-                        : 'bg-card border border-border hover:border-foreground/20'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-card border border-border hover:border-primary/20'
                     }`}
                   >
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      requestDetails.urgency === option.id ? 'bg-background/10' : 'bg-secondary'
+                      requestDetails.urgency === option.id ? 'bg-white/20' : 'bg-secondary'
                     }`}>
                       <option.icon className="w-6 h-6" />
                     </div>
@@ -348,7 +348,7 @@ const PostJobScreen = ({
             <Button
               onClick={() => setStep(step + 1)}
               disabled={!canProceed()}
-              className="flex-1 bg-foreground text-background hover:bg-foreground/90"
+              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Continue
             </Button>
@@ -356,7 +356,7 @@ const PostJobScreen = ({
             <Button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className="flex-1 bg-foreground text-background hover:bg-foreground/90"
+              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Post Job
             </Button>

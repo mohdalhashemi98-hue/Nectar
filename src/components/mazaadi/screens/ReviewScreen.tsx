@@ -65,9 +65,9 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="w-24 h-24 mx-auto mb-6 bg-foreground rounded-full flex items-center justify-center"
+              className="w-24 h-24 mx-auto mb-6 bg-primary rounded-full flex items-center justify-center"
             >
-              <CheckCircle className="w-12 h-12 text-background" />
+              <CheckCircle className="w-12 h-12 text-primary-foreground" />
             </motion.div>
             <h1 className="font-display text-2xl font-bold text-foreground mb-2">Thank You!</h1>
             <p className="text-muted-foreground mb-6">Your review helps other customers and rewards great service providers.</p>
@@ -82,7 +82,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
 
             <Button
               onClick={() => onNavigate('consumer-home')}
-              className="w-full bg-foreground text-background hover:bg-foreground/90"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Back to Home
             </Button>
@@ -95,8 +95,8 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-foreground text-background relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-background/5 rounded-full blur-3xl" />
+      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         
         <div className="px-6 py-5 relative z-10">
           <motion.div 
@@ -104,12 +104,12 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4 mb-4"
           >
-            <button onClick={onBack} className="p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors">
+            <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
               <h1 className="font-display text-xl font-bold">Leave a Review</h1>
-              <p className="text-background/60 text-sm">Share your experience</p>
+              <p className="text-primary-foreground/60 text-sm">Share your experience</p>
             </div>
           </motion.div>
 
@@ -118,15 +118,15 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-background/10 rounded-2xl p-4"
+            className="bg-white/15 rounded-2xl p-4"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-background/10 rounded-xl flex items-center justify-center text-xl">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl">
                 🔧
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold">{job.title}</h3>
-                <p className="text-background/60 text-sm">by {job.vendor}</p>
+                <p className="text-primary-foreground/60 text-sm">by {job.vendor}</p>
               </div>
               <div className="text-right">
                 <div className="font-bold">{job.amount} AED</div>
@@ -159,13 +159,13 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                 onMouseLeave={() => setHoveredRating(0)}
                 onClick={() => setRating(star)}
               >
-                <Star
-                  className={`w-10 h-10 transition-colors ${
-                    star <= (hoveredRating || rating)
-                      ? 'fill-foreground text-foreground'
-                      : 'text-border'
-                  }`}
-                />
+                  <Star
+                    className={`w-10 h-10 transition-colors ${
+                      star <= (hoveredRating || rating)
+                        ? 'fill-primary text-primary'
+                        : 'text-border'
+                    }`}
+                  />
               </motion.button>
             ))}
           </div>
@@ -174,7 +174,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-block px-4 py-1.5 rounded-full bg-foreground text-background text-sm font-semibold"
+              className="inline-block px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold"
             >
               {getRatingText(rating)}
             </motion.div>
@@ -199,7 +199,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                 onClick={() => handleTagToggle(tag.id)}
                 className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${
                   selectedTags.includes(tag.id)
-                    ? 'bg-foreground text-background'
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
@@ -246,7 +246,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                 onClick={() => setTipAmount(amount === 0 ? null : amount)}
                 className={`py-3 rounded-xl text-sm font-semibold transition-all ${
                   (tipAmount === amount) || (amount === 0 && tipAmount === null)
-                    ? 'bg-foreground text-background'
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
@@ -265,8 +265,8 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center">
-                <Award className="w-5 h-5 text-background" />
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <Award className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
                 <div className="font-semibold text-foreground">Earn Points</div>
@@ -286,7 +286,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
         <Button
           onClick={handleSubmit}
           disabled={rating === 0}
-          className="w-full bg-foreground text-background hover:bg-foreground/90 h-12 text-base font-semibold"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
         >
           Submit Review {tipAmount && `& Tip ${tipAmount} AED`}
         </Button>
