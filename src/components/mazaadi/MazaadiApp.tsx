@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation } from '@/types/mazaadi';
+import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData } from '@/types/mazaadi';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
@@ -15,6 +15,8 @@ import JobsScreen from './screens/JobsScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import ChatScreen from './screens/ChatScreen';
 import CompanyProfileScreen from './screens/CompanyProfileScreen';
+import PostJobScreen from './screens/PostJobScreen';
+import ReviewScreen from './screens/ReviewScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -204,6 +206,38 @@ const MazaadiApp = () => {
               setSelectedConversation(conv);
               navigateTo('chat');
             }}
+          />
+        );
+      
+      case 'post-request':
+        return (
+          <PostJobScreen
+            requestDetails={requestDetails}
+            setRequestDetails={setRequestDetails}
+            selectedCategory={selectedCategory}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSubmit={resetRequestForm}
+          />
+        );
+      
+      case 'review':
+        return selectedJob ? (
+          <ReviewScreen
+            job={selectedJob}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSubmitReview={(review) => {
+              console.log('Review submitted:', review);
+              navigateTo('consumer-home');
+            }}
+          />
+        ) : (
+          <JobsScreen
+            jobs={jobs}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectJob={setSelectedJob}
           />
         );
       
