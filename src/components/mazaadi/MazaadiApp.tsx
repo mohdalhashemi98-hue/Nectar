@@ -9,6 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import ConsumerHomeScreen from './screens/ConsumerHomeScreen';
 import VendorHomeScreen from './screens/VendorHomeScreen';
+import VendorProfileScreen from './screens/VendorProfileScreen';
 import RewardsScreen from './screens/RewardsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import JobsScreen from './screens/JobsScreen';
@@ -41,6 +42,7 @@ const MazaadiApp = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Form state
@@ -137,6 +139,34 @@ const MazaadiApp = () => {
           />
         );
       
+      case 'vendor-profile':
+        return selectedVendor ? (
+          <VendorProfileScreen
+            vendor={selectedVendor}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onStartChat={(conv) => {
+              setConversations(prev => [conv, ...prev]);
+              setSelectedConversation(conv);
+            }}
+          />
+        ) : (
+          <ConsumerHomeScreen
+            userProfile={userProfile}
+            rewards={rewards}
+            previousVendors={previousVendors}
+            jobs={jobs}
+            notifications={notifications}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onNavigate={navigateTo}
+            onSelectCategory={setSelectedCategory}
+            onSelectVendor={setSelectedVendor}
+            onSelectJob={setSelectedJob}
+            onResetRequestForm={resetRequestForm}
+          />
+        );
+      
       case 'rewards':
         return (
           <RewardsScreen
@@ -181,7 +211,7 @@ const MazaadiApp = () => {
       case 'messages-list':
         return (
           <MessagesScreen
-            conversations={initialConversations}
+            conversations={conversations}
             userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
@@ -201,7 +231,7 @@ const MazaadiApp = () => {
           />
         ) : (
           <MessagesScreen
-            conversations={initialConversations}
+            conversations={conversations}
             userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
