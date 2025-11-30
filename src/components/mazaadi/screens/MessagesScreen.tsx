@@ -23,7 +23,7 @@ const MessagesScreen = ({ conversations, onBack, onNavigate, onSelectConversatio
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">Messages</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-amber-200 to-white bg-clip-text text-transparent">Messages</h1>
             <p className="text-white/80 text-sm">
               {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}
             </p>
