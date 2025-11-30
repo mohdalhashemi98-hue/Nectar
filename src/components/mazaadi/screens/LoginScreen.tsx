@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, Smartphone } from 'lucide-react';
 import { UserType } from '@/types/mazaadi';
+import nectarLogo from '@/assets/nectar-logo.png';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -127,7 +128,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
           >
             <h1 className="font-display text-3xl font-bold text-background">Create Account</h1>
             <p className="text-background/60 mt-1">
-              {userType === 'vendor' ? 'Join as a Professional' : 'Join Mazaadi today'}
+              {userType === 'vendor' ? 'Join as a Professional' : 'Join Nectar today'}
             </p>
           </motion.div>
 
@@ -238,10 +239,8 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-background/10 rounded-3xl mb-4">
-            <span className="text-4xl">🤝</span>
-          </div>
-          <h1 className="font-display text-3xl font-bold text-background">Mazaadi</h1>
+          <img src={nectarLogo} alt="Nectar" className="w-20 h-20 mx-auto mb-4 object-contain" />
+          <h1 className="font-display text-3xl font-bold text-background">Nectar</h1>
           <p className="text-background/60 mt-1">
             {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}
           </p>
