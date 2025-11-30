@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, Users, Calendar, Target, Award, BarChart3 } from 'lucide-react';
 import { VendorStats, AvailableJob, ScreenType } from '@/types/mazaadi';
 import BottomNav from '../BottomNav';
+import { VendorHomeSkeleton } from '../ScreenSkeleton';
 
 interface VendorHomeScreenProps {
   vendorStats: VendorStats;
@@ -15,7 +17,19 @@ const VendorHomeScreen = ({
   availableJobs,
   onNavigate,
   onSelectJob
-}: VendorHomeScreenProps) => (
+}: VendorHomeScreenProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <VendorHomeSkeleton />;
+  }
+
+  return (
   <div className="flex flex-col h-screen bg-background">
     {/* Header */}
     <div className="bg-foreground text-background relative overflow-hidden">
@@ -213,6 +227,7 @@ const VendorHomeScreen = ({
 
     <BottomNav active="home" userType="vendor" onNavigate={onNavigate} />
   </div>
-);
+  );
+};
 
 export default VendorHomeScreen;

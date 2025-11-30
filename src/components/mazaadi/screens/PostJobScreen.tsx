@@ -23,6 +23,7 @@ const categories: { id: string; name: string; icon: LucideIcon }[] = [
   { id: 'cleaning', name: 'Cleaning', icon: Sparkles },
   { id: 'painting', name: 'Painting', icon: Paintbrush },
   { id: 'carpentry', name: 'Carpentry', icon: Hammer },
+  { id: 'other', name: 'Other', icon: FileText },
 ];
 
 const urgencyOptions = [
