@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap, LucideIcon } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
+
+const categoryIcons: Record<string, LucideIcon> = {
+  Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap
+};
 import BottomNav from '../BottomNav';
 
 interface ConsumerHomeScreenProps {
@@ -243,20 +247,23 @@ const ConsumerHomeScreen = ({
         >
           <h3 className="font-display text-lg font-bold text-foreground mb-4">Popular Services</h3>
           <div className="grid grid-cols-3 gap-3">
-            {categories.slice(0, 6).map((cat) => (
-              <motion.button
-                key={cat.name}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('post-request'); }}
-                className="bg-card p-4 rounded-2xl border border-border hover:border-foreground/20 transition-all duration-300 group"
-              >
-                <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center text-xl mb-2 mx-auto group-hover:bg-foreground group-hover:scale-110 transition-all duration-300">
-                  <span className="group-hover:scale-110 transition-transform">{cat.icon}</span>
-                </div>
-                <div className="text-xs font-medium text-foreground text-center">{cat.name}</div>
-              </motion.button>
-            ))}
+            {categories.slice(0, 6).map((cat) => {
+              const IconComponent = categoryIcons[cat.icon] || Sparkles;
+              return (
+                <motion.button
+                  key={cat.name}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('post-request'); }}
+                  className="bg-card p-4 rounded-2xl border border-border hover:border-foreground/20 transition-all duration-300 group"
+                >
+                  <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mb-2 mx-auto group-hover:bg-foreground transition-all duration-300">
+                    <IconComponent className="w-5 h-5 text-foreground group-hover:text-background transition-colors" />
+                  </div>
+                  <div className="text-xs font-medium text-foreground text-center">{cat.name}</div>
+                </motion.button>
+              );
+            })}
           </div>
         </motion.div>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Camera, X, Zap, Clock, Calendar, DollarSign, Tag, FileText, MapPin, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Camera, X, Zap, Clock, Calendar, DollarSign, Tag, FileText, MapPin, CheckCircle, Wind, Wrench, Sparkles, Paintbrush, Hammer, LucideIcon } from 'lucide-react';
 import { ScreenType, RequestDetails } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,13 +16,13 @@ interface PostJobScreenProps {
   onSubmit: () => void;
 }
 
-const categories = [
-  { id: 'ac', name: 'AC Services', icon: '❄️' },
-  { id: 'plumbing', name: 'Plumbing', icon: '🔧' },
-  { id: 'electrical', name: 'Electrical', icon: '⚡' },
-  { id: 'cleaning', name: 'Cleaning', icon: '✨' },
-  { id: 'painting', name: 'Painting', icon: '🎨' },
-  { id: 'carpentry', name: 'Carpentry', icon: '🪚' },
+const categories: { id: string; name: string; icon: LucideIcon }[] = [
+  { id: 'ac', name: 'AC Services', icon: Wind },
+  { id: 'plumbing', name: 'Plumbing', icon: Wrench },
+  { id: 'electrical', name: 'Electrical', icon: Zap },
+  { id: 'cleaning', name: 'Cleaning', icon: Sparkles },
+  { id: 'painting', name: 'Painting', icon: Paintbrush },
+  { id: 'carpentry', name: 'Carpentry', icon: Hammer },
 ];
 
 const urgencyOptions = [
@@ -127,26 +127,33 @@ const PostJobScreen = ({
           >
             <h2 className="font-display text-lg font-bold text-foreground">What service do you need?</h2>
             <div className="grid grid-cols-2 gap-3">
-              {categories.map((cat, idx) => (
-                <motion.button
-                  key={cat.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  onClick={() => handleCategorySelect(cat.id)}
-                  className={`p-4 rounded-2xl text-left transition-all relative overflow-hidden ${
-                    requestDetails.category === cat.id
-                      ? 'bg-foreground text-background'
-                      : 'bg-card border border-border hover:border-foreground/30'
-                  }`}
-                >
-                  <span className="text-2xl mb-2 block">{cat.icon}</span>
-                  <span className="font-semibold">{cat.name}</span>
-                  {requestDetails.category === cat.id && (
-                    <CheckCircle className="absolute top-3 right-3 w-5 h-5" />
-                  )}
-                </motion.button>
-              ))}
+              {categories.map((cat, idx) => {
+                const IconComponent = cat.icon;
+                return (
+                  <motion.button
+                    key={cat.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    onClick={() => handleCategorySelect(cat.id)}
+                    className={`p-4 rounded-2xl text-left transition-all relative overflow-hidden ${
+                      requestDetails.category === cat.id
+                        ? 'bg-foreground text-background'
+                        : 'bg-card border border-border hover:border-foreground/30'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 ${
+                      requestDetails.category === cat.id ? 'bg-background/10' : 'bg-secondary'
+                    }`}>
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <span className="font-semibold">{cat.name}</span>
+                    {requestDetails.category === cat.id && (
+                      <CheckCircle className="absolute top-3 right-3 w-5 h-5" />
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
         )}

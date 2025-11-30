@@ -50,15 +50,15 @@ export const initialRewards: Rewards = {
 };
 
 export const categories: Category[] = [
-  { name: 'Cleaning', icon: '✨', gradient: 'from-blue-500 to-cyan-400', jobs: 1247, avgPrice: '150 AED', description: 'Home & office cleaning' },
-  { name: 'Maintenance', icon: '🔧', gradient: 'from-orange-500 to-red-400', jobs: 892, avgPrice: '280 AED', description: 'Repairs & fixes' },
-  { name: 'Materials', icon: '📦', gradient: 'from-purple-500 to-pink-400', jobs: 634, avgPrice: '320 AED', description: 'Supplies & materials' },
-  { name: 'Beauty', icon: '💅', gradient: 'from-pink-500 to-rose-400', jobs: 567, avgPrice: '200 AED', description: 'Personal care services' },
-  { name: 'Tech', icon: '💻', gradient: 'from-indigo-500 to-blue-400', jobs: 423, avgPrice: '350 AED', description: 'Tech support & repair' },
-  { name: 'Moving', icon: '🚚', gradient: 'from-green-500 to-emerald-400', jobs: 389, avgPrice: '400 AED', description: 'Relocation services' },
-  { name: 'AC & HVAC', icon: '❄️', gradient: 'from-cyan-500 to-blue-400', jobs: 756, avgPrice: '250 AED', description: 'Cooling & ventilation' },
-  { name: 'Plumbing', icon: '🚿', gradient: 'from-blue-500 to-indigo-400', jobs: 543, avgPrice: '200 AED', description: 'Water & pipes' },
-  { name: 'Electrical', icon: '💡', gradient: 'from-yellow-500 to-orange-400', jobs: 421, avgPrice: '220 AED', description: 'Electrical work' }
+  { name: 'Cleaning', icon: 'Sparkles', gradient: 'from-blue-500 to-cyan-400', jobs: 1247, avgPrice: '150 AED', description: 'Home & office cleaning' },
+  { name: 'Maintenance', icon: 'Wrench', gradient: 'from-orange-500 to-red-400', jobs: 892, avgPrice: '280 AED', description: 'Repairs & fixes' },
+  { name: 'Materials', icon: 'Package', gradient: 'from-purple-500 to-pink-400', jobs: 634, avgPrice: '320 AED', description: 'Supplies & materials' },
+  { name: 'Beauty', icon: 'Scissors', gradient: 'from-pink-500 to-rose-400', jobs: 567, avgPrice: '200 AED', description: 'Personal care services' },
+  { name: 'Tech', icon: 'Monitor', gradient: 'from-indigo-500 to-blue-400', jobs: 423, avgPrice: '350 AED', description: 'Tech support & repair' },
+  { name: 'Moving', icon: 'Truck', gradient: 'from-green-500 to-emerald-400', jobs: 389, avgPrice: '400 AED', description: 'Relocation services' },
+  { name: 'AC & HVAC', icon: 'Wind', gradient: 'from-cyan-500 to-blue-400', jobs: 756, avgPrice: '250 AED', description: 'Cooling & ventilation' },
+  { name: 'Plumbing', icon: 'Droplets', gradient: 'from-blue-500 to-indigo-400', jobs: 543, avgPrice: '200 AED', description: 'Water & pipes' },
+  { name: 'Electrical', icon: 'Zap', gradient: 'from-yellow-500 to-orange-400', jobs: 421, avgPrice: '220 AED', description: 'Electrical work' }
 ];
 
 export const initialJobs: Job[] = [
