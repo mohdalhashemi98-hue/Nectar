@@ -194,7 +194,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                   <div className="flex items-center gap-3">
                     {job.amount > 0 && (
                       <span className="font-bold text-foreground">
-                        {job.amount} AED
+                        {job.amount} د.إ
                       </span>
                     )}
                       {job.rated && (

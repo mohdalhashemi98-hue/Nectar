@@ -245,7 +245,7 @@ const PostJobScreen = ({
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
                 <DollarSign className="w-4 h-4" />
-                Your Budget (AED)
+                Your Budget (د.إ)
               </label>
               <div className="grid grid-cols-3 gap-2 mb-3">
                 {['100-200', '200-500', '500+'].map((budget) => (
@@ -258,7 +258,7 @@ const PostJobScreen = ({
                         : 'bg-secondary text-foreground hover:bg-secondary/80'
                     }`}
                   >
-                    {budget} AED
+                    {budget} د.إ
                   </button>
                 ))}
               </div>
@@ -320,7 +320,7 @@ const PostJobScreen = ({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Budget</span>
-                  <span className="font-semibold text-foreground">{requestDetails.budget} AED</span>
+                  <span className="font-semibold text-foreground">{requestDetails.budget} د.إ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Urgency</span>
