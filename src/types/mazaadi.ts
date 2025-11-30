@@ -208,4 +208,5 @@ export type ScreenType =
   | 'request-detail'
   | 'notifications'
   | 'profile'
-  | 'company-profile';
+  | 'company-profile'
+  | 'review';
