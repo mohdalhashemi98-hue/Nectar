@@ -4,6 +4,7 @@ import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, Wrench, Packag
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
+import nectarLogo from '@/assets/nectar-logo.png';
 
 const categoryIcons: Record<string, LucideIcon> = {
   Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap
@@ -26,10 +27,10 @@ interface ConsumerHomeScreenProps {
 }
 
 const statusColors: Record<string, { bg: string; text: string }> = {
-  'Completed': { bg: 'bg-foreground/10', text: 'text-foreground' },
-  'In Progress': { bg: 'bg-foreground/10', text: 'text-foreground' },
+  'Completed': { bg: 'bg-primary/10', text: 'text-primary' },
+  'In Progress': { bg: 'bg-primary/10', text: 'text-primary' },
   'Pending': { bg: 'bg-warning/10', text: 'text-warning' },
-  'Awaiting Completion': { bg: 'bg-foreground/5', text: 'text-muted-foreground' },
+  'Awaiting Completion': { bg: 'bg-muted', text: 'text-muted-foreground' },
   'Cancelled': { bg: 'bg-destructive/10', text: 'text-destructive' }
 };
 
@@ -77,19 +78,22 @@ const ConsumerHomeScreen = ({
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between mb-5"
           >
-            <div>
-              <h1 className="font-display text-2xl font-bold text-foreground mb-0.5">
-                Hi, {userProfile.name.split(' ')[0]}
-              </h1>
-              <p className="text-sm text-muted-foreground">What can we help with today?</p>
+            <div className="flex items-center gap-3">
+              <img src={nectarLogo} alt="Nectar" className="w-10 h-10 object-contain" />
+              <div>
+                <h1 className="font-display text-2xl font-bold text-foreground mb-0.5">
+                  Hi, {userProfile.name.split(' ')[0]}
+                </h1>
+                <p className="text-sm text-muted-foreground">What can we help with today?</p>
+              </div>
             </div>
             <button 
               onClick={() => onNavigate('notifications')} 
-              className="relative p-3 bg-secondary rounded-2xl hover:bg-secondary/80 transition-colors"
+              className="relative p-3 bg-secondary rounded-3xl hover:bg-secondary/80 transition-colors"
             >
               <Bell className="w-5 h-5 text-foreground" />
               {notifications.filter(n => n.unread).length > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-foreground rounded-full" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
               )}
             </button>
           </motion.div>
@@ -116,7 +120,7 @@ const ConsumerHomeScreen = ({
             <motion.div 
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-3 bg-card rounded-2xl border border-border overflow-hidden"
+              className="mt-3 bg-card rounded-3xl border border-border overflow-hidden"
               style={{ boxShadow: 'var(--shadow-lg)' }}
             >
               {searchResults.length > 0 ? (
@@ -147,37 +151,46 @@ const ConsumerHomeScreen = ({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-6 py-5 pb-24 space-y-6">
-        {/* Rewards Card */}
+        {/* Golden Ticket Rewards Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-foreground rounded-3xl p-5 text-background"
-          style={{ boxShadow: 'var(--shadow-lg)' }}
+          className="card-golden p-5 relative overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
+          {/* Decorative honeycomb pattern */}
+          <div className="absolute top-0 right-0 w-32 h-32 opacity-20">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <pattern id="honeycomb" width="20" height="23" patternUnits="userSpaceOnUse">
+                <polygon points="10,0 20,5 20,15 10,20 0,15 0,5" fill="none" stroke="currentColor" strokeWidth="1"/>
+              </pattern>
+              <rect width="100" height="100" fill="url(#honeycomb)"/>
+            </svg>
+          </div>
+          
+          <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-background/10 rounded-2xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-primary-foreground/20 rounded-3xl flex items-center justify-center">
                 <span className="text-2xl">{tierConfig[rewards.tier].icon}</span>
               </div>
               <div>
                 <div className="font-display font-bold text-lg">{rewards.tier} Member</div>
-                <div className="text-sm opacity-60">{rewards.cashbackRate}% cashback</div>
+                <div className="text-sm opacity-80">{rewards.cashbackRate}% cashback</div>
               </div>
             </div>
             <div className="text-right">
               <div className="font-display text-2xl font-bold">{rewards.points.toLocaleString()}</div>
-              <div className="text-xs opacity-60">points</div>
+              <div className="text-xs opacity-80">points</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-background/10 rounded-xl px-3 py-2 mb-4">
+          <div className="flex items-center gap-2 bg-primary-foreground/20 rounded-2xl px-3 py-2 mb-4 relative z-10">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">12 jobs completed</span>
-            <span className="text-xs bg-background/20 px-2 py-0.5 rounded-full ml-auto">Top 10%</span>
+            <span className="text-xs bg-primary-foreground/30 px-2 py-0.5 rounded-full ml-auto">Top 10%</span>
           </div>
           <button 
             onClick={() => onNavigate('rewards')} 
-            className="w-full bg-background text-foreground py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-background/90 transition-colors"
+            className="w-full bg-primary-foreground text-primary py-3 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-primary-foreground/90 transition-colors relative z-10"
           >
             <Sparkles className="w-4 h-4" />
             View Rewards
@@ -215,7 +228,7 @@ const ConsumerHomeScreen = ({
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-lg font-bold text-foreground">Quick Re-hire</h3>
-              <button onClick={() => onNavigate('previous-vendors')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => onNavigate('previous-vendors')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
                 View All
               </button>
             </div>
@@ -225,7 +238,7 @@ const ConsumerHomeScreen = ({
                   key={vendor.id}
                   whileHover={{ y: -4 }}
                   onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile'); }}
-                  className="flex-shrink-0 w-32 bg-card p-4 rounded-2xl border border-border transition-all duration-300 group"
+                  className="flex-shrink-0 w-32 bg-card p-4 rounded-3xl border border-border transition-all duration-300 group"
                   style={{ boxShadow: 'var(--shadow-sm)' }}
                 >
                   <div className="relative mb-3">
@@ -233,17 +246,17 @@ const ConsumerHomeScreen = ({
                       {vendor.avatar}
                     </div>
                     {vendor.favorite && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
-                        <Heart className="w-3 h-3 text-background fill-current" />
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                        <Heart className="w-3 h-3 text-primary-foreground fill-current" />
                       </div>
                     )}
                   </div>
                   <h4 className="font-semibold text-foreground text-sm mb-1 truncate text-center">{vendor.name}</h4>
                   <div className="flex items-center justify-center gap-1 mb-3">
-                    <Star className="w-3 h-3 text-foreground fill-foreground" />
+                    <Star className="w-3 h-3 text-primary fill-primary" />
                     <span className="text-xs font-bold">{vendor.rating}</span>
                   </div>
-                  <div className="w-full py-2 bg-secondary text-foreground rounded-lg text-xs font-semibold text-center group-hover:bg-foreground group-hover:text-background transition-colors">
+                  <div className="w-full py-2 bg-secondary text-foreground rounded-xl text-xs font-semibold text-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     Re-hire
                   </div>
                 </motion.button>
@@ -268,10 +281,10 @@ const ConsumerHomeScreen = ({
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('post-request'); }}
-                  className="bg-card p-4 rounded-2xl border border-border hover:border-foreground/20 transition-all duration-300 group"
+                  className="bg-card p-4 rounded-3xl border border-border hover:border-primary/30 transition-all duration-300 group"
                 >
-                  <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mb-2 mx-auto group-hover:bg-foreground transition-all duration-300">
-                    <IconComponent className="w-5 h-5 text-foreground group-hover:text-background transition-colors" />
+                  <div className="w-10 h-10 bg-secondary rounded-2xl flex items-center justify-center mb-2 mx-auto group-hover:bg-primary transition-all duration-300">
+                    <IconComponent className="w-5 h-5 text-foreground group-hover:text-primary-foreground transition-colors" />
                   </div>
                   <div className="text-xs font-medium text-foreground text-center">{cat.name}</div>
                 </motion.button>
@@ -289,7 +302,7 @@ const ConsumerHomeScreen = ({
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-lg font-bold text-foreground">Active Jobs</h3>
-              <button onClick={() => onNavigate('transactions')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => onNavigate('transactions')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
                 View All
               </button>
             </div>
@@ -309,7 +322,7 @@ const ConsumerHomeScreen = ({
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{job.vendor}</span>
-                    <span className="font-bold text-foreground">{job.amount} AED</span>
+                    <span className="font-bold text-primary">{job.amount} AED</span>
                   </div>
                 </motion.button>
               ))}
@@ -326,8 +339,8 @@ const ConsumerHomeScreen = ({
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => { onResetRequestForm(); onNavigate('post-request'); }}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center z-40"
-        style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}
+        className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-golden text-primary-foreground rounded-full flex items-center justify-center z-40"
+        style={{ boxShadow: 'var(--shadow-golden)' }}
       >
         <Plus className="w-6 h-6" />
       </motion.button>
