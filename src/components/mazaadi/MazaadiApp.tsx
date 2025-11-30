@@ -72,21 +72,35 @@ const MazaadiApp = () => {
     setNavigationHistory([]);
   };
 
-  // Render auth screen
-  if (!isAuthenticated) {
-    return (
-      <LoginScreen 
-        onLogin={() => { setIsAuthenticated(true); setCurrentScreen('welcome'); }}
-        onSignup={() => { setIsAuthenticated(true); setCurrentScreen('welcome'); }}
-      />
-    );
-  }
+  const handleSelectUserType = (type: UserType) => {
+    setUserType(type);
+    if (!isAuthenticated) {
+      setCurrentScreen('login' as ScreenType);
+    } else {
+      setCurrentScreen(type === 'consumer' ? 'consumer-home' : 'vendor-home');
+    }
+  };
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    setCurrentScreen(userType === 'consumer' ? 'consumer-home' : 'vendor-home');
+  };
 
   // Render main screens
   const renderScreen = () => {
     switch (currentScreen) {
       case 'welcome':
-        return <WelcomeScreen onSelectUserType={setUserType} onNavigate={navigateTo} />;
+        return <WelcomeScreen onSelectUserType={handleSelectUserType} />;
+      
+      case 'login':
+        return (
+          <LoginScreen 
+            onLogin={handleLogin}
+            onSignup={handleLogin}
+            onBack={() => setCurrentScreen('welcome')}
+            userType={userType}
+          />
+        );
       
       case 'consumer-home':
         return (
@@ -138,7 +152,7 @@ const MazaadiApp = () => {
         );
       
       default:
-        return <WelcomeScreen onSelectUserType={setUserType} onNavigate={navigateTo} />;
+        return <WelcomeScreen onSelectUserType={handleSelectUserType} />;
     }
   };
 

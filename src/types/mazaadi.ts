@@ -191,6 +191,7 @@ export interface TierConfig {
 export type UserType = 'consumer' | 'vendor' | null;
 export type ScreenType = 
   | 'welcome'
+  | 'login'
   | 'consumer-home'
   | 'vendor-home'
   | 'post-request'

@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, Smartphone } from 'lucide-react';
+import { UserType } from '@/types/mazaadi';
 
 interface LoginScreenProps {
   onLogin: () => void;
   onSignup: () => void;
+  onBack?: () => void;
+  userType?: UserType;
 }
 
 type AuthScreen = 'login' | 'signup' | 'otp';
 
-const LoginScreen = ({ onLogin, onSignup }: LoginScreenProps) => {
+const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) => {
   const [authScreen, setAuthScreen] = useState<AuthScreen>('login');
   const [authData, setAuthData] = useState({ phone: '', password: '', name: '', email: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -89,9 +92,19 @@ const LoginScreen = ({ onLogin, onSignup }: LoginScreenProps) => {
     return (
       <div className="flex flex-col h-screen bg-gradient-hero">
         <div className="flex-1 flex flex-col justify-center px-6">
+          {/* Back Button */}
+          <button 
+            onClick={() => setAuthScreen('login')} 
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+          </button>
+          
           <div className="text-center mb-6 animate-fade-in">
             <h1 className="text-3xl font-bold text-primary-foreground">Create Account</h1>
-            <p className="text-primary-foreground/70 mt-1">Join Mazaadi today</p>
+            <p className="text-primary-foreground/70 mt-1">
+              {userType === 'vendor' ? 'Join as a Professional' : 'Join Mazaadi today'}
+            </p>
           </div>
 
           <div className="bg-card rounded-3xl p-6 shadow-xl animate-slide-up">
@@ -179,13 +192,25 @@ const LoginScreen = ({ onLogin, onSignup }: LoginScreenProps) => {
   return (
     <div className="flex flex-col h-screen bg-gradient-hero">
       <div className="flex-1 flex flex-col justify-center px-6">
+        {/* Back Button */}
+        {onBack && (
+          <button 
+            onClick={onBack} 
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+          </button>
+        )}
+        
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-flex items-center justify-center w-20 h-20 glass-dark rounded-3xl mb-4 animate-bounce-subtle">
             <span className="text-4xl">🤝</span>
           </div>
           <h1 className="text-3xl font-bold text-primary-foreground">Mazaadi</h1>
-          <p className="text-primary-foreground/70 mt-1">Welcome back!</p>
+          <p className="text-primary-foreground/70 mt-1">
+            {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}
+          </p>
         </div>
 
         {/* Form */}
