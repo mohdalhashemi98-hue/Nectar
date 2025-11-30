@@ -61,9 +61,9 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-foreground text-background p-6 pb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-background/5 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-background/5 rounded-full blur-xl" />
+      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground p-6 pb-20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
         
         <div className="relative z-10">
           <motion.div 
@@ -75,7 +75,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
               <h1 className="font-display text-2xl font-bold">My Jobs</h1>
               <p className="opacity-60 text-sm">{jobs.length} total jobs</p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-background/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
               <Briefcase className="w-6 h-6" />
             </div>
           </motion.div>
@@ -92,10 +92,10 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
               { icon: Timer, value: activeCount, label: 'Active' },
               { icon: Sparkles, value: jobs.reduce((acc, j) => acc + j.pointsEarned, 0), label: 'Points' }
             ].map((stat, idx) => (
-              <div key={idx} className="flex-1 bg-background/10 rounded-2xl p-3">
+              <div key={idx} className="flex-1 bg-white/15 rounded-2xl p-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-background/10 flex items-center justify-center">
-                    <stat.icon className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
+                    <stat.icon className="w-4 h-4 text-primary-foreground" />
                   </div>
                   <div>
                     <p className="font-display text-xl font-bold">{stat.value}</p>
@@ -123,7 +123,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
               onClick={() => setActiveFilter(filter.key)}
               className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${
                 activeFilter === filter.key
-                  ? 'bg-foreground text-background'
+                  ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -179,7 +179,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                   <div className="flex items-center gap-4">
                     {job.vendor && (
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-foreground flex items-center justify-center text-background text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
                           {job.vendor.charAt(0)}
                         </div>
                         <span className="text-sm text-muted-foreground">{job.vendor}</span>
@@ -197,9 +197,9 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                         {job.amount} AED
                       </span>
                     )}
-                    {job.rated && (
-                      <div className="flex items-center gap-1 bg-secondary px-2 py-1 rounded-lg">
-                        <Star className="w-4 h-4 text-foreground fill-foreground" />
+                      {job.rated && (
+                        <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
+                          <Star className="w-4 h-4 text-primary fill-primary" />
                         <span className="text-sm font-bold">{job.rating}</span>
                       </div>
                     )}
@@ -209,11 +209,11 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
 
                 {job.pointsEarned > 0 && (
                   <div className="mt-3 pt-3 border-t border-border flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-foreground flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                       <span className="text-xs">🪙</span>
                     </div>
                     <span className="text-sm text-muted-foreground">Earned</span>
-                    <span className="text-sm font-bold text-foreground">
+                    <span className="text-sm font-bold text-primary">
                       +{job.pointsEarned} pts
                     </span>
                   </div>
