@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, Smartphone } from 'lucide-react';
 import { UserType } from '@/types/mazaadi';
 
@@ -37,35 +38,53 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
     }, 1500);
   };
 
+  const pageVariants = {
+    initial: { opacity: 0, x: 20 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -20 }
+  };
+
   if (authScreen === 'otp') {
     return (
-      <div className="flex flex-col h-screen bg-gradient-hero">
+      <div className="flex flex-col h-screen bg-foreground">
         <div className="flex-1 flex flex-col justify-center px-6">
-          <button 
+          <motion.button 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={() => setAuthScreen('signup')} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
-          </button>
+            <ChevronLeft className="w-6 h-6 text-background" />
+          </motion.button>
 
-          <div className="text-center mb-8 animate-fade-in">
-            <div className="inline-flex items-center justify-center w-20 h-20 glass-dark rounded-3xl mb-4 animate-bounce-subtle">
-              <Smartphone className="w-10 h-10 text-primary-foreground" />
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-background/10 rounded-3xl mb-4">
+              <Smartphone className="w-10 h-10 text-background" />
             </div>
-            <h1 className="text-3xl font-bold text-primary-foreground">Verify Phone</h1>
-            <p className="text-primary-foreground/70 mt-2">
+            <h1 className="font-display text-3xl font-bold text-background">Verify Phone</h1>
+            <p className="text-background/60 mt-2">
               Enter the 6-digit code sent to<br />{authData.phone || '+971 50 XXX XXXX'}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-card rounded-3xl p-6 shadow-xl animate-slide-up">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-card rounded-3xl p-6"
+            style={{ boxShadow: 'var(--shadow-xl)' }}
+          >
             <div className="flex justify-center gap-3 mb-6">
               {[0, 1, 2, 3, 4, 5].map((idx) => (
                 <input
                   key={idx}
                   type="text"
                   maxLength={1}
-                  className="w-12 h-14 text-center text-2xl font-bold bg-muted border-2 border-border rounded-xl focus:border-primary focus:outline-none transition-colors"
+                  className="w-12 h-14 text-center text-2xl font-bold bg-secondary border-2 border-transparent rounded-xl focus:border-foreground focus:outline-none transition-colors"
                 />
               ))}
             </div>
@@ -80,9 +99,9 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
             <div className="text-center">
               <span className="text-muted-foreground">Didn't receive code? </span>
-              <button className="text-primary font-bold hover:underline">Resend</button>
+              <button className="text-foreground font-semibold hover:underline">Resend</button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     );
@@ -90,27 +109,38 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
   if (authScreen === 'signup') {
     return (
-      <div className="flex flex-col h-screen bg-gradient-hero">
+      <div className="flex flex-col h-screen bg-foreground">
         <div className="flex-1 flex flex-col justify-center px-6">
-          {/* Back Button */}
-          <button 
+          <motion.button 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={() => setAuthScreen('login')} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
-          </button>
+            <ChevronLeft className="w-6 h-6 text-background" />
+          </motion.button>
           
-          <div className="text-center mb-6 animate-fade-in">
-            <h1 className="text-3xl font-bold text-primary-foreground">Create Account</h1>
-            <p className="text-primary-foreground/70 mt-1">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-6"
+          >
+            <h1 className="font-display text-3xl font-bold text-background">Create Account</h1>
+            <p className="text-background/60 mt-1">
               {userType === 'vendor' ? 'Join as a Professional' : 'Join Mazaadi today'}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-card rounded-3xl p-6 shadow-xl animate-slide-up">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-card rounded-3xl p-6"
+            style={{ boxShadow: 'var(--shadow-xl)' }}
+          >
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-foreground mb-2">Full Name</label>
+                <label className="block text-sm font-semibold text-foreground mb-2">Full Name</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
@@ -124,7 +154,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-foreground mb-2">Phone Number</label>
+                <label className="block text-sm font-semibold text-foreground mb-2">Phone Number</label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
@@ -138,7 +168,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-foreground mb-2">Email (optional)</label>
+                <label className="block text-sm font-semibold text-foreground mb-2">Email (optional)</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
@@ -152,7 +182,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-foreground mb-2">Password</label>
+                <label className="block text-sm font-semibold text-foreground mb-2">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
@@ -181,43 +211,52 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
             <div className="mt-6 text-center">
               <span className="text-muted-foreground">Already have an account? </span>
-              <button onClick={() => setAuthScreen('login')} className="text-primary font-bold hover:underline">Log In</button>
+              <button onClick={() => setAuthScreen('login')} className="text-foreground font-semibold hover:underline">Log In</button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-hero">
+    <div className="flex flex-col h-screen bg-foreground">
       <div className="flex-1 flex flex-col justify-center px-6">
-        {/* Back Button */}
         {onBack && (
-          <button 
+          <motion.button 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={onBack} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className="absolute top-6 left-6 p-2 bg-background/10 rounded-xl hover:bg-background/20 transition-colors"
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
-          </button>
+            <ChevronLeft className="w-6 h-6 text-background" />
+          </motion.button>
         )}
         
-        {/* Logo */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-20 h-20 glass-dark rounded-3xl mb-4 animate-bounce-subtle">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-background/10 rounded-3xl mb-4">
             <span className="text-4xl">🤝</span>
           </div>
-          <h1 className="text-3xl font-bold text-primary-foreground">Mazaadi</h1>
-          <p className="text-primary-foreground/70 mt-1">
+          <h1 className="font-display text-3xl font-bold text-background">Mazaadi</h1>
+          <p className="text-background/60 mt-1">
             {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}
           </p>
-        </div>
+        </motion.div>
 
-        {/* Form */}
-        <div className="bg-card rounded-3xl p-6 shadow-xl animate-slide-up">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-card rounded-3xl p-6"
+          style={{ boxShadow: 'var(--shadow-xl)' }}
+        >
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-foreground mb-2">Phone Number</label>
+              <label className="block text-sm font-semibold text-foreground mb-2">Phone Number</label>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
@@ -231,7 +270,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-foreground mb-2">Password</label>
+              <label className="block text-sm font-semibold text-foreground mb-2">Password</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
@@ -250,7 +289,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
               </div>
             </div>
 
-            <button className="text-sm text-primary font-semibold hover:underline">
+            <button className="text-sm text-muted-foreground font-medium hover:text-foreground transition-colors">
               Forgot password?
             </button>
 
@@ -267,12 +306,12 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
             <span className="text-muted-foreground">Don't have an account? </span>
             <button
               onClick={() => setAuthScreen('signup')}
-              className="text-primary font-bold hover:underline"
+              className="text-foreground font-semibold hover:underline"
             >
               Sign Up
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
