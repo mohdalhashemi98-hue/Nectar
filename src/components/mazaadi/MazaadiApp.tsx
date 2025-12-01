@@ -13,6 +13,7 @@ import VendorProfileScreen from './screens/VendorProfileScreen';
 import RewardsScreen from './screens/RewardsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import JobsScreen from './screens/JobsScreen';
+import JobDetailScreen from './screens/JobDetailScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import ChatScreen from './screens/ChatScreen';
 import CompanyProfileScreen from './screens/CompanyProfileScreen';
@@ -204,7 +205,51 @@ const MazaadiApp = () => {
             userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
-            onSelectJob={setSelectedJob}
+            onSelectJob={(job) => {
+              setSelectedJob(job);
+              navigateTo('job-detail');
+            }}
+          />
+        );
+      
+      case 'job-detail':
+        return selectedJob ? (
+          <JobDetailScreen
+            job={selectedJob}
+            vendor={previousVendors.find(v => v.id === selectedJob.vendorId) || null}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onStartChat={() => {
+              const existingConv = conversations.find(c => c.name === selectedJob.vendor);
+              if (existingConv) {
+                setSelectedConversation(existingConv);
+              } else if (selectedJob.vendor) {
+                const newConv = {
+                  id: Date.now(),
+                  name: selectedJob.vendor,
+                  avatar: selectedJob.vendor.charAt(0),
+                  lastMessage: '',
+                  time: 'Now',
+                  unread: false,
+                  online: true,
+                  messages: []
+                };
+                setConversations(prev => [newConv, ...prev]);
+                setSelectedConversation(newConv);
+              }
+              navigateTo('chat');
+            }}
+          />
+        ) : (
+          <JobsScreen
+            jobs={jobs}
+            userType={userType}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectJob={(job) => {
+              setSelectedJob(job);
+              navigateTo('job-detail');
+            }}
           />
         );
       
