@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap, LucideIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, Wrench, Package, Scissors, Monitor, Truck, Wind, Droplets, Zap, X, LucideIcon } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
@@ -49,11 +49,14 @@ const ConsumerHomeScreen = ({
   onResetRequestForm
 }: ConsumerHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showReviewBanner, setShowReviewBanner] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const pendingReviewJobs = jobs.filter(j => j.status === 'Completed' && !j.rated);
 
   const searchResults = searchQuery.length > 0
     ? categories.filter(c => 
@@ -151,6 +154,50 @@ const ConsumerHomeScreen = ({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-6 py-5 pb-24 space-y-6">
+        {/* Review Reminder Banner */}
+        <AnimatePresence>
+          {showReviewBanner && pendingReviewJobs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              className="relative"
+            >
+              <div className="bg-gradient-to-r from-primary/15 via-primary/10 to-primary/5 border border-primary/30 rounded-2xl p-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
+                <button 
+                  onClick={() => setShowReviewBanner(false)}
+                  className="absolute top-2 right-2 p-1.5 rounded-full bg-background/50 hover:bg-background/80 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
+                <div className="flex items-center gap-3 relative z-10">
+                  <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Star className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-foreground text-sm">
+                      {pendingReviewJobs.length === 1 
+                        ? `Review your ${pendingReviewJobs[0].title}` 
+                        : `${pendingReviewJobs.length} jobs need your review`}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Earn 50 points per review</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      onSelectJob(pendingReviewJobs[0]);
+                      onNavigate('review');
+                    }}
+                    className="px-4 py-2 bg-primary text-primary-foreground rounded-xl text-xs font-semibold hover:bg-primary/90 transition-colors flex-shrink-0"
+                  >
+                    Review
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Golden Ticket Rewards Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
