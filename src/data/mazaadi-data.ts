@@ -78,6 +78,21 @@ export const initialJobs: Job[] = [
     category: 'AC & HVAC'
   },
   { 
+    id: 5, 
+    title: 'Kitchen Plumbing Fix', 
+    vendor: 'Sarah Hassan',
+    vendorId: 2,
+    amount: 180, 
+    status: 'Completed',
+    paymentStatus: 'Paid',
+    pointsEarned: 0,
+    date: '2024-02-25',
+    completedDate: '2024-02-26',
+    rated: false,
+    rating: 0,
+    category: 'Plumbing'
+  },
+  { 
     id: 2, 
     title: 'Plumbing Repair', 
     vendor: 'Sarah Hassan',

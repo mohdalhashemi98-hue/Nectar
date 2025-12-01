@@ -147,79 +147,101 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
             const statusConfig = getStatusConfig(job.status);
             const StatusIcon = statusConfig.icon;
             
-            return (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + index * 0.03 }}
-                whileHover={{ y: -2 }}
-                onClick={() => onSelectJob(job)}
-                className="card-interactive p-4"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-xl">
-                      {getCategoryIcon(job.category)}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground">
-                        {job.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">{job.category}</p>
-                    </div>
-                  </div>
-                  <div className={`px-3 py-1.5 rounded-full ${statusConfig.bg} flex items-center gap-1.5`}>
-                    <StatusIcon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
-                    <span className={`text-xs font-medium ${statusConfig.color}`}>{job.status}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    {job.vendor && (
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
-                          {job.vendor.charAt(0)}
-                        </div>
-                        <span className="text-sm text-muted-foreground">{job.vendor}</span>
+              const canReview = job.status === 'Completed' && !job.rated;
+              
+              return (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + index * 0.03 }}
+                  whileHover={{ y: -2 }}
+                  className="card-interactive p-4"
+                >
+                  <div className="flex items-start justify-between mb-3" onClick={() => onSelectJob(job)}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-xl">
+                        {getCategoryIcon(job.category)}
                       </div>
-                    )}
-                    {job.offersCount && (
-                      <span className="text-sm font-semibold text-foreground">
-                        {job.offersCount} offers
-                      </span>
-                    )}
+                      <div>
+                        <h3 className="font-semibold text-foreground">
+                          {job.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">{job.category}</p>
+                      </div>
+                    </div>
+                    <div className={`px-3 py-1.5 rounded-full ${statusConfig.bg} flex items-center gap-1.5`}>
+                      <StatusIcon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
+                      <span className={`text-xs font-medium ${statusConfig.color}`}>{job.status}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {job.amount > 0 && (
-                      <span className="font-bold text-foreground">
-                        {job.amount} AED
-                      </span>
-                    )}
+
+                  <div className="flex items-center justify-between" onClick={() => onSelectJob(job)}>
+                    <div className="flex items-center gap-4">
+                      {job.vendor && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                            {job.vendor.charAt(0)}
+                          </div>
+                          <span className="text-sm text-muted-foreground">{job.vendor}</span>
+                        </div>
+                      )}
+                      {job.offersCount && (
+                        <span className="text-sm font-semibold text-foreground">
+                          {job.offersCount} offers
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {job.amount > 0 && (
+                        <span className="font-bold text-foreground">
+                          {job.amount} AED
+                        </span>
+                      )}
                       {job.rated && (
                         <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
                           <Star className="w-4 h-4 text-primary fill-primary" />
-                        <span className="text-sm font-bold">{job.rating}</span>
-                      </div>
-                    )}
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </div>
-
-                {job.pointsEarned > 0 && (
-                  <div className="mt-3 pt-3 border-t border-border flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <span className="text-xs">🪙</span>
+                          <span className="text-sm font-bold">{job.rating}</span>
+                        </div>
+                      )}
+                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </div>
-                    <span className="text-sm text-muted-foreground">Earned</span>
-                    <span className="text-sm font-bold text-primary">
-                      +{job.pointsEarned} pts
-                    </span>
                   </div>
-                )}
-              </motion.div>
-            );
+
+                  {/* Review CTA for completed unrated jobs */}
+                  {canReview && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-3 pt-3 border-t border-border"
+                    >
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectJob(job);
+                          onNavigate('review');
+                        }}
+                        className="w-full py-2.5 bg-gradient-golden text-primary-foreground rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                      >
+                        <Star className="w-4 h-4" />
+                        Leave a Review & Earn 50 pts
+                      </button>
+                    </motion.div>
+                  )}
+
+                  {job.pointsEarned > 0 && !canReview && (
+                    <div className="mt-3 pt-3 border-t border-border flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                        <span className="text-xs">🪙</span>
+                      </div>
+                      <span className="text-sm text-muted-foreground">Earned</span>
+                      <span className="text-sm font-bold text-primary">
+                        +{job.pointsEarned} pts
+                      </span>
+                    </div>
+                  )}
+                </motion.div>
+              );
           })
         )}
       </div>
