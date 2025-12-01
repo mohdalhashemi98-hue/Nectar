@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData } from '@/types/mazaadi';
+import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob } from '@/types/mazaadi';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
@@ -21,6 +21,7 @@ import CompanyProfileScreen from './screens/CompanyProfileScreen';
 import PostJobScreen from './screens/PostJobScreen';
 import ReviewScreen from './screens/ReviewScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
+import RequestDetailScreen from './screens/RequestDetailScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -43,6 +44,7 @@ const MazaadiApp = () => {
   // Selection state
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [selectedAvailableJob, setSelectedAvailableJob] = useState<AvailableJob | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
@@ -159,7 +161,7 @@ const MazaadiApp = () => {
             vendorStats={vendorStats}
             availableJobs={availableJobs}
             onNavigate={navigateTo}
-            onSelectJob={(job) => setSelectedJob(job as any)}
+            onSelectJob={(job) => setSelectedAvailableJob(job)}
           />
         );
       
@@ -351,6 +353,22 @@ const MazaadiApp = () => {
             onBack={goBack}
             onNavigate={navigateTo}
             onSelectJob={setSelectedJob}
+          />
+        );
+      
+      case 'request-detail':
+        return selectedAvailableJob ? (
+          <RequestDetailScreen
+            job={selectedAvailableJob}
+            onBack={goBack}
+            onNavigate={navigateTo}
+          />
+        ) : (
+          <VendorHomeScreen
+            vendorStats={vendorStats}
+            availableJobs={availableJobs}
+            onNavigate={navigateTo}
+            onSelectJob={(job) => setSelectedAvailableJob(job)}
           />
         );
       
