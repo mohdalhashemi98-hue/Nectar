@@ -148,12 +148,27 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
               <motion.div 
                 key={a.id} 
                 whileHover={{ scale: 1.05 }}
-                className={`text-center p-3 rounded-xl transition-all ${
-                  a.earned ? 'bg-foreground/5 border border-foreground/10' : 'bg-secondary opacity-50'
+                whileTap={{ scale: 0.95 }}
+                className={`text-center p-3 rounded-2xl transition-all relative overflow-hidden ${
+                  a.earned 
+                    ? 'bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 border border-primary/30' 
+                    : 'bg-secondary/50 border border-border opacity-60'
                 }`}
               >
-                <div className="text-2xl mb-1">{a.icon}</div>
-                <div className="text-xs font-medium text-foreground">{a.name}</div>
+                {a.earned && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent animate-pulse-scale" />
+                )}
+                <div className={`text-3xl mb-1.5 relative z-10 ${a.earned ? 'drop-shadow-lg' : 'grayscale'}`}>
+                  {a.icon}
+                </div>
+                <div className={`text-xs font-semibold relative z-10 ${a.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  {a.name}
+                </div>
+                {a.earned && (
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-[10px] text-primary-foreground">✓</span>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
