@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData } from '@/types/mazaadi';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
@@ -51,14 +52,19 @@ const MazaadiApp = () => {
     title: '', description: '', category: '', budget: '', urgency: 'flexible', photos: []
   });
 
+  // Track navigation direction for animations
+  const directionRef = useRef<'forward' | 'back'>('forward');
+
   const navigateTo = (screen: ScreenType) => {
     if (currentScreen !== screen) {
+      directionRef.current = 'forward';
       setNavigationHistory(prev => [...prev, currentScreen]);
     }
     setCurrentScreen(screen);
   };
 
   const goBack = () => {
+    directionRef.current = 'back';
     if (navigationHistory.length > 0) {
       const newHistory = [...navigationHistory];
       const lastScreen = newHistory.pop();
@@ -67,6 +73,22 @@ const MazaadiApp = () => {
     } else {
       setCurrentScreen(userType === 'consumer' ? 'consumer-home' : userType === 'vendor' ? 'vendor-home' : 'welcome');
     }
+  };
+
+  // Animation variants for screen transitions
+  const screenVariants = {
+    enter: (direction: 'forward' | 'back') => ({
+      x: direction === 'forward' ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: 'forward' | 'back') => ({
+      x: direction === 'forward' ? '-100%' : '100%',
+      opacity: 0,
+    }),
   };
 
   const resetRequestForm = () => {
@@ -327,8 +349,24 @@ const MazaadiApp = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-background min-h-screen shadow-2xl">
-      {renderScreen()}
+    <div className="max-w-md mx-auto bg-background min-h-screen shadow-2xl overflow-hidden relative">
+      <AnimatePresence mode="wait" custom={directionRef.current}>
+        <motion.div
+          key={currentScreen}
+          custom={directionRef.current}
+          variants={screenVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: 'spring', stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          className="w-full h-full"
+        >
+          {renderScreen()}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };
