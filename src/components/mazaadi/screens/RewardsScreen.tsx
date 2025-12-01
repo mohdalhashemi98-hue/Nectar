@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
-import { Target, Trophy, Coins, Flame, Gift, Sparkles } from 'lucide-react';
+import { Target, Trophy, Coins, Flame, Gift, Sparkles, Gem, Zap, Star, PiggyBank, Crown, LucideIcon } from 'lucide-react';
 import { Rewards, ScreenType, UserType } from '@/types/mazaadi';
 import { tierConfig } from '@/data/mazaadi-data';
 import BottomNav from '../BottomNav';
+
+const achievementIcons: Record<string, LucideIcon> = {
+  Trophy, Gem, Zap, Star, PiggyBank, Crown
+};
 
 interface RewardsScreenProps {
   rewards: Rewards;
@@ -144,33 +148,40 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             Achievements
           </h3>
           <div className="grid grid-cols-3 gap-2">
-            {rewards.achievements.map((a) => (
-              <motion.div 
-                key={a.id} 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`text-center p-3 rounded-2xl transition-all relative overflow-hidden ${
-                  a.earned 
-                    ? 'bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 border border-primary/30' 
-                    : 'bg-secondary/50 border border-border opacity-60'
-                }`}
-              >
-                {a.earned && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent animate-pulse-scale" />
-                )}
-                <div className={`text-3xl mb-1.5 relative z-10 ${a.earned ? 'drop-shadow-lg' : 'grayscale'}`}>
-                  {a.icon}
-                </div>
-                <div className={`text-xs font-semibold relative z-10 ${a.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {a.name}
-                </div>
-                {a.earned && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-[10px] text-primary-foreground">✓</span>
+            {rewards.achievements.map((a) => {
+              const IconComponent = achievementIcons[a.icon] || Trophy;
+              return (
+                <motion.div 
+                  key={a.id} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`text-center p-3 rounded-2xl transition-all relative overflow-hidden ${
+                    a.earned 
+                      ? 'bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border border-primary/40' 
+                      : 'bg-secondary/50 border border-border opacity-50'
+                  }`}
+                >
+                  {a.earned && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-transparent pulse-glow" />
+                  )}
+                  <div className={`w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center relative z-10 ${
+                    a.earned 
+                      ? 'bg-gradient-golden shadow-lg' 
+                      : 'bg-muted'
+                  }`}>
+                    <IconComponent className={`w-5 h-5 ${a.earned ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
                   </div>
-                )}
-              </motion.div>
-            ))}
+                  <div className={`text-xs font-semibold relative z-10 ${a.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+                    {a.name}
+                  </div>
+                  {a.earned && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-lg border-2 border-background">
+                      <span className="text-[10px] text-primary-foreground font-bold">✓</span>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
 

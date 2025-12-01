@@ -34,12 +34,12 @@ export const initialRewards: Rewards = {
     endsIn: '3 days'
   },
   achievements: [
-    { id: 1, name: 'First Booking', icon: '🏆', earned: true, date: 'Jan 2024' },
-    { id: 2, name: 'Loyal Customer', icon: '💎', earned: true, date: 'Feb 2024' },
-    { id: 3, name: 'Quick Payer', icon: '⚡', earned: true, date: 'Feb 2024' },
-    { id: 4, name: 'Review Master', icon: '🌟', earned: false, date: null },
-    { id: 5, name: 'Super Saver', icon: '🪙', earned: false, date: null },
-    { id: 6, name: 'VIP Member', icon: '👑', earned: false, date: null }
+    { id: 1, name: 'First Booking', icon: 'Trophy', earned: true, date: 'Jan 2024' },
+    { id: 2, name: 'Loyal Customer', icon: 'Gem', earned: true, date: 'Feb 2024' },
+    { id: 3, name: 'Quick Payer', icon: 'Zap', earned: true, date: 'Feb 2024' },
+    { id: 4, name: 'Review Master', icon: 'Star', earned: false, date: null },
+    { id: 5, name: 'Super Saver', icon: 'PiggyBank', earned: false, date: null },
+    { id: 6, name: 'VIP Member', icon: 'Crown', earned: false, date: null }
   ],
   recentEarnings: [
     { description: 'AC Maintenance', points: 125, date: '2 days ago', type: 'job' },
