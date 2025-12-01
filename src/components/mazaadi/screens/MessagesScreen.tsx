@@ -172,7 +172,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50/50 to-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground p-6 pb-32 relative overflow-hidden">
+      <div className="bg-gradient-golden text-primary-foreground p-6 pb-40 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-0 w-36 h-36 bg-primary-foreground/10 rounded-full blur-2xl" />
@@ -224,27 +224,27 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
             transition={{ delay: 0.1 }}
             className="grid grid-cols-3 gap-3 mb-8"
           >
-            {/* Online Now - Special Design */}
+            {/* Online Now - Warm Amber Design */}
             <motion.div 
-              className="bg-emerald-500/90 backdrop-blur-sm rounded-2xl p-3 border border-emerald-400/30 shadow-lg shadow-emerald-500/20"
+              className="bg-amber-800/80 backdrop-blur-sm rounded-2xl p-3 border border-amber-600/30 shadow-lg shadow-amber-900/30"
               whileHover={{ scale: 1.03, y: -2 }}
               transition={{ duration: 0.2 }}
             >
               <div className="flex flex-col items-center text-center gap-1">
-                <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center relative">
+                <div className="w-9 h-9 rounded-xl bg-amber-200/30 flex items-center justify-center relative">
                   <motion.div
                     animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
                     transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute w-6 h-6 rounded-full bg-white/30"
+                    className="absolute w-6 h-6 rounded-full bg-amber-200/40"
                   />
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="w-3.5 h-3.5 rounded-full bg-white shadow-sm"
+                    className="w-3.5 h-3.5 rounded-full bg-amber-200 shadow-sm"
                   />
                 </div>
-                <p className="font-display text-2xl font-bold text-white">{onlineCount}</p>
-                <p className="text-[10px] text-white/80 leading-tight font-medium">Online</p>
+                <p className="font-display text-2xl font-bold text-amber-100">{onlineCount}</p>
+                <p className="text-[10px] text-amber-200/80 leading-tight font-medium">Online</p>
               </div>
             </motion.div>
 
@@ -297,7 +297,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
       </div>
 
       {/* Conversations List */}
-      <div className="px-4 -mt-14 space-y-3 relative z-10">
+      <div className="px-4 -mt-12 space-y-3 relative z-10">
         {visibleConversations.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
