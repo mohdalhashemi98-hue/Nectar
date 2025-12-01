@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, Phone, MessageSquare, Star, CheckCircle, Clock, 
-  CreditCard, MapPin, Calendar, Shield, ChevronRight, AlertCircle,
+  CreditCard, Calendar, Shield, AlertCircle,
   Timer, Package, Banknote
 } from 'lucide-react';
 import { Job, Vendor, ScreenType } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 interface JobDetailScreenProps {
   job: Job;
@@ -14,17 +15,6 @@ interface JobDetailScreenProps {
   onNavigate: (screen: ScreenType) => void;
   onStartChat: () => void;
 }
-
-const getCategoryIcon = (category: string) => {
-  switch (category) {
-    case 'AC & HVAC': return '❄️';
-    case 'Plumbing': return '🚿';
-    case 'Cleaning': return '✨';
-    case 'Maintenance': return '🔧';
-    case 'Electrical': return '⚡';
-    default: return '📦';
-  }
-};
 
 const getStatusConfig = (status: string) => {
   switch (status) {
@@ -127,8 +117,8 @@ const JobDetailScreen = ({ job, vendor, onBack, onNavigate, onStartChat }: JobDe
             className="bg-white/15 rounded-2xl p-4"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-2xl">
-                {getCategoryIcon(job.category)}
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                <CategoryIcon category={job.category} className="w-7 h-7 text-primary-foreground" />
               </div>
               <div className="flex-1">
                 <h2 className="font-semibold text-lg">{job.title}</h2>
