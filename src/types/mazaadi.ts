@@ -36,6 +36,8 @@ export interface Achievement {
   icon: string;
   earned: boolean;
   date: string | null;
+  progress?: number;
+  target?: number;
 }
 
 export interface Earning {

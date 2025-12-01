@@ -150,6 +150,7 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
           <div className="grid grid-cols-3 gap-3">
             {rewards.achievements.map((a) => {
               const IconComponent = achievementIcons[a.icon] || Trophy;
+              const progressPercent = a.progress && a.target ? Math.min((a.progress / a.target) * 100, 100) : 0;
               return (
                 <motion.div 
                   key={a.id} 
@@ -173,9 +174,24 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
                       </div>
                     )}
                   </div>
-                  <div className={`text-[11px] font-medium leading-tight ${a.earned ? 'text-foreground' : 'text-muted-foreground/60'}`}>
+                  <div className={`text-[11px] font-medium leading-tight mb-1.5 ${a.earned ? 'text-foreground' : 'text-muted-foreground/60'}`}>
                     {a.name}
                   </div>
+                  {!a.earned && a.progress !== undefined && a.target !== undefined && (
+                    <div className="mt-1">
+                      <div className="h-1 bg-border rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progressPercent}%` }}
+                          transition={{ delay: 0.3, duration: 0.6 }}
+                          className="h-full bg-primary/60 rounded-full"
+                        />
+                      </div>
+                      <div className="text-[9px] text-muted-foreground mt-1">
+                        {a.progress}/{a.target}
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}

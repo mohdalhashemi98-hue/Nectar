@@ -37,9 +37,9 @@ export const initialRewards: Rewards = {
     { id: 1, name: 'First Booking', icon: 'Trophy', earned: true, date: 'Jan 2024' },
     { id: 2, name: 'Loyal Customer', icon: 'Gem', earned: true, date: 'Feb 2024' },
     { id: 3, name: 'Quick Payer', icon: 'Zap', earned: true, date: 'Feb 2024' },
-    { id: 4, name: 'Review Master', icon: 'Star', earned: false, date: null },
-    { id: 5, name: 'Super Saver', icon: 'PiggyBank', earned: false, date: null },
-    { id: 6, name: 'VIP Member', icon: 'Crown', earned: false, date: null }
+    { id: 4, name: 'Review Master', icon: 'Star', earned: false, date: null, progress: 7, target: 10 },
+    { id: 5, name: 'Super Saver', icon: 'PiggyBank', earned: false, date: null, progress: 650, target: 1000 },
+    { id: 6, name: 'VIP Member', icon: 'Crown', earned: false, date: null, progress: 2847, target: 5000 }
   ],
   recentEarnings: [
     { description: 'AC Maintenance', points: 125, date: '2 days ago', type: 'job' },
