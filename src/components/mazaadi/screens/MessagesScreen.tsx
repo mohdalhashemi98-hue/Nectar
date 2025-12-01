@@ -172,21 +172,31 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50/50 to-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground p-6 pb-24 relative overflow-hidden">
+      <div className="bg-gradient-golden text-primary-foreground p-6 pb-32 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
-        <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-primary-foreground/5 rounded-full blur-xl" />
+        <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-0 w-36 h-36 bg-primary-foreground/10 rounded-full blur-2xl" />
+        <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-primary-foreground/5 rounded-full blur-xl" />
+        
+        {/* Honeycomb pattern overlay */}
+        <div className="absolute inset-0 opacity-5">
+          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <pattern id="honeycomb" width="20" height="20" patternUnits="userSpaceOnUse">
+              <polygon points="10,0 20,5 20,15 10,20 0,15 0,5" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#honeycomb)" />
+          </svg>
+        </div>
         
         <div className="relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-6"
+            className="flex items-center gap-4 mb-8"
           >
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="font-display text-2xl font-bold">Messages</h1>
+                <h1 className="font-display text-3xl font-bold tracking-tight">Messages</h1>
                 <motion.div
                   animate={{ rotate: [0, 15, -15, 0] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
@@ -194,12 +204,12 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
                   <Sparkles className="w-5 h-5 text-primary-foreground/80" />
                 </motion.div>
               </div>
-              <p className="opacity-80 text-sm">
+              <p className="opacity-80 text-sm mt-1">
                 {unreadCount > 0 ? `${unreadCount} unread conversations` : 'All caught up!'}
               </p>
             </div>
             <motion.div 
-              className="w-14 h-14 rounded-2xl bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center border border-primary-foreground/10"
+              className="w-14 h-14 rounded-2xl bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center border border-primary-foreground/20 shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -207,41 +217,66 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
             </motion.div>
           </motion.div>
 
-          {/* Stats Row */}
+          {/* Stats Row - Redesigned */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="grid grid-cols-3 gap-3 mb-6"
+            className="grid grid-cols-3 gap-3 mb-8"
           >
-            {[
-              { icon: Circle, value: onlineCount, label: 'Online Now', color: 'bg-emerald-400' },
-              { icon: MessageSquare, value: unreadCount, label: 'Unread', color: 'bg-primary-foreground' },
-              { icon: Users, value: visibleConversations.length, label: 'Total Chats', color: 'bg-amber-300' }
-            ].map((stat, idx) => (
-              <motion.div 
-                key={idx} 
-                className="bg-primary-foreground/15 backdrop-blur-sm rounded-2xl p-3 border border-primary-foreground/10"
-                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.2)' }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex flex-col items-center text-center gap-1">
-                  <div className={`w-8 h-8 rounded-xl ${idx === 0 ? 'bg-emerald-400/30' : 'bg-primary-foreground/20'} flex items-center justify-center`}>
-                    {idx === 0 ? (
-                      <motion.div
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="w-3 h-3 rounded-full bg-emerald-400"
-                      />
-                    ) : (
-                      <stat.icon className="w-4 h-4" />
-                    )}
-                  </div>
-                  <p className="font-display text-2xl font-bold">{stat.value}</p>
-                  <p className="text-[10px] opacity-70 leading-tight">{stat.label}</p>
+            {/* Online Now - Special Design */}
+            <motion.div 
+              className="bg-emerald-500/90 backdrop-blur-sm rounded-2xl p-3 border border-emerald-400/30 shadow-lg shadow-emerald-500/20"
+              whileHover={{ scale: 1.03, y: -2 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex flex-col items-center text-center gap-1">
+                <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center relative">
+                  <motion.div
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute w-6 h-6 rounded-full bg-white/30"
+                  />
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="w-3.5 h-3.5 rounded-full bg-white shadow-sm"
+                  />
                 </div>
-              </motion.div>
-            ))}
+                <p className="font-display text-2xl font-bold text-white">{onlineCount}</p>
+                <p className="text-[10px] text-white/80 leading-tight font-medium">Online</p>
+              </div>
+            </motion.div>
+
+            {/* Unread */}
+            <motion.div 
+              className="bg-primary-foreground/15 backdrop-blur-sm rounded-2xl p-3 border border-primary-foreground/10"
+              whileHover={{ scale: 1.03, y: -2 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex flex-col items-center text-center gap-1">
+                <div className="w-9 h-9 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <p className="font-display text-2xl font-bold">{unreadCount}</p>
+                <p className="text-[10px] opacity-70 leading-tight">Unread</p>
+              </div>
+            </motion.div>
+
+            {/* Total Chats */}
+            <motion.div 
+              className="bg-primary-foreground/15 backdrop-blur-sm rounded-2xl p-3 border border-primary-foreground/10"
+              whileHover={{ scale: 1.03, y: -2 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex flex-col items-center text-center gap-1">
+                <div className="w-9 h-9 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
+                  <Users className="w-4 h-4" />
+                </div>
+                <p className="font-display text-2xl font-bold">{visibleConversations.length}</p>
+                <p className="text-[10px] opacity-70 leading-tight">Total</p>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Search */}
@@ -255,14 +290,14 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
             <input
               type="text"
               placeholder="Search conversations..."
-              className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-primary-foreground/20 backdrop-blur-md placeholder:opacity-60 border border-primary-foreground/20 focus:outline-none focus:border-primary-foreground/40 focus:bg-primary-foreground/25 transition-all text-primary-foreground shadow-inner"
+              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-primary-foreground/25 backdrop-blur-md placeholder:opacity-60 border border-primary-foreground/20 focus:outline-none focus:border-primary-foreground/40 focus:bg-primary-foreground/30 transition-all text-primary-foreground shadow-inner"
             />
           </motion.div>
         </div>
       </div>
 
       {/* Conversations List */}
-      <div className="px-4 -mt-10 space-y-3 relative z-10">
+      <div className="px-4 -mt-14 space-y-3 relative z-10">
         {visibleConversations.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
