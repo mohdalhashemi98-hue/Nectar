@@ -297,7 +297,7 @@ const MessagesScreen = ({ conversations, userType, onBack, onNavigate, onSelectC
       </div>
 
       {/* Conversations List */}
-      <div className="px-4 -mt-12 space-y-3 relative z-10">
+      <div className="px-4 -mt-6 space-y-3 relative z-10">
         {visibleConversations.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
