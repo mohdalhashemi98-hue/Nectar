@@ -22,6 +22,7 @@ import PostJobScreen from './screens/PostJobScreen';
 import ReviewScreen from './screens/ReviewScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import RequestDetailScreen from './screens/RequestDetailScreen';
+import VendorWorkScreen from './screens/VendorWorkScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -234,7 +235,16 @@ const MazaadiApp = () => {
         );
       
       case 'transactions':
-        return (
+        return userType === 'vendor' ? (
+          <VendorWorkScreen
+            availableJobs={availableJobs}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectJob={(job) => {
+              setSelectedAvailableJob(job);
+            }}
+          />
+        ) : (
           <JobsScreen
             jobs={jobs}
             userType={userType}
