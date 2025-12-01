@@ -20,6 +20,7 @@ import ChatScreen from './screens/ChatScreen';
 import CompanyProfileScreen from './screens/CompanyProfileScreen';
 import PostJobScreen from './screens/PostJobScreen';
 import ReviewScreen from './screens/ReviewScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -217,6 +218,16 @@ const MazaadiApp = () => {
             userType={userType}
             onNavigate={navigateTo}
             onLogout={handleLogout}
+          />
+        );
+      
+      case 'notifications':
+        return (
+          <NotificationsScreen
+            notifications={notifications}
+            userType={userType}
+            onBack={goBack}
+            onNavigate={navigateTo}
           />
         );
       
