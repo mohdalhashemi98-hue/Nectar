@@ -310,6 +310,19 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
           </Button>
         </div>
       )}
+
+      {/* Payment Button - Show when job needs payment */}
+      {userType === 'consumer' && job.paymentStatus !== 'Paid' && job.vendor && (job.status === 'In Progress' || job.status === 'Awaiting Completion') && (
+        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
+          <Button
+            onClick={() => onNavigate('payment')}
+            className="w-full bg-gradient-golden text-primary-foreground hover:opacity-90 h-12 text-base font-semibold"
+          >
+            <CreditCard className="w-5 h-5 mr-2" />
+            View Payment & Progress
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
