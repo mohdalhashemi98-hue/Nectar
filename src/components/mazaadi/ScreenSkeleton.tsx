@@ -87,19 +87,32 @@ export const ConsumerHomeSkeleton = () => (
 
 export const VendorHomeSkeleton = () => (
   <div className="flex flex-col h-screen bg-background">
-    {/* Header Skeleton - Dark with golden accents */}
-    <div className="bg-foreground px-6 py-5">
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <div className="h-7 w-44 mb-2 rounded-lg bg-primary/30 shimmer" />
-          <div className="h-5 w-32 rounded-lg bg-primary/20 shimmer" />
+    {/* Header Skeleton - Golden gradient matching app design */}
+    <div className="bg-gradient-golden px-6 py-5 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-36 h-36 bg-primary-foreground/10 rounded-full blur-2xl" />
+      
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-foreground/20 shimmer" />
+            <div>
+              <div className="h-7 w-44 mb-2 rounded-lg bg-primary-foreground/20 shimmer" />
+              <div className="h-5 w-32 rounded-lg bg-primary-foreground/20 shimmer" />
+            </div>
+          </div>
+          <div className="w-11 h-11 rounded-3xl bg-primary-foreground/20 shimmer" />
         </div>
-        <div className="w-11 h-11 rounded-2xl bg-primary/30 shimmer" />
-      </div>
-      <div className="grid grid-cols-3 gap-3">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-24 rounded-2xl bg-primary/20 shimmer" />
-        ))}
+        <div className="grid grid-cols-3 gap-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-24 rounded-3xl bg-primary-foreground/20 border border-primary-foreground/10 shimmer p-3">
+              <div className="w-8 h-8 mx-auto mb-1 rounded-xl bg-primary-foreground/20" />
+              <div className="h-5 w-12 mx-auto mb-1 rounded-lg bg-primary-foreground/20" />
+              <div className="h-3 w-14 mx-auto rounded-lg bg-primary-foreground/20" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -109,8 +122,22 @@ export const VendorHomeSkeleton = () => (
       <div>
         <GoldenSkeleton className="h-5 w-48 mb-3 rounded-lg" />
         <div className="grid grid-cols-2 gap-3">
-          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow" />
-          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow" />
+          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <GoldenSkeleton className="w-10 h-10 rounded-xl" />
+              <GoldenSkeleton className="h-3 w-16 rounded-lg" />
+            </div>
+            <GoldenSkeleton className="h-6 w-24 rounded-lg mb-1" />
+            <GoldenSkeleton className="h-3 w-20 rounded-lg" />
+          </div>
+          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <GoldenSkeleton className="w-10 h-10 rounded-xl" />
+              <GoldenSkeleton className="h-3 w-16 rounded-lg" />
+            </div>
+            <GoldenSkeleton className="h-6 w-24 rounded-lg mb-1" />
+            <GoldenSkeleton className="h-3 w-20 rounded-lg" />
+          </div>
         </div>
       </div>
 
@@ -118,8 +145,9 @@ export const VendorHomeSkeleton = () => (
       <div className="grid grid-cols-3 gap-3">
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-20 rounded-2xl bg-card border border-border p-3 flex flex-col justify-center items-center">
-            <GoldenSkeleton className="h-6 w-12 mb-2 rounded-lg" />
-            <GoldenSkeleton className="h-3 w-16 rounded-lg" />
+            <GoldenSkeleton className="w-8 h-8 rounded-lg mb-2" />
+            <GoldenSkeleton className="h-5 w-10 mb-1 rounded-lg" />
+            <GoldenSkeleton className="h-3 w-14 rounded-lg" />
           </div>
         ))}
       </div>
@@ -141,14 +169,20 @@ export const VendorHomeSkeleton = () => (
           <GoldenSkeleton className="h-6 w-16 rounded-full" />
         </div>
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
+          {[1, 2].map((i) => (
             <div key={i} className="h-24 rounded-2xl bg-card border border-border p-4">
-              <div className="flex justify-between mb-2">
-                <GoldenSkeleton className="h-5 w-40 rounded-lg" />
-                <GoldenSkeleton className="h-5 w-20 rounded-lg" />
+              <div className="flex gap-3 mb-2">
+                <GoldenSkeleton className="w-10 h-10 rounded-xl flex-shrink-0" />
+                <div className="flex-1">
+                  <GoldenSkeleton className="h-5 w-40 rounded-lg mb-2" />
+                  <GoldenSkeleton className="h-3 w-24 rounded-lg" />
+                </div>
               </div>
-              <GoldenSkeleton className="h-4 w-full rounded-lg mb-2" />
-              <GoldenSkeleton className="h-3 w-24 rounded-lg" />
+              <div className="flex gap-4">
+                <GoldenSkeleton className="h-4 w-20 rounded-lg" />
+                <GoldenSkeleton className="h-4 w-16 rounded-lg" />
+                <GoldenSkeleton className="h-4 w-16 rounded-lg" />
+              </div>
             </div>
           ))}
         </div>
