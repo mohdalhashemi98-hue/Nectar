@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, Users, Calendar, Target, Award, BarChart3, MessageSquare, ThumbsUp } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, Users, Calendar, Target, Award, BarChart3, MessageSquare, ThumbsUp, Filter, SortDesc, X, ChevronDown } from 'lucide-react';
 import { VendorStats, AvailableJob, ScreenType } from '@/types/mazaadi';
 import BottomNav from '../BottomNav';
 import { VendorHomeSkeleton } from '../ScreenSkeleton';
@@ -52,6 +52,48 @@ const VendorHomeScreen = ({
   onSelectJob
 }: VendorHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [urgentOnly, setUrgentOnly] = useState(false);
+  const [sortBy, setSortBy] = useState<'newest' | 'distance' | 'budget'>('newest');
+  const [showFilters, setShowFilters] = useState(false);
+
+  const categories = useMemo(() => {
+    const cats = new Set(availableJobs.map(job => job.category));
+    return ['all', ...Array.from(cats)];
+  }, [availableJobs]);
+
+  const filteredAndSortedJobs = useMemo(() => {
+    let jobs = [...availableJobs];
+    
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      jobs = jobs.filter(job => job.category === categoryFilter);
+    }
+    
+    // Apply urgent filter
+    if (urgentOnly) {
+      jobs = jobs.filter(job => job.urgent);
+    }
+    
+    // Apply sorting
+    jobs.sort((a, b) => {
+      switch (sortBy) {
+        case 'distance':
+          return parseFloat(a.distance) - parseFloat(b.distance);
+        case 'budget':
+          const budgetA = parseInt(a.budget.split('-')[1] || a.budget);
+          const budgetB = parseInt(b.budget.split('-')[1] || b.budget);
+          return budgetB - budgetA;
+        case 'newest':
+        default:
+          return 0; // Keep original order for newest
+      }
+    });
+    
+    return jobs;
+  }, [availableJobs, categoryFilter, urgentOnly, sortBy]);
+
+  const activeFiltersCount = (categoryFilter !== 'all' ? 1 : 0) + (urgentOnly ? 1 : 0);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -308,14 +350,129 @@ const VendorHomeScreen = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <h3 className="font-display text-lg font-bold text-foreground">Available Jobs</h3>
           <span className="px-3 py-1 bg-primary text-primary-foreground rounded-full text-xs font-semibold">
-            {availableJobs.length} new
+            {filteredAndSortedJobs.length} jobs
           </span>
         </div>
+
+        {/* Filter & Sort Controls */}
+        <div className="flex items-center gap-2 mb-4">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+              showFilters || activeFiltersCount > 0
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary text-foreground hover:bg-secondary/80'
+            }`}
+          >
+            <Filter className="w-4 h-4" />
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="w-5 h-5 bg-primary-foreground text-primary rounded-full text-xs flex items-center justify-center font-bold">
+                {activeFiltersCount}
+              </span>
+            )}
+          </button>
+          
+          <div className="relative flex-1">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="w-full appearance-none bg-secondary text-foreground px-3 py-2 pr-8 rounded-xl text-sm font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              <option value="newest">Newest First</option>
+              <option value="distance">Nearest</option>
+              <option value="budget">Highest Budget</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Expandable Filters Panel */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="card-elevated p-4 mb-4 space-y-4">
+                {/* Category Filter */}
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Category</label>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setCategoryFilter(cat)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                          categoryFilter === cat
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-secondary text-foreground hover:bg-secondary/80'
+                        }`}
+                      >
+                        {cat === 'all' ? 'All Categories' : cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Urgent Filter */}
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-foreground">Urgent jobs only</label>
+                  <button
+                    onClick={() => setUrgentOnly(!urgentOnly)}
+                    className={`w-12 h-6 rounded-full transition-colors ${
+                      urgentOnly ? 'bg-primary' : 'bg-secondary'
+                    }`}
+                  >
+                    <motion.div
+                      animate={{ x: urgentOnly ? 24 : 2 }}
+                      className="w-5 h-5 bg-white rounded-full shadow-md"
+                    />
+                  </button>
+                </div>
+
+                {/* Clear Filters */}
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={() => {
+                      setCategoryFilter('all');
+                      setUrgentOnly(false);
+                    }}
+                    className="flex items-center gap-1 text-sm text-primary font-medium"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear all filters
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Jobs List */}
         <div className="space-y-3">
-          {availableJobs.map((job, idx) => (
+          {filteredAndSortedJobs.length === 0 ? (
+            <div className="card-elevated p-6 text-center">
+              <Filter className="w-10 h-10 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-muted-foreground">No jobs match your filters</p>
+              <button
+                onClick={() => {
+                  setCategoryFilter('all');
+                  setUrgentOnly(false);
+                }}
+                className="text-sm text-primary font-medium mt-2"
+              >
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            filteredAndSortedJobs.map((job, idx) => (
             <motion.button
               key={job.id}
               initial={{ opacity: 0, y: 10 }}
@@ -349,7 +506,8 @@ const VendorHomeScreen = ({
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{job.time}</span>
               </div>
             </motion.button>
-          ))}
+          ))
+          )}
         </div>
       </motion.div>
     </div>
