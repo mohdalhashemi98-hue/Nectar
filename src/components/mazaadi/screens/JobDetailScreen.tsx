@@ -4,13 +4,15 @@ import {
   CreditCard, Calendar, Shield, AlertCircle,
   Timer, Package, Banknote
 } from 'lucide-react';
-import { Job, Vendor, ScreenType } from '@/types/mazaadi';
+import { Job, Vendor, ScreenType, UserType } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
 import { CategoryIcon } from '../utils/categoryIcons';
+
 
 interface JobDetailScreenProps {
   job: Job;
   vendor?: Vendor | null;
+  userType: UserType;
   onBack: () => void;
   onNavigate: (screen: ScreenType) => void;
   onStartChat: () => void;
@@ -42,7 +44,7 @@ const getPaymentStatusConfig = (status: string | null) => {
   }
 };
 
-const JobDetailScreen = ({ job, vendor, onBack, onNavigate, onStartChat }: JobDetailScreenProps) => {
+const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartChat }: JobDetailScreenProps) => {
   const statusConfig = getStatusConfig(job.status);
   const StatusIcon = statusConfig.icon;
   const paymentConfig = getPaymentStatusConfig(job.paymentStatus);
@@ -86,7 +88,7 @@ const JobDetailScreen = ({ job, vendor, onBack, onNavigate, onStartChat }: JobDe
     }
   ];
 
-  const canReview = job.status === 'Completed' && !job.rated;
+  const canReview = userType === 'consumer' && job.status === 'Completed' && !job.rated;
 
   return (
     <div className="flex flex-col h-screen bg-background">

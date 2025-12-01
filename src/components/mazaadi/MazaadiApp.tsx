@@ -217,6 +217,7 @@ const MazaadiApp = () => {
           <JobDetailScreen
             job={selectedJob}
             vendor={previousVendors.find(v => v.id === selectedJob.vendorId) || null}
+            userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
             onStartChat={() => {

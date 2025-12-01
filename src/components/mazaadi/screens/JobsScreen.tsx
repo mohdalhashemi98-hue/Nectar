@@ -138,7 +138,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
             const statusConfig = getStatusConfig(job.status);
             const StatusIcon = statusConfig.icon;
             
-              const canReview = job.status === 'Completed' && !job.rated;
+              const canReview = userType === 'consumer' && job.status === 'Completed' && !job.rated;
               
               return (
                 <motion.div
