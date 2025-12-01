@@ -129,7 +129,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                 <p className="text-primary-foreground/60 text-sm">by {job.vendor}</p>
               </div>
               <div className="text-right">
-                <div className="font-bold">{job.amount} د.إ</div>
+                <div className="font-bold">{job.amount} AED</div>
                 <div className="text-xs text-success">Completed</div>
               </div>
             </div>
@@ -250,7 +250,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
-                {amount === 0 ? 'None' : `${amount} د.إ`}
+                {amount === 0 ? 'None' : `${amount} AED`}
               </button>
             ))}
           </div>
@@ -288,7 +288,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
           disabled={rating === 0}
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
         >
-          Submit Review {tipAmount && `& Tip ${tipAmount} د.إ`}
+          Submit Review {tipAmount && `& Tip ${tipAmount} AED`}
         </Button>
       </div>
     </div>

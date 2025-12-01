@@ -21,9 +21,9 @@ interface CompanyProfileScreenProps {
 
 const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileScreenProps) => {
   const [services] = useState<Service[]>([
-    { id: '1', name: 'AC Repair & Maintenance', description: 'Complete AC servicing, repair, and installation', price: '150-500 د.إ', duration: '1-3 hours', category: 'HVAC' },
-    { id: '2', name: 'Electrical Work', description: 'Wiring, switches, and electrical repairs', price: '100-300 د.إ', duration: '1-2 hours', category: 'Electrical' },
-    { id: '3', name: 'Plumbing Services', description: 'Leak repairs, pipe installation, bathroom fitting', price: '120-400 د.إ', duration: '1-4 hours', category: 'Plumbing' },
+    { id: '1', name: 'AC Repair & Maintenance', description: 'Complete AC servicing, repair, and installation', price: '150-500 AED', duration: '1-3 hours', category: 'HVAC' },
+    { id: '2', name: 'Electrical Work', description: 'Wiring, switches, and electrical repairs', price: '100-300 AED', duration: '1-2 hours', category: 'Electrical' },
+    { id: '3', name: 'Plumbing Services', description: 'Leak repairs, pipe installation, bathroom fitting', price: '120-400 AED', duration: '1-4 hours', category: 'Plumbing' },
   ]);
 
   return (
