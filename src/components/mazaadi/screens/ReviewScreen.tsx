@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Star, ThumbsUp, Award, MessageSquare, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowLeft, Star, ThumbsUp, Award, MessageSquare, CheckCircle, Sparkles, Briefcase, Clock, Smile, Wrench, Banknote } from 'lucide-react';
 import { ScreenType, Job, ReviewData } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 interface ReviewScreenProps {
   job: Job;
@@ -14,12 +15,12 @@ interface ReviewScreenProps {
 }
 
 const quickTags = [
-  { id: 'professional', label: 'Professional', icon: '👔' },
-  { id: 'punctual', label: 'Punctual', icon: '⏰' },
-  { id: 'quality', label: 'Quality Work', icon: '⭐' },
-  { id: 'friendly', label: 'Friendly', icon: '😊' },
-  { id: 'clean', label: 'Clean & Tidy', icon: '✨' },
-  { id: 'value', label: 'Great Value', icon: '💰' },
+  { id: 'professional', label: 'Professional', Icon: Briefcase },
+  { id: 'punctual', label: 'Punctual', Icon: Clock },
+  { id: 'quality', label: 'Quality Work', Icon: Star },
+  { id: 'friendly', label: 'Friendly', Icon: Smile },
+  { id: 'clean', label: 'Clean & Tidy', Icon: Sparkles },
+  { id: 'value', label: 'Great Value', Icon: Banknote },
 ];
 
 const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenProps) => {
@@ -121,8 +122,8 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
             className="bg-white/15 rounded-2xl p-4"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl">
-                🔧
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <CategoryIcon category={job.category} className="w-6 h-6 text-primary-foreground" />
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold">{job.title}</h3>
@@ -203,7 +204,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
-                <span>{tag.icon}</span>
+                <tag.Icon className="w-4 h-4" />
                 {tag.label}
               </motion.button>
             ))}
