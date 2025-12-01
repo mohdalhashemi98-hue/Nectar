@@ -147,38 +147,35 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             <Trophy className="w-5 h-5" />
             Achievements
           </h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-3">
             {rewards.achievements.map((a) => {
               const IconComponent = achievementIcons[a.icon] || Trophy;
               return (
                 <motion.div 
                   key={a.id} 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`text-center p-3 rounded-2xl transition-all relative overflow-hidden ${
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`text-center p-3 rounded-2xl transition-all relative ${
                     a.earned 
-                      ? 'bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border border-primary/40' 
-                      : 'bg-secondary/50 border border-border opacity-50'
+                      ? 'bg-gradient-to-br from-primary/15 via-primary/8 to-transparent border border-primary/30' 
+                      : 'bg-secondary/30 border border-border/50'
                   }`}
                 >
-                  {a.earned && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-transparent pulse-glow" />
-                  )}
-                  <div className={`w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center relative z-10 ${
+                  <div className={`w-11 h-11 mx-auto mb-2 rounded-xl flex items-center justify-center relative ${
                     a.earned 
-                      ? 'bg-gradient-golden shadow-lg' 
-                      : 'bg-muted'
+                      ? 'bg-gradient-golden shadow-md' 
+                      : 'bg-muted/60'
                   }`}>
-                    <IconComponent className={`w-5 h-5 ${a.earned ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
+                    <IconComponent className={`w-5 h-5 ${a.earned ? 'text-primary-foreground' : 'text-muted-foreground/60'}`} />
+                    {a.earned && (
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full flex items-center justify-center shadow-sm border border-background">
+                        <span className="text-[8px] text-success-foreground font-bold">✓</span>
+                      </div>
+                    )}
                   </div>
-                  <div className={`text-xs font-semibold relative z-10 ${a.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  <div className={`text-[11px] font-medium leading-tight ${a.earned ? 'text-foreground' : 'text-muted-foreground/60'}`}>
                     {a.name}
                   </div>
-                  {a.earned && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-lg border-2 border-background">
-                      <span className="text-[10px] text-primary-foreground font-bold">✓</span>
-                    </div>
-                  )}
                 </motion.div>
               );
             })}
