@@ -322,7 +322,7 @@ const ConsumerHomeScreen = ({
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{job.vendor}</span>
-                    <span className="font-bold text-primary">{job.amount} د.إ</span>
+                    <span className="font-bold text-primary">{job.amount} AED</span>
                   </div>
                 </motion.button>
               ))}

@@ -71,7 +71,7 @@ const VendorHomeScreen = ({
         >
           {[
             { value: vendorStats.totalJobs, label: 'Jobs Done', icon: Briefcase },
-            { value: `${(vendorStats.totalEarnings / 1000).toFixed(0)}K`, label: 'د.إ Earned', icon: DollarSign },
+            { value: `${(vendorStats.totalEarnings / 1000).toFixed(0)}K`, label: 'AED Earned', icon: DollarSign },
             { value: `${vendorStats.completionRate}%`, label: 'Success', icon: Target }
           ].map((stat, idx) => (
             <div key={idx} className="bg-primary-foreground/20 backdrop-blur-xl rounded-3xl p-3 text-center border border-primary-foreground/10">
@@ -107,7 +107,7 @@ const VendorHomeScreen = ({
               <div className="text-xs text-muted-foreground">Earnings</div>
             </div>
             <div className="font-display text-xl font-bold text-foreground">
-              {vendorStats.thisMonth.earnings.toLocaleString()} د.إ
+              {vendorStats.thisMonth.earnings.toLocaleString()} AED
             </div>
             <div className="text-xs text-success font-medium mt-1">↑ 12% from last month</div>
           </div>

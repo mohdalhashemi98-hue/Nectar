@@ -84,7 +84,7 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
         >
           {[
             { icon: Flame, value: `${rewards.streak} Day`, label: 'Streak' },
-            { icon: Coins, value: rewards.totalSaved, label: 'د.إ Saved' },
+            { icon: Coins, value: rewards.totalSaved, label: 'AED Saved' },
             { icon: Sparkles, value: rewards.lifetimePoints.toLocaleString(), label: 'Lifetime' }
           ].map((stat, idx) => (
             <div key={idx} className="bg-card rounded-2xl p-3 border border-border" style={{ boxShadow: 'var(--shadow-md)' }}>
