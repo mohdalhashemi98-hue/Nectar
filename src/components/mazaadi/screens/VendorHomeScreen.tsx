@@ -1,11 +1,42 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, Users, Calendar, Target, Award, BarChart3 } from 'lucide-react';
+import { Star, Settings, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, Users, Calendar, Target, Award, BarChart3, MessageSquare, ThumbsUp } from 'lucide-react';
 import { VendorStats, AvailableJob, ScreenType } from '@/types/mazaadi';
 import BottomNav from '../BottomNav';
 import { VendorHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon } from '../utils/categoryIcons';
 import nectarLogo from '@/assets/nectar-logo.png';
+
+// Mock customer reviews data
+const customerReviews = [
+  {
+    id: 1,
+    customerName: 'Mohammed K.',
+    rating: 5,
+    comment: 'Excellent AC service! Ahmad was professional, arrived on time, and fixed the issue quickly. Highly recommend!',
+    date: '2 days ago',
+    service: 'AC Maintenance',
+    helpful: 12
+  },
+  {
+    id: 2,
+    customerName: 'Sara M.',
+    rating: 5,
+    comment: 'Great work on the installation. Very knowledgeable and cleaned up after the job.',
+    date: '1 week ago',
+    service: 'AC Installation',
+    helpful: 8
+  },
+  {
+    id: 3,
+    customerName: 'Ali R.',
+    rating: 4,
+    comment: 'Good service overall. Would have appreciated a bit more communication during the repair.',
+    date: '2 weeks ago',
+    service: 'AC Repair',
+    helpful: 5
+  }
+];
 
 interface VendorHomeScreenProps {
   vendorStats: VendorStats;
@@ -181,11 +212,101 @@ const VendorHomeScreen = ({
         </div>
       </motion.div>
 
-      {/* Available Jobs */}
+      {/* Customer Reviews */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
+            Customer Reviews
+          </h3>
+          <div className="flex items-center gap-1 px-3 py-1 bg-primary/10 rounded-full">
+            <Star className="w-4 h-4 fill-primary text-primary" />
+            <span className="text-sm font-bold text-primary">{vendorStats.rating}</span>
+            <span className="text-xs text-muted-foreground">({vendorStats.reviews})</span>
+          </div>
+        </div>
+        
+        {/* Rating Breakdown */}
+        <div className="card-elevated p-4 mb-4">
+          <div className="grid grid-cols-5 gap-2 mb-3">
+            {[5, 4, 3, 2, 1].map((stars) => {
+              const percentage = stars === 5 ? 78 : stars === 4 ? 15 : stars === 3 ? 5 : stars === 2 ? 1 : 1;
+              return (
+                <div key={stars} className="text-center">
+                  <div className="text-xs text-muted-foreground mb-1">{stars}★</div>
+                  <div className="h-12 bg-secondary rounded-lg relative overflow-hidden">
+                    <motion.div 
+                      initial={{ height: 0 }}
+                      animate={{ height: `${percentage}%` }}
+                      transition={{ delay: 0.4, duration: 0.5 }}
+                      className="absolute bottom-0 left-0 right-0 bg-primary rounded-lg"
+                    />
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">{percentage}%</div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Based on {vendorStats.reviews} reviews</span>
+            <span className="text-primary font-medium">Top Rated Pro</span>
+          </div>
+        </div>
+
+        {/* Recent Reviews */}
+        <div className="space-y-3">
+          {customerReviews.map((review, idx) => (
+            <motion.div
+              key={review.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 + idx * 0.05 }}
+              className="card-elevated p-4"
+            >
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center font-bold text-foreground">
+                    {review.customerName.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground">{review.customerName}</div>
+                    <div className="text-xs text-muted-foreground">{review.service}</div>
+                  </div>
+                </div>
+                <div className="text-xs text-muted-foreground">{review.date}</div>
+              </div>
+              
+              <div className="flex items-center gap-1 mb-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star 
+                    key={star} 
+                    className={`w-4 h-4 ${star <= review.rating ? 'fill-primary text-primary' : 'text-border'}`} 
+                  />
+                ))}
+              </div>
+              
+              <p className="text-sm text-muted-foreground mb-3">{review.comment}</p>
+              
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  <ThumbsUp className="w-3 h-3" />
+                  Helpful ({review.helpful})
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Available Jobs */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-bold text-foreground">Available Jobs</h3>
