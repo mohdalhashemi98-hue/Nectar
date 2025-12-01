@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Send, Phone, MoreVertical, Image, Paperclip, Smile, CheckCheck } from 'lucide-react';
-import { Conversation, ScreenType } from '@/types/mazaadi';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Send, Phone, MoreVertical, Image, Paperclip, Smile, CheckCheck, Check, Clock } from 'lucide-react';
+import { Conversation, ScreenType, Message } from '@/types/mazaadi';
+
+interface ExtendedMessage extends Message {
+  status?: 'sending' | 'sent' | 'delivered' | 'read';
+}
 
 interface ChatScreenProps {
   conversation: Conversation;
@@ -9,31 +13,174 @@ interface ChatScreenProps {
   onNavigate: (screen: ScreenType) => void;
 }
 
+// Simulated vendor responses based on context
+const vendorResponses = [
+  "Great! I'll be there as scheduled.",
+  "Thanks for reaching out. Let me check my availability.",
+  "I can offer you a competitive price for this service.",
+  "Yes, that works for me. See you then!",
+  "I've completed similar jobs before. Don't worry, you're in good hands.",
+  "I'll bring all the necessary equipment.",
+  "Is there anything specific I should know before arriving?",
+  "Perfect! I'll send you an update when I'm on my way."
+];
+
+const TypingIndicator = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    className="flex justify-start"
+  >
+    <div className="bg-card border border-border rounded-3xl rounded-bl-md px-4 py-3">
+      <div className="flex items-center gap-1">
+        <motion.div
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+          className="w-2 h-2 bg-muted-foreground rounded-full"
+        />
+        <motion.div
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+          className="w-2 h-2 bg-muted-foreground rounded-full"
+        />
+        <motion.div
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+          className="w-2 h-2 bg-muted-foreground rounded-full"
+        />
+      </div>
+    </div>
+  </motion.div>
+);
+
+const MessageStatusIcon = ({ status }: { status: ExtendedMessage['status'] }) => {
+  switch (status) {
+    case 'sending':
+      return <Clock className="w-3.5 h-3.5 text-muted-foreground animate-pulse" />;
+    case 'sent':
+      return <Check className="w-3.5 h-3.5 text-muted-foreground" />;
+    case 'delivered':
+      return <CheckCheck className="w-3.5 h-3.5 text-muted-foreground" />;
+    case 'read':
+      return <CheckCheck className="w-3.5 h-3.5 text-primary" />;
+    default:
+      return <CheckCheck className="w-3.5 h-3.5 text-muted-foreground" />;
+  }
+};
+
 const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState(conversation.messages);
+  const [messages, setMessages] = useState<ExtendedMessage[]>(
+    conversation.messages.map(m => ({ ...m, status: 'read' as const }))
+  );
+  const [isTyping, setIsTyping] = useState(false);
+  const [isOnline, setIsOnline] = useState(conversation.online);
+  const [lastSeen, setLastSeen] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping, scrollToBottom]);
+
+  // Simulate online/offline status changes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() > 0.8) {
+        setIsOnline(prev => !prev);
+        if (!isOnline) {
+          setLastSeen('just now');
+        }
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [isOnline]);
+
+  // Simulate vendor response
+  const simulateVendorResponse = useCallback(() => {
+    // Show typing indicator
+    setIsTyping(true);
+    setIsOnline(true);
+    
+    // Random typing duration (1.5-4 seconds)
+    const typingDuration = 1500 + Math.random() * 2500;
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+      
+      // Add vendor message
+      const randomResponse = vendorResponses[Math.floor(Math.random() * vendorResponses.length)];
+      const vendorMessage: ExtendedMessage = {
+        id: Date.now(),
+        sender: 'vendor',
+        text: randomResponse,
+        time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+        status: 'read'
+      };
+      
+      setMessages(prev => [...prev, vendorMessage]);
+      
+      // Mark user's last message as read
+      setMessages(prev => 
+        prev.map((msg, idx) => 
+          idx === prev.length - 2 && msg.sender === 'user' 
+            ? { ...msg, status: 'read' } 
+            : msg
+        )
+      );
+    }, typingDuration);
+  }, []);
+
+  // Cleanup typing timeout
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSend = () => {
     if (!message.trim()) return;
     
-    const newMessage = {
-      id: messages.length + 1,
-      sender: 'user' as const,
+    const newMessage: ExtendedMessage = {
+      id: Date.now(),
+      sender: 'user',
       text: message.trim(),
-      time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+      time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+      status: 'sending'
     };
     
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setMessage('');
+    
+    // Simulate message being sent
+    setTimeout(() => {
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === newMessage.id ? { ...msg, status: 'sent' } : msg
+        )
+      );
+    }, 300);
+    
+    // Simulate message being delivered
+    setTimeout(() => {
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === newMessage.id ? { ...msg, status: 'delivered' } : msg
+        )
+      );
+    }, 800);
+    
+    // Trigger vendor response after a delay
+    setTimeout(() => {
+      simulateVendorResponse();
+    }, 1000 + Math.random() * 2000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -41,6 +188,11 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
       e.preventDefault();
       handleSend();
     }
+  };
+
+  // Simulate "user is typing" to vendor (visual feedback only)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
   };
 
   return (
@@ -63,19 +215,52 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
             <div className="w-12 h-12 rounded-3xl bg-primary flex items-center justify-center text-primary-foreground font-bold">
               {conversation.avatar}
             </div>
-            {conversation.online && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-card" />
-            )}
+            <AnimatePresence>
+              {isOnline && (
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-card" 
+                />
+              )}
+            </AnimatePresence>
           </div>
           <div className="flex-1 min-w-0">
             <h2 className="font-semibold text-foreground truncate">{conversation.name}</h2>
-            <p className="text-xs text-muted-foreground">
-              {conversation.online ? (
-                <span className="text-success font-medium">Online</span>
+            <AnimatePresence mode="wait">
+              {isTyping ? (
+                <motion.p 
+                  key="typing"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-xs text-primary font-medium"
+                >
+                  typing...
+                </motion.p>
+              ) : isOnline ? (
+                <motion.p 
+                  key="online"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-xs text-success font-medium"
+                >
+                  Online
+                </motion.p>
               ) : (
-                'Last seen recently'
+                <motion.p 
+                  key="offline"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-xs text-muted-foreground"
+                >
+                  {lastSeen ? `Last seen ${lastSeen}` : 'Last seen recently'}
+                </motion.p>
               )}
-            </p>
+            </AnimatePresence>
           </div>
         </div>
 
@@ -101,9 +286,9 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
         {messages.map((msg, index) => (
           <motion.div
             key={msg.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.03 }}
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div className={`max-w-[80%] ${msg.sender === 'user' ? 'order-2' : 'order-1'}`}>
@@ -119,12 +304,18 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
               <div className={`flex items-center gap-1 mt-1 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <span className="text-[10px] text-muted-foreground">{msg.time}</span>
                 {msg.sender === 'user' && (
-                  <CheckCheck className="w-3.5 h-3.5 text-foreground/60" />
+                  <MessageStatusIcon status={msg.status} />
                 )}
               </div>
             </div>
           </motion.div>
         ))}
+
+        {/* Typing Indicator */}
+        <AnimatePresence>
+          {isTyping && <TypingIndicator />}
+        </AnimatePresence>
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -148,7 +339,7 @@ const ChatScreen = ({ conversation, onBack, onNavigate }: ChatScreenProps) => {
             <input
               type="text"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleInputChange}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
               className="w-full px-4 py-3 pr-12 rounded-2xl bg-secondary border border-border focus:border-foreground/30 focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
