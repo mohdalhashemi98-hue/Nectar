@@ -3,6 +3,7 @@ import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, 
 import { Job, ScreenType, UserType } from '@/types/mazaadi';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 interface JobsScreenProps {
   jobs: Job[];
@@ -21,16 +22,6 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
     { key: 'in-progress', label: 'Active' },
     { key: 'completed', label: 'Done' }
   ];
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'AC & HVAC': return '❄️';
-      case 'Plumbing': return '🚿';
-      case 'Cleaning': return '✨';
-      case 'Maintenance': return '🔧';
-      default: return '📦';
-    }
-  };
 
   const getStatusConfig = (status: string) => {
     switch (status) {
@@ -160,8 +151,8 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                 >
                   <div className="flex items-start justify-between mb-3" onClick={() => onSelectJob(job)}>
                     <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-xl">
-                        {getCategoryIcon(job.category)}
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
+                        <CategoryIcon category={job.category} className="w-6 h-6 text-foreground" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-foreground">
