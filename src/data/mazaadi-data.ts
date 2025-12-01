@@ -310,6 +310,58 @@ export const initialConversations: Conversation[] = [
       { id: 1, sender: 'vendor', text: 'Hello! We received your service request.', time: '8:00 AM' },
       { id: 2, sender: 'vendor', text: 'When would you like us to visit?', time: '8:01 AM' }
     ]
+  },
+  { 
+    id: 4, 
+    name: 'Ali Painting Services', 
+    avatar: 'A',
+    lastMessage: 'The paint colors are ready for tomorrow.', 
+    time: '5h', 
+    unread: true,
+    online: false,
+    messages: [
+      { id: 1, sender: 'vendor', text: 'Hi! I received your painting request.', time: '7:00 AM' },
+      { id: 2, sender: 'vendor', text: 'The paint colors are ready for tomorrow.', time: '8:30 AM' }
+    ]
+  },
+  { 
+    id: 5, 
+    name: 'CleanPro Services', 
+    avatar: 'C',
+    lastMessage: 'Your deep cleaning is scheduled for Saturday.', 
+    time: '1d', 
+    unread: false,
+    online: true,
+    messages: [
+      { id: 1, sender: 'vendor', text: 'Thank you for booking with us!', time: 'Yesterday' },
+      { id: 2, sender: 'vendor', text: 'Your deep cleaning is scheduled for Saturday.', time: 'Yesterday' }
+    ]
+  },
+  { 
+    id: 6, 
+    name: 'Quick Fix UAE', 
+    avatar: 'Q',
+    lastMessage: 'All repairs completed. Let us know if you need anything else!', 
+    time: '2d', 
+    unread: false,
+    online: false,
+    messages: [
+      { id: 1, sender: 'vendor', text: 'Job completed successfully!', time: '2 days ago' },
+      { id: 2, sender: 'vendor', text: 'All repairs completed. Let us know if you need anything else!', time: '2 days ago' }
+    ]
+  },
+  { 
+    id: 7, 
+    name: 'Emirates Electrical', 
+    avatar: 'E',
+    lastMessage: 'We can install the new outlets next week.', 
+    time: '3d', 
+    unread: false,
+    online: false,
+    messages: [
+      { id: 1, sender: 'vendor', text: 'Hello! We specialize in electrical work.', time: '3 days ago' },
+      { id: 2, sender: 'vendor', text: 'We can install the new outlets next week.', time: '3 days ago' }
+    ]
   }
 ];
 
