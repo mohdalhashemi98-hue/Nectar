@@ -156,7 +156,7 @@ const MessagesScreen = ({
   };
   return <div className="min-h-screen bg-gradient-to-b from-amber-50/50 to-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground p-6 pb-40 relative overflow-hidden">
+      <div className="bg-gradient-golden text-primary-foreground p-6 pb-28 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-0 w-36 h-36 bg-primary-foreground/10 rounded-full blur-2xl" />
