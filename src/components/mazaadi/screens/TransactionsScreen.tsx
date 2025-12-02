@@ -323,41 +323,6 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
               </div>
             </motion.div>
 
-            {/* Payment Methods Stats */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-            >
-              <h3 className="font-semibold text-foreground mb-4">Payment Methods</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={[
-                  { method: 'Card', count: transactions.filter(t => t.paymentMethod.includes('Card')).length },
-                  { method: 'Wallet', count: transactions.filter(t => t.paymentMethod.includes('Wallet')).length },
-                  { method: 'Cash', count: transactions.filter(t => t.paymentMethod.includes('Cash')).length },
-                ]}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis 
-                    dataKey="method" 
-                    stroke="hsl(var(--muted-foreground))"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <YAxis 
-                    stroke="hsl(var(--muted-foreground))"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  <Bar dataKey="count" fill="#F59E0B" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </motion.div>
           </>
         ) : (
           // Transactions List
