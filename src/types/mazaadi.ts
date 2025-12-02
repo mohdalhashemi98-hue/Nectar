@@ -180,6 +180,19 @@ export interface ReviewData {
   tags: string[];
 }
 
+export interface Transaction {
+  id: number;
+  jobTitle: string;
+  vendor: string;
+  amount: number;
+  date: string;
+  status: 'completed' | 'refunded' | 'processing';
+  paymentMethod: string;
+  receiptId: string;
+  serviceFee: number;
+  pointsEarned: number;
+}
+
 export interface TierConfig {
   [key: string]: {
     color: string;
