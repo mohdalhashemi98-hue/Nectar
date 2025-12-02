@@ -24,6 +24,7 @@ import NotificationsScreen from './screens/NotificationsScreen';
 import RequestDetailScreen from './screens/RequestDetailScreen';
 import VendorWorkScreen from './screens/VendorWorkScreen';
 import PaymentScreen from './screens/PaymentScreen';
+import TransactionsScreen from './screens/TransactionsScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -246,15 +247,9 @@ const MazaadiApp = () => {
             }}
           />
         ) : (
-          <JobsScreen
-            jobs={jobs}
-            userType={userType}
+          <TransactionsScreen
             onBack={goBack}
             onNavigate={navigateTo}
-            onSelectJob={(job) => {
-              setSelectedJob(job);
-              navigateTo('job-detail');
-            }}
           />
         );
       

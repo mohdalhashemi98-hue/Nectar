@@ -1,4 +1,4 @@
-import { Category, Job, Offer, Vendor, Conversation, Notification, AvailableJob, Rewards, VendorStats, TierConfig, UserProfile } from '@/types/mazaadi';
+import { Category, Job, Offer, Vendor, Conversation, Notification, AvailableJob, Rewards, VendorStats, TierConfig, UserProfile, Transaction } from '@/types/mazaadi';
 
 export const tierConfig: TierConfig = {
   Bronze: { color: 'amber', cashback: 2, minPoints: 0, icon: '🥉', benefits: ['2% cashback', 'Basic support'] },
@@ -389,3 +389,66 @@ export const initialVendorStats: VendorStats = {
   responseTime: 'Instant',
   thisMonth: { jobs: 12, earnings: 3200 }
 };
+
+export const initialTransactions: Transaction[] = [
+  {
+    id: 1,
+    jobTitle: 'AC Maintenance',
+    vendor: 'Ahmad Al-Mansouri',
+    amount: 250,
+    date: '2024-02-15',
+    status: 'completed',
+    paymentMethod: 'Credit Card',
+    receiptId: 'RCP-2024-001',
+    serviceFee: 12,
+    pointsEarned: 125
+  },
+  {
+    id: 2,
+    jobTitle: 'Kitchen Plumbing Fix',
+    vendor: 'Sarah Hassan',
+    amount: 180,
+    date: '2024-02-26',
+    status: 'completed',
+    paymentMethod: 'Nectar Wallet',
+    receiptId: 'RCP-2024-002',
+    serviceFee: 9,
+    pointsEarned: 90
+  },
+  {
+    id: 3,
+    jobTitle: 'Electrical Repair',
+    vendor: 'Emirates Electrical',
+    amount: 320,
+    date: '2024-02-10',
+    status: 'completed',
+    paymentMethod: 'Credit Card',
+    receiptId: 'RCP-2024-003',
+    serviceFee: 16,
+    pointsEarned: 160
+  },
+  {
+    id: 4,
+    jobTitle: 'Deep Cleaning',
+    vendor: 'CleanPro Services',
+    amount: 350,
+    date: '2024-01-28',
+    status: 'completed',
+    paymentMethod: 'Cash on Completion',
+    receiptId: 'RCP-2024-004',
+    serviceFee: 17,
+    pointsEarned: 175
+  },
+  {
+    id: 5,
+    jobTitle: 'Painting Service Refund',
+    vendor: 'Ali Painting Services',
+    amount: 420,
+    date: '2024-01-20',
+    status: 'refunded',
+    paymentMethod: 'Credit Card',
+    receiptId: 'RCP-2024-005',
+    serviceFee: 21,
+    pointsEarned: 0
+  }
+];
