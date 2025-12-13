@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users } from 'lucide-react';
 import { Job, ScreenType, UserType } from '@/types/mazaadi';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
@@ -13,10 +13,65 @@ interface JobsScreenProps {
   onSelectJob: (job: Job) => void;
 }
 
+// Mock market jobs data
+const marketJobs = [
+  {
+    id: 'm1',
+    title: 'Kitchen Deep Cleaning',
+    category: 'Cleaning',
+    location: 'Dubai Marina',
+    budget: '200-350 AED',
+    postedTime: '2 hours ago',
+    proposals: 5,
+    description: 'Looking for professional kitchen deep cleaning service including appliances.'
+  },
+  {
+    id: 'm2',
+    title: 'AC Maintenance & Repair',
+    category: 'AC Services',
+    location: 'JBR',
+    budget: '150-300 AED',
+    postedTime: '4 hours ago',
+    proposals: 8,
+    description: 'Annual AC maintenance for 3 units. Cleaning and gas refill if needed.'
+  },
+  {
+    id: 'm3',
+    title: 'Furniture Assembly',
+    category: 'Handyman',
+    location: 'Downtown Dubai',
+    budget: '100-200 AED',
+    postedTime: '6 hours ago',
+    proposals: 3,
+    description: 'Need help assembling IKEA furniture - wardrobe and desk.'
+  },
+  {
+    id: 'm4',
+    title: 'Bathroom Plumbing Fix',
+    category: 'Plumbing',
+    location: 'Business Bay',
+    budget: '250-400 AED',
+    postedTime: '1 day ago',
+    proposals: 12,
+    description: 'Leaking faucet and slow drain in master bathroom.'
+  },
+  {
+    id: 'm5',
+    title: 'Home Painting - 2 Rooms',
+    category: 'Painting',
+    location: 'Al Barsha',
+    budget: '800-1200 AED',
+    postedTime: '1 day ago',
+    proposals: 7,
+    description: 'Repaint 2 bedrooms, walls and ceiling. Paint will be provided.'
+  }
+];
+
 const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScreenProps) => {
-  const [activeTab, setActiveTab] = useState<'active' | 'previous'>('active');
+  const [activeTab, setActiveTab] = useState<'market' | 'active' | 'previous'>('market');
 
   const tabs = [
+    { key: 'market', label: 'Browse Market' },
     { key: 'active', label: 'Active' },
     { key: 'previous', label: 'Previous' }
   ];
@@ -42,8 +97,6 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
   
   const previousJobs = jobs.filter(job => job.status === 'Completed');
 
-  const displayedJobs = activeTab === 'active' ? activeJobs : previousJobs;
-
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
@@ -58,12 +111,17 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
             className="flex items-center gap-4"
           >
             <div className="flex-1">
-              <h1 className="font-display text-2xl font-bold">My Jobs</h1>
-              <p className="opacity-60 text-sm">{jobs.length} total jobs</p>
+              <h1 className="font-display text-2xl font-bold">Jobs</h1>
+              <p className="opacity-60 text-sm">Find services or track your requests</p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-              <Briefcase className="w-6 h-6" />
-            </div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onNavigate('post-request')}
+              className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center"
+            >
+              <Plus className="w-6 h-6" />
+            </motion.button>
           </motion.div>
         </div>
       </div>
@@ -80,38 +138,183 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
           {tabs.map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as 'active' | 'previous')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${
+              onClick={() => setActiveTab(tab.key as 'market' | 'active' | 'previous')}
+              className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition-all ${
                 activeTab === tab.key
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {tab.label}
-              <span className="ml-2 opacity-70">
-                ({tab.key === 'active' ? activeJobs.length : previousJobs.length})
-              </span>
             </button>
           ))}
         </motion.div>
       </div>
 
-      {/* Jobs List */}
-      <div className="p-4 space-y-3">
-        {displayedJobs.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary flex items-center justify-center">
-              <Briefcase className="w-10 h-10 text-muted-foreground" />
+      {/* Market Jobs */}
+      {activeTab === 'market' && (
+        <div className="p-4 space-y-3">
+          {/* Post Job CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-4 mb-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Plus className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground">Need a service?</h3>
+                <p className="text-sm text-muted-foreground">Post a job and get offers from pros</p>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onNavigate('post-request')}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold"
+              >
+                Post Job
+              </motion.button>
             </div>
-            <p className="text-muted-foreground">
-              {activeTab === 'active' ? 'No active jobs' : 'No previous jobs'}
-            </p>
-          </div>
-        ) : (
-          displayedJobs.map((job, index) => {
-            const statusConfig = getStatusConfig(job.status);
-            const StatusIcon = statusConfig.icon;
-            
+          </motion.div>
+
+          <h2 className="font-semibold text-foreground mb-3">Open Jobs in Market</h2>
+          
+          {marketJobs.map((job, index) => (
+            <motion.div
+              key={job.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.03 }}
+              whileHover={{ y: -2 }}
+              className="card-interactive p-4"
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
+                  <CategoryIcon category={job.category} className="w-6 h-6 text-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">{job.title}</h3>
+                  <p className="text-sm text-muted-foreground">{job.category}</p>
+                </div>
+                <span className="text-sm font-bold text-primary">{job.budget}</span>
+              </div>
+              
+              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{job.description}</p>
+              
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>{job.location}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>{job.postedTime}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5" />
+                  <span>{job.proposals} proposals</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Active Jobs */}
+      {activeTab === 'active' && (
+        <div className="p-4 space-y-3">
+          {activeJobs.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary flex items-center justify-center">
+                <Briefcase className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <p className="text-muted-foreground mb-4">No active jobs</p>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onNavigate('post-request')}
+                className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-semibold"
+              >
+                Post Your First Job
+              </motion.button>
+            </div>
+          ) : (
+            activeJobs.map((job, index) => {
+              const statusConfig = getStatusConfig(job.status);
+              const StatusIcon = statusConfig.icon;
+              
+              return (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + index * 0.03 }}
+                  whileHover={{ y: -2 }}
+                  className="card-interactive p-4"
+                  onClick={() => onSelectJob(job)}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
+                        <CategoryIcon category={job.category} className="w-6 h-6 text-foreground" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-foreground">{job.title}</h3>
+                        <p className="text-sm text-muted-foreground">{job.category}</p>
+                      </div>
+                    </div>
+                    <div className={`px-3 py-1.5 rounded-full ${statusConfig.bg} flex items-center gap-1.5`}>
+                      <StatusIcon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
+                      <span className={`text-xs font-medium ${statusConfig.color}`}>{job.status}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      {job.vendor && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                            {job.vendor.charAt(0)}
+                          </div>
+                          <span className="text-sm text-muted-foreground">{job.vendor}</span>
+                        </div>
+                      )}
+                      {job.offersCount && (
+                        <span className="text-sm font-semibold text-foreground">
+                          {job.offersCount} offers
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {job.amount > 0 && (
+                        <span className="font-bold text-foreground">{job.amount} AED</span>
+                      )}
+                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })
+          )}
+        </div>
+      )}
+
+      {/* Previous Jobs */}
+      {activeTab === 'previous' && (
+        <div className="p-4 space-y-3">
+          {previousJobs.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary flex items-center justify-center">
+                <Briefcase className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <p className="text-muted-foreground">No previous jobs</p>
+            </div>
+          ) : (
+            previousJobs.map((job, index) => {
+              const statusConfig = getStatusConfig(job.status);
+              const StatusIcon = statusConfig.icon;
               const canReview = userType === 'consumer' && job.status === 'Completed' && !job.rated;
               
               return (
@@ -119,7 +322,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                   key={job.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + index * 0.03 }}
+                  transition={{ delay: 0.15 + index * 0.03 }}
                   whileHover={{ y: -2 }}
                   className="card-interactive p-4"
                 >
@@ -129,9 +332,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                         <CategoryIcon category={job.category} className="w-6 h-6 text-foreground" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-foreground">
-                          {job.title}
-                        </h3>
+                        <h3 className="font-semibold text-foreground">{job.title}</h3>
                         <p className="text-sm text-muted-foreground">{job.category}</p>
                       </div>
                     </div>
@@ -151,17 +352,10 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                           <span className="text-sm text-muted-foreground">{job.vendor}</span>
                         </div>
                       )}
-                      {job.offersCount && (
-                        <span className="text-sm font-semibold text-foreground">
-                          {job.offersCount} offers
-                        </span>
-                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       {job.amount > 0 && (
-                        <span className="font-bold text-foreground">
-                          {job.amount} AED
-                        </span>
+                        <span className="font-bold text-foreground">{job.amount} AED</span>
                       )}
                       {job.rated && (
                         <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
@@ -173,7 +367,6 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                     </div>
                   </div>
 
-                  {/* Review CTA for completed unrated jobs */}
                   {canReview && (
                     <motion.div 
                       initial={{ opacity: 0, y: 5 }}
@@ -200,16 +393,15 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                         <span className="text-xs">🪙</span>
                       </div>
                       <span className="text-sm text-muted-foreground">Earned</span>
-                      <span className="text-sm font-bold text-primary">
-                        +{job.pointsEarned} pts
-                      </span>
+                      <span className="text-sm font-bold text-primary">+{job.pointsEarned} pts</span>
                     </div>
                   )}
                 </motion.div>
               );
-          })
-        )}
-      </div>
+            })
+          )}
+        </div>
+      )}
 
       <BottomNav active="transactions" userType={userType} onNavigate={onNavigate} />
     </div>
