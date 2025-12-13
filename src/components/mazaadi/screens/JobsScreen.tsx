@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Sparkles } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase } from 'lucide-react';
 import { Job, ScreenType, UserType } from '@/types/mazaadi';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
@@ -14,13 +14,11 @@ interface JobsScreenProps {
 }
 
 const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScreenProps) => {
-  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState<'active' | 'previous'>('active');
 
-  const filters = [
-    { key: 'all', label: 'All' },
-    { key: 'pending', label: 'Pending' },
-    { key: 'in-progress', label: 'Active' },
-    { key: 'completed', label: 'Done' }
+  const tabs = [
+    { key: 'active', label: 'Active' },
+    { key: 'previous', label: 'Previous' }
   ];
 
   const getStatusConfig = (status: string) => {
@@ -38,21 +36,18 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
     }
   };
 
-  const filteredJobs = jobs.filter(job => {
-    if (activeFilter === 'all') return true;
-    if (activeFilter === 'pending') return job.status === 'Pending';
-    if (activeFilter === 'in-progress') return job.status === 'In Progress' || job.status === 'Awaiting Completion';
-    if (activeFilter === 'completed') return job.status === 'Completed';
-    return true;
-  });
+  const activeJobs = jobs.filter(job => 
+    job.status === 'Pending' || job.status === 'In Progress' || job.status === 'Awaiting Completion'
+  );
+  
+  const previousJobs = jobs.filter(job => job.status === 'Completed');
 
-  const completedCount = jobs.filter(j => j.status === 'Completed').length;
-  const activeCount = jobs.filter(j => j.status === 'In Progress' || j.status === 'Awaiting Completion').length;
+  const displayedJobs = activeTab === 'active' ? activeJobs : previousJobs;
 
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground p-6 pb-20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground p-6 pb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
         
@@ -60,7 +55,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-6"
+            className="flex items-center gap-4"
           >
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">My Jobs</h1>
@@ -70,71 +65,50 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
               <Briefcase className="w-6 h-6" />
             </div>
           </motion.div>
-
-          {/* Stats Row */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex gap-3"
-          >
-            {[
-              { icon: CheckCircle, value: completedCount, label: 'Completed' },
-              { icon: Timer, value: activeCount, label: 'Active' },
-              { icon: Sparkles, value: jobs.reduce((acc, j) => acc + j.pointsEarned, 0), label: 'Points' }
-            ].map((stat, idx) => (
-              <div key={idx} className="flex-1 bg-white/15 rounded-2xl p-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                    <stat.icon className="w-4 h-4 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <p className="font-display text-xl font-bold">{stat.value}</p>
-                    <p className="text-[10px] opacity-60">{stat.label}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
         </div>
       </div>
 
-      {/* Filters - Floating */}
-      <div className="px-4 -mt-8 relative z-20">
+      {/* Tabs */}
+      <div className="px-4 py-4">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
+          transition={{ delay: 0.1 }}
           className="bg-card/95 backdrop-blur-xl rounded-2xl p-1.5 border border-border flex gap-1"
           style={{ boxShadow: 'var(--shadow-lg)' }}
         >
-          {filters.map(filter => (
+          {tabs.map(tab => (
             <button
-              key={filter.key}
-              onClick={() => setActiveFilter(filter.key)}
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key as 'active' | 'previous')}
               className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${
-                activeFilter === filter.key
+                activeTab === tab.key
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {filter.label}
+              {tab.label}
+              <span className="ml-2 opacity-70">
+                ({tab.key === 'active' ? activeJobs.length : previousJobs.length})
+              </span>
             </button>
           ))}
         </motion.div>
       </div>
 
       {/* Jobs List */}
-      <div className="p-4 space-y-3 pt-6">
-        {filteredJobs.length === 0 ? (
+      <div className="p-4 space-y-3">
+        {displayedJobs.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary flex items-center justify-center">
               <Briefcase className="w-10 h-10 text-muted-foreground" />
             </div>
-            <p className="text-muted-foreground">No jobs found</p>
+            <p className="text-muted-foreground">
+              {activeTab === 'active' ? 'No active jobs' : 'No previous jobs'}
+            </p>
           </div>
         ) : (
-          filteredJobs.map((job, index) => {
+          displayedJobs.map((job, index) => {
             const statusConfig = getStatusConfig(job.status);
             const StatusIcon = statusConfig.icon;
             
