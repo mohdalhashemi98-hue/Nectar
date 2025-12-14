@@ -118,11 +118,19 @@ const ServicesScreen = ({
           ref={containerRef}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+          className="relative flex gap-2 pb-2 overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x"
+          style={{ 
+            scrollbarWidth: 'none', 
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch'
+          }}
+          drag="x"
+          dragConstraints={containerRef}
+          dragElastic={0.1}
         >
           {/* Sliding Indicator */}
           <motion.div
-            className="absolute bottom-2 h-[calc(100%-8px)] bg-primary rounded-full z-0"
+            className="absolute bottom-2 h-[calc(100%-8px)] bg-primary rounded-full z-0 pointer-events-none"
             initial={false}
             animate={{
               left: indicatorStyle.left,
@@ -136,20 +144,35 @@ const ServicesScreen = ({
           />
           
           {(['all', 'core', 'lifestyle', 'specialized'] as GroupType[]).map((group, index) => (
-            <button
+            <motion.button
               key={group}
               ref={(el) => (tabsRef.current[index] = el)}
-              onClick={() => setActiveGroup(group)}
-              className={`relative z-10 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+              onClick={() => {
+                setActiveGroup(group);
+                // Scroll the selected tab into view
+                tabsRef.current[index]?.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'nearest', 
+                  inline: 'center' 
+                });
+              }}
+              whileTap={{ scale: 0.95 }}
+              className={`relative z-10 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors duration-200 snap-center flex-shrink-0 ${
                 activeGroup === group
                   ? 'text-primary-foreground'
-                  : 'bg-card text-muted-foreground border border-border hover:border-primary/30'
+                  : 'bg-card text-muted-foreground border border-border hover:border-primary/30 active:bg-secondary'
               }`}
             >
               {groupLabels[group]}
-            </button>
+            </motion.button>
           ))}
+          
+          {/* Extra padding for scroll */}
+          <div className="w-4 flex-shrink-0" />
         </motion.div>
+        
+        {/* Scroll hint gradient */}
+        <div className="absolute right-4 top-3 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-20" />
       </div>
 
       {/* Categories List */}
