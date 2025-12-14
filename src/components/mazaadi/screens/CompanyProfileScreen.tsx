@@ -454,30 +454,65 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             {portfolio.map((item, idx) => (
               <motion.div
                 key={item.id}
-                whileTap={{ scale: 0.98 }}
-                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden group snap-start"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.05, type: 'spring', stiffness: 300, damping: 25 }}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -2 }}
+                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden group snap-start touch-pan-x"
               >
                 {/* Before/After Visual */}
-                <div className="h-28 bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center relative">
+                <motion.div 
+                  className="h-28 bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center relative"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                >
                   <div className="flex items-center gap-2">
-                    <span className="text-3xl">{item.beforeEmoji}</span>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-3xl">{item.afterEmoji}</span>
+                    <motion.span 
+                      className="text-3xl"
+                      whileHover={{ rotate: -10, scale: 1.1 }}
+                    >
+                      {item.beforeEmoji}
+                    </motion.span>
+                    <motion.div
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                    >
+                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </motion.div>
+                    <motion.span 
+                      className="text-3xl"
+                      whileHover={{ rotate: 10, scale: 1.1 }}
+                    >
+                      {item.afterEmoji}
+                    </motion.span>
                   </div>
                   <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/50 backdrop-blur-sm rounded text-[10px] text-white font-medium">
                     Before/After
                   </div>
                   
                   {/* Edit overlay */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <button className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 bg-black/50 flex items-center justify-center gap-2"
+                  >
+                    <motion.button 
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+                    >
                       <Edit2 className="w-4 h-4 text-white" />
-                    </button>
-                    <button className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                    </motion.button>
+                    <motion.button 
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+                    >
                       <Trash2 className="w-4 h-4 text-white" />
-                    </button>
-                  </div>
-                </div>
+                    </motion.button>
+                  </motion.div>
+                </motion.div>
                 <div className="p-3">
                   <h4 className="font-semibold text-foreground text-sm">{item.title}</h4>
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
@@ -490,13 +525,21 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             
             {/* Add New Card */}
             <motion.button
-              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: portfolio.length * 0.05, type: 'spring', stiffness: 300, damping: 25 }}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ y: -2, borderColor: 'hsl(var(--primary))' }}
               onClick={handleAddPortfolioItem}
-              className="flex-shrink-0 w-48 h-[172px] bg-secondary/50 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-primary/50 hover:bg-primary/5 transition-colors"
+              className="flex-shrink-0 w-48 h-[172px] bg-secondary/50 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-primary/5 transition-colors touch-pan-x"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <motion.div 
+                className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center"
+                whileHover={{ rotate: 90, scale: 1.1 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
                 <Plus className="w-6 h-6 text-primary" />
-              </div>
+              </motion.div>
               <span className="text-sm font-medium text-muted-foreground">Add Work</span>
             </motion.button>
           </div>
