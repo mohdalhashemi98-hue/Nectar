@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Search, ChevronRight, Star, Users, Clock, Filter } from 'lucide-react';
 import { ScreenType, Category, SubService } from '@/types/mazaadi';
@@ -31,6 +31,26 @@ const ServicesScreen = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [activeGroup, setActiveGroup] = useState<GroupType>('all');
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Update sliding indicator position
+  useEffect(() => {
+    const groups: GroupType[] = ['all', 'core', 'lifestyle', 'specialized'];
+    const activeIndex = groups.indexOf(activeGroup);
+    const activeTab = tabsRef.current[activeIndex];
+    
+    if (activeTab && containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const tabRect = activeTab.getBoundingClientRect();
+      
+      setIndicatorStyle({
+        left: tabRect.left - containerRect.left + containerRef.current.scrollLeft,
+        width: tabRect.width
+      });
+    }
+  }, [activeGroup]);
 
   // Filter categories based on search and group
   const filteredCategories = categories.filter(cat => {
@@ -92,20 +112,37 @@ const ServicesScreen = ({
         </motion.div>
       </div>
 
-      {/* Group Filter Tabs */}
+      {/* Sliding Filter Tabs */}
       <div className="px-4 py-3 -mt-4 relative z-10">
         <motion.div 
+          ref={containerRef}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+          className="relative flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
         >
-          {(['all', 'core', 'lifestyle', 'specialized'] as GroupType[]).map((group) => (
+          {/* Sliding Indicator */}
+          <motion.div
+            className="absolute bottom-2 h-[calc(100%-8px)] bg-primary rounded-full z-0"
+            initial={false}
+            animate={{
+              left: indicatorStyle.left,
+              width: indicatorStyle.width,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 30
+            }}
+          />
+          
+          {(['all', 'core', 'lifestyle', 'specialized'] as GroupType[]).map((group, index) => (
             <button
               key={group}
+              ref={(el) => (tabsRef.current[index] = el)}
               onClick={() => setActiveGroup(group)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              className={`relative z-10 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
                 activeGroup === group
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'text-primary-foreground'
                   : 'bg-card text-muted-foreground border border-border hover:border-primary/30'
               }`}
             >
