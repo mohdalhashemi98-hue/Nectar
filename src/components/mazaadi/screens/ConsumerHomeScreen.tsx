@@ -140,7 +140,7 @@ const ConsumerHomeScreen = ({
                       onClick={() => {
                         onSelectCategory(cat.name);
                         setSearchQuery('');
-                        onNavigate('post-request');
+                        onNavigate('services');
                       }}
                       className="w-full p-4 flex items-center gap-3 hover:bg-secondary/50 border-b border-border last:border-0 transition-colors"
                     >
@@ -268,7 +268,7 @@ const ConsumerHomeScreen = ({
             </div>
           </div>
           <button
-            onClick={() => { onResetRequestForm(); onNavigate('post-request'); }}
+            onClick={() => { onResetRequestForm(); onNavigate('services'); }}
             className="btn-primary w-full flex items-center justify-center gap-2"
           >
             <Plus className="w-5 h-5" />
@@ -345,7 +345,7 @@ const ConsumerHomeScreen = ({
                   key={cat.name}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('post-request'); }}
+                  onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('services'); }}
                   className="bg-card p-4 rounded-3xl border border-border hover:border-primary/30 transition-all duration-300 group"
                 >
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-2 mx-auto bg-gradient-to-br ${cat.gradient} text-white`}>
@@ -403,7 +403,7 @@ const ConsumerHomeScreen = ({
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => { onResetRequestForm(); onNavigate('post-request'); }}
+        onClick={() => { onResetRequestForm(); onNavigate('services'); }}
         className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-golden text-primary-foreground rounded-full flex items-center justify-center z-40"
         style={{ boxShadow: 'var(--shadow-golden)' }}
       >

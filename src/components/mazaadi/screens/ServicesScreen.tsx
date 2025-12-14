@@ -9,7 +9,7 @@ import BottomNav from '../BottomNav';
 interface ServicesScreenProps {
   onNavigate: (screen: ScreenType) => void;
   onSelectCategory: (category: string) => void;
-  onSelectSubService?: (category: string, subService: string) => void;
+  onSelectSubService: (category: string, subService: string) => void;
   onResetRequestForm: () => void;
 }
 
@@ -45,13 +45,13 @@ const ServicesScreen = ({
   });
 
   const handleSelectService = (category: Category, subService?: SubService) => {
-    if (subService && onSelectSubService) {
+    onSelectCategory(category.name);
+    if (subService) {
       onSelectSubService(category.name, subService.name);
-    } else {
-      onSelectCategory(category.name);
     }
     onResetRequestForm();
-    onNavigate('post-request');
+    // Navigate to the job configuration screen with pre-populated data
+    onNavigate('job-configuration');
   };
 
   return (
