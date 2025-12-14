@@ -195,6 +195,38 @@ const MazaadiApp = () => {
         );
       
       case 'vendor-profile':
+        // If vendor is viewing their own profile preview, show it with mock data
+        if (userType === 'vendor' && !selectedVendor) {
+          const vendorSelfView: Vendor = {
+            id: 0,
+            name: 'Al-Mansouri Services',
+            avatar: 'AM',
+            rating: 4.9,
+            reviews: 156,
+            specialty: 'HVAC & AC Services',
+            verified: true,
+            favorite: false,
+            lastJob: '',
+            completedJobs: 500,
+            lastJobDate: '',
+            responseTime: '12 min',
+            distance: '',
+            avgPrice: '',
+            completionRate: 98,
+            phone: ''
+          };
+          return (
+            <VendorProfileScreen
+              vendor={vendorSelfView}
+              onBack={goBack}
+              onNavigate={navigateTo}
+              onStartChat={(conv) => {
+                setConversations(prev => [conv, ...prev]);
+                setSelectedConversation(conv);
+              }}
+            />
+          );
+        }
         return selectedVendor ? (
           <VendorProfileScreen
             vendor={selectedVendor}
