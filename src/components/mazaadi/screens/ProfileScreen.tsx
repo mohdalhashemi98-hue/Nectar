@@ -395,6 +395,8 @@ const ProfileScreen = ({
         active="profile"
         onNavigate={onNavigate}
         userType={userType}
+        pendingQuotes={userType === 'consumer' ? jobs.filter(j => j.status === 'Pending' && j.offersCount && j.offersCount > 0).length : 0}
+        unreadMessages={2}
       />
     </div>
   );

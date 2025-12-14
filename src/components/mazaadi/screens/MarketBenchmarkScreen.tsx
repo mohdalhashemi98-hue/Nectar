@@ -368,7 +368,7 @@ const MarketBenchmarkScreen = ({
         )}
       </div>
 
-      <BottomNav active="benchmark" userType="consumer" onNavigate={onNavigate} />
+      <BottomNav active="benchmark" userType="consumer" onNavigate={onNavigate} pendingQuotes={1} unreadMessages={2} />
     </div>
   );
 };
