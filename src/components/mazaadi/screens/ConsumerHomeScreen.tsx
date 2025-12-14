@@ -72,7 +72,7 @@ const ConsumerHomeScreen = ({
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="bg-card border-b border-border">
-        <div className="px-6 py-5">
+        <div className="px-4 py-5">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

@@ -99,7 +99,7 @@ const VendorHomeScreen = ({
       <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
         
-        <div className="px-6 py-4 relative z-10">
+        <div className="px-4 py-4 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

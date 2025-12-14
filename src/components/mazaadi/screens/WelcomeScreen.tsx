@@ -14,7 +14,7 @@ const WelcomeScreen = ({ onSelectUserType }: WelcomeScreenProps) => (
     <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/[0.05] rounded-full blur-3xl" />
     <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-primary/[0.06] rounded-full blur-2xl" />
     
-    <div className="relative flex-1 flex flex-col justify-center items-center px-6 z-10">
+    <div className="relative flex-1 flex flex-col justify-center items-center px-4 z-10">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

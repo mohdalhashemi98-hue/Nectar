@@ -48,7 +48,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
   if (authScreen === 'otp') {
     return (
       <div className="flex flex-col h-screen bg-gradient-golden">
-        <div className="flex-1 flex flex-col justify-center px-6">
+        <div className="flex-1 flex flex-col justify-center px-4">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -111,7 +111,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
   if (authScreen === 'signup') {
     return (
       <div className="flex flex-col h-screen bg-gradient-golden">
-        <div className="flex-1 flex flex-col justify-center px-6">
+        <div className="flex-1 flex flex-col justify-center px-4">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -222,7 +222,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
 
   return (
     <div className="flex flex-col h-screen bg-gradient-golden">
-      <div className="flex-1 flex flex-col justify-center px-6">
+      <div className="flex-1 flex flex-col justify-center px-4">
         {onBack && (
           <motion.button 
             initial={{ opacity: 0 }}

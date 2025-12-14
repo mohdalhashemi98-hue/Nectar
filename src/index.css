@@ -327,13 +327,64 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* Safe area */
-  .safe-area-pb {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  /* ======================================
+     UNIFIED SCREEN LAYOUT SYSTEM
+     ====================================== */
+  
+  /* Main app container - constrains width for mobile-first design */
+  .screen-container {
+    @apply min-h-screen w-full mx-auto relative;
+    max-width: 448px; /* max-w-md equivalent */
+    background: hsl(var(--background));
   }
 
+  /* Content area within screens */
+  .screen-content {
+    @apply flex flex-col min-h-screen w-full;
+  }
+
+  /* Standard horizontal padding for content */
+  .screen-padded {
+    @apply px-4;
+  }
+
+  /* When bottom nav is present, add padding to prevent content overlap */
+  .has-bottom-nav {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ======================================
+     SAFE AREA UTILITIES (iOS/Android)
+     ====================================== */
+  
+  /* Safe area padding - bottom (for fixed footers/navs) */
+  .safe-area-pb {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Safe area padding - top (for headers under notch) */
   .safe-area-pt {
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  /* Safe area margin - bottom */
+  .safe-area-mb {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Fixed bottom element with safe area */
+  .fixed-bottom-safe {
+    @apply fixed bottom-0 left-0 right-0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Bottom navigation specific styling */
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50;
+    max-width: 448px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

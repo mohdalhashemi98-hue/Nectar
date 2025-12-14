@@ -65,7 +65,7 @@ const ProfileScreen = ({
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground p-6 pb-20 relative overflow-hidden">
+      <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/10 rounded-full blur-xl" />
         
