@@ -328,7 +328,15 @@ const ConsumerHomeScreen = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h3 className="font-display text-lg font-bold text-foreground mb-4">Popular Services</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display text-lg font-bold text-foreground">Popular Services</h3>
+            <button 
+              onClick={() => onNavigate('services')} 
+              className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              View All
+            </button>
+          </div>
           <div className="grid grid-cols-3 gap-3">
             {categories.slice(0, 6).map((cat) => {
               const IconComponent = getCategoryIcon(cat.name);
@@ -340,10 +348,10 @@ const ConsumerHomeScreen = ({
                   onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('post-request'); }}
                   className="bg-card p-4 rounded-3xl border border-border hover:border-primary/30 transition-all duration-300 group"
                 >
-                  <div className="w-10 h-10 bg-secondary rounded-2xl flex items-center justify-center mb-2 mx-auto group-hover:bg-primary transition-all duration-300">
-                    <IconComponent className="w-5 h-5 text-foreground group-hover:text-primary-foreground transition-colors" />
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-2 mx-auto bg-gradient-to-br ${cat.gradient} text-white`}>
+                    <IconComponent className="w-5 h-5" />
                   </div>
-                  <div className="text-xs font-medium text-foreground text-center">{cat.name}</div>
+                  <div className="text-xs font-medium text-foreground text-center truncate">{cat.name}</div>
                 </motion.button>
               );
             })}

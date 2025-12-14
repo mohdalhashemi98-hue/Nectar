@@ -1,4 +1,4 @@
-import { Category, Job, Offer, Vendor, Conversation, Notification, AvailableJob, Rewards, VendorStats, TierConfig, UserProfile, Transaction } from '@/types/mazaadi';
+import { Category, Job, Offer, Vendor, Conversation, Notification, AvailableJob, Rewards, VendorStats, TierConfig, UserProfile, Transaction, SubService } from '@/types/mazaadi';
 
 export const tierConfig: TierConfig = {
   Bronze: { color: 'amber', cashback: 2, minPoints: 0, icon: '🥉', benefits: ['2% cashback', 'Basic support'] },
@@ -50,15 +50,191 @@ export const initialRewards: Rewards = {
 };
 
 export const categories: Category[] = [
-  { name: 'Cleaning', icon: 'Sparkles', gradient: 'from-blue-500 to-cyan-400', jobs: 1247, avgPrice: '150 AED', description: 'Home & office cleaning' },
-  { name: 'Maintenance', icon: 'Wrench', gradient: 'from-orange-500 to-red-400', jobs: 892, avgPrice: '280 AED', description: 'Repairs & fixes' },
-  { name: 'Materials', icon: 'Package', gradient: 'from-purple-500 to-pink-400', jobs: 634, avgPrice: '320 AED', description: 'Supplies & materials' },
-  { name: 'Beauty', icon: 'Scissors', gradient: 'from-pink-500 to-rose-400', jobs: 567, avgPrice: '200 AED', description: 'Personal care services' },
-  { name: 'Tech', icon: 'Monitor', gradient: 'from-indigo-500 to-blue-400', jobs: 423, avgPrice: '350 AED', description: 'Tech support & repair' },
-  { name: 'Moving', icon: 'Truck', gradient: 'from-green-500 to-emerald-400', jobs: 389, avgPrice: '400 AED', description: 'Relocation services' },
-  { name: 'AC & HVAC', icon: 'Wind', gradient: 'from-cyan-500 to-blue-400', jobs: 756, avgPrice: '250 AED', description: 'Cooling & ventilation' },
-  { name: 'Plumbing', icon: 'Droplets', gradient: 'from-blue-500 to-indigo-400', jobs: 543, avgPrice: '200 AED', description: 'Water & pipes' },
-  { name: 'Electrical', icon: 'Zap', gradient: 'from-yellow-500 to-orange-400', jobs: 421, avgPrice: '220 AED', description: 'Electrical work' }
+  // === HIGH-VOLUME CORE HOME SERVICES ===
+  { 
+    name: 'AC & Ventilation', 
+    icon: 'Wind', 
+    gradient: 'from-cyan-500 to-blue-400', 
+    jobs: 2156, 
+    avgPrice: '250 AED', 
+    description: 'Critical AC maintenance & emergency repair',
+    group: 'core',
+    subServices: [
+      { name: 'AC Deep Cleaning', avgPrice: '150 AED' },
+      { name: 'Quarterly Filter Service', avgPrice: '80 AED' },
+      { name: 'AC Gas Top-up', avgPrice: '200 AED' },
+      { name: 'Duct Cleaning', avgPrice: '350 AED' },
+      { name: 'Emergency AC Repair', avgPrice: '300 AED' }
+    ]
+  },
+  { 
+    name: 'Plumbing & Water', 
+    icon: 'Droplets', 
+    gradient: 'from-blue-500 to-indigo-400', 
+    jobs: 1543, 
+    avgPrice: '200 AED', 
+    description: 'Essential plumbing for villas & apartments',
+    group: 'core',
+    subServices: [
+      { name: 'Water Heater Repair/Installation', avgPrice: '250 AED' },
+      { name: 'Water Tank Cleaning', avgPrice: '180 AED' },
+      { name: 'Leak Detection', avgPrice: '150 AED' },
+      { name: 'Drainage/Clog Fixes', avgPrice: '120 AED' }
+    ]
+  },
+  { 
+    name: 'Electrical Services', 
+    icon: 'Zap', 
+    gradient: 'from-yellow-500 to-orange-400', 
+    jobs: 1221, 
+    avgPrice: '220 AED', 
+    description: 'Safety, repairs & installations',
+    group: 'core',
+    subServices: [
+      { name: 'Wiring & Faulty Switch Repair', avgPrice: '180 AED' },
+      { name: 'Light Fixture Installation', avgPrice: '120 AED' },
+      { name: 'Circuit Breaker Repair', avgPrice: '250 AED' },
+      { name: 'Home Safety Inspections', avgPrice: '300 AED' }
+    ]
+  },
+  { 
+    name: 'General Handyman', 
+    icon: 'Wrench', 
+    gradient: 'from-orange-500 to-red-400', 
+    jobs: 1892, 
+    avgPrice: '150 AED', 
+    description: 'Small fixes & installations',
+    group: 'core',
+    subServices: [
+      { name: 'Furniture Assembly', avgPrice: '100 AED' },
+      { name: 'TV Wall Mounting', avgPrice: '120 AED' },
+      { name: 'Curtain/Blind Installation', avgPrice: '80 AED' },
+      { name: 'Locksmith & Door Repair', avgPrice: '150 AED' },
+      { name: 'Minor Wall Fixes', avgPrice: '100 AED' }
+    ]
+  },
+
+  // === RECURRING LIFESTYLE & CLEANING SERVICES ===
+  { 
+    name: 'Home Cleaning', 
+    icon: 'Sparkles', 
+    gradient: 'from-emerald-500 to-teal-400', 
+    jobs: 3247, 
+    avgPrice: '120 AED', 
+    description: 'Hourly maid & recurring cleaning',
+    group: 'lifestyle',
+    subServices: [
+      { name: 'Hourly Maid Service', avgPrice: '50 AED/hr' },
+      { name: 'Weekly Subscription', avgPrice: '400 AED/mo' },
+      { name: 'Bi-Weekly Subscription', avgPrice: '250 AED/mo' },
+      { name: 'Deep Cleaning (Move-in/out)', avgPrice: '350 AED' }
+    ]
+  },
+  { 
+    name: 'Specialized Cleaning', 
+    icon: 'SprayCan', 
+    gradient: 'from-violet-500 to-purple-400', 
+    jobs: 876, 
+    avgPrice: '280 AED', 
+    description: 'Premium cleaning services',
+    group: 'lifestyle',
+    subServices: [
+      { name: 'Sofa/Upholstery Steam Cleaning', avgPrice: '250 AED' },
+      { name: 'Carpet Shampooing', avgPrice: '200 AED' },
+      { name: 'Mattress Sanitization', avgPrice: '150 AED' }
+    ]
+  },
+  { 
+    name: 'Pest Control', 
+    icon: 'Bug', 
+    gradient: 'from-lime-500 to-green-400', 
+    jobs: 654, 
+    avgPrice: '200 AED', 
+    description: 'Licensed pest control services',
+    group: 'lifestyle',
+    subServices: [
+      { name: 'General Pest Control (Insects)', avgPrice: '150 AED' },
+      { name: 'Rodent Control', avgPrice: '200 AED' },
+      { name: 'Full Villa Fumigation', avgPrice: '450 AED' },
+      { name: 'Termite Treatment', avgPrice: '500 AED' }
+    ]
+  },
+  { 
+    name: 'Laundry & Dry Cleaning', 
+    icon: 'Shirt', 
+    gradient: 'from-sky-500 to-blue-400', 
+    jobs: 1123, 
+    avgPrice: '80 AED', 
+    description: 'Pickup/delivery laundry services',
+    group: 'lifestyle',
+    subServices: [
+      { name: 'Wash & Fold (by weight)', avgPrice: '25 AED/kg' },
+      { name: 'Dry Cleaning (by piece)', avgPrice: '30 AED' },
+      { name: 'Ironing Service', avgPrice: '5 AED/pc' },
+      { name: 'Specialized Item Cleaning', avgPrice: '100 AED' }
+    ]
+  },
+
+  // === SPECIALIZED & HIGH-TICKET SERVICES ===
+  { 
+    name: 'Gardening & Landscaping', 
+    icon: 'TreePine', 
+    gradient: 'from-green-500 to-emerald-400', 
+    jobs: 489, 
+    avgPrice: '350 AED', 
+    description: 'Villa & townhouse landscaping',
+    group: 'specialized',
+    subServices: [
+      { name: 'Lawn Mowing', avgPrice: '150 AED' },
+      { name: 'Shrub Trimming & Pruning', avgPrice: '200 AED' },
+      { name: 'Irrigation System Repair', avgPrice: '250 AED' },
+      { name: 'New Garden Design/Softscape', avgPrice: '800 AED' }
+    ]
+  },
+  { 
+    name: 'At-Home Beauty & Wellness', 
+    icon: 'Scissors', 
+    gradient: 'from-pink-500 to-rose-400', 
+    jobs: 967, 
+    avgPrice: '200 AED', 
+    description: 'Mobile salon & wellness',
+    group: 'specialized',
+    subServices: [
+      { name: 'Mobile Manicure/Pedicure', avgPrice: '120 AED' },
+      { name: 'At-Home Hair Cut/Styling', avgPrice: '150 AED' },
+      { name: 'Massage Therapy', avgPrice: '250 AED' },
+      { name: 'Hijama/Cupping', avgPrice: '200 AED' }
+    ]
+  },
+  { 
+    name: 'Movers & Packers', 
+    icon: 'Truck', 
+    gradient: 'from-amber-500 to-orange-400', 
+    jobs: 789, 
+    avgPrice: '800 AED', 
+    description: 'Professional relocation services',
+    group: 'specialized',
+    subServices: [
+      { name: 'Local House Moving', avgPrice: '600 AED' },
+      { name: 'Office Relocation', avgPrice: '1200 AED' },
+      { name: 'Furniture Dismantling/Reassembly', avgPrice: '300 AED' },
+      { name: 'Short-Term Storage', avgPrice: '400 AED/mo' }
+    ]
+  },
+  { 
+    name: 'Vehicle Care', 
+    icon: 'Car', 
+    gradient: 'from-slate-500 to-gray-400', 
+    jobs: 567, 
+    avgPrice: '150 AED', 
+    description: 'Mobile car care services',
+    group: 'specialized',
+    subServices: [
+      { name: 'At-Home Car Wash & Detailing', avgPrice: '100 AED' },
+      { name: 'Mobile Oil Change', avgPrice: '200 AED' },
+      { name: 'Battery Replacement Service', avgPrice: '250 AED' }
+    ]
+  }
 ];
 
 export const initialJobs: Job[] = [

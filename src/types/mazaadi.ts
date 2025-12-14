@@ -47,6 +47,12 @@ export interface Earning {
   type: string;
 }
 
+export interface SubService {
+  name: string;
+  description?: string;
+  avgPrice?: string;
+}
+
 export interface Category {
   name: string;
   icon: string;
@@ -54,6 +60,8 @@ export interface Category {
   jobs: number;
   avgPrice: string;
   description: string;
+  group?: 'core' | 'lifestyle' | 'specialized';
+  subServices?: SubService[];
 }
 
 export interface Job {
@@ -227,4 +235,5 @@ export type ScreenType =
   | 'review'
   | 'quote-management'
   | 'market-benchmark'
-  | 'help';
+  | 'help'
+  | 'services';

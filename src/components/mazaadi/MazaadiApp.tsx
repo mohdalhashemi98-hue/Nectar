@@ -28,6 +28,7 @@ import TransactionsScreen from './screens/TransactionsScreen';
 import QuoteManagementScreen from './screens/QuoteManagementScreen';
 import MarketBenchmarkScreen from './screens/MarketBenchmarkScreen';
 import HelpScreen from './screens/HelpScreen';
+import ServicesScreen from './screens/ServicesScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -473,6 +474,15 @@ const MazaadiApp = () => {
         return (
           <HelpScreen
             onNavigate={navigateTo}
+          />
+        );
+      
+      case 'services':
+        return (
+          <ServicesScreen
+            onNavigate={navigateTo}
+            onSelectCategory={setSelectedCategory}
+            onResetRequestForm={resetRequestForm}
           />
         );
       
