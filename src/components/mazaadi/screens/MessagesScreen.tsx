@@ -173,7 +173,7 @@ const MessagesScreen = ({
         )}
       </div>
 
-      <BottomNav active="messages" userType={userType} onNavigate={onNavigate} />
+      <BottomNav active="messages" userType={userType} onNavigate={onNavigate} pendingQuotes={1} unreadMessages={unreadCount} />
     </div>
   );
 };

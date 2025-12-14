@@ -223,7 +223,7 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
         </motion.div>
       </div>
 
-      <BottomNav active="rewards" userType={userType} onNavigate={onNavigate} />
+      <BottomNav active="rewards" userType={userType} onNavigate={onNavigate} pendingQuotes={1} unreadMessages={2} />
     </div>
   );
 };

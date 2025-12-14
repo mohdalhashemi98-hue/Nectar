@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/mazaadi';
 
@@ -6,23 +6,25 @@ interface BottomNavProps {
   active: string;
   userType: UserType;
   onNavigate: (screen: ScreenType) => void;
+  pendingQuotes?: number;
+  unreadMessages?: number;
 }
 
-const BottomNav = ({ active, userType, onNavigate }: BottomNavProps) => {
+const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMessages = 0 }: BottomNavProps) => {
   const navItems = userType === 'vendor' 
     ? [
-        { key: 'home', icon: Home, label: 'Home', screen: 'vendor-home' as ScreenType },
-        { key: 'transactions', icon: Briefcase, label: 'Work', screen: 'transactions' as ScreenType },
-        { key: 'company', icon: Building2, label: 'Company', screen: 'company-profile' as ScreenType },
-        { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType },
-        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType }
+        { key: 'home', icon: Home, label: 'Home', screen: 'vendor-home' as ScreenType, badge: 0 },
+        { key: 'transactions', icon: Briefcase, label: 'Work', screen: 'transactions' as ScreenType, badge: 0 },
+        { key: 'company', icon: Building2, label: 'Company', screen: 'company-profile' as ScreenType, badge: 0 },
+        { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType, badge: unreadMessages },
+        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: 0 }
       ]
     : [
-        { key: 'home', icon: Home, label: 'Home', screen: 'consumer-home' as ScreenType },
-        { key: 'benchmark', icon: TrendingUp, label: 'Benchmark', screen: 'market-benchmark' as ScreenType },
-        { key: 'rewards', icon: Gift, label: 'Rewards', screen: 'rewards' as ScreenType },
-        { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType },
-        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType }
+        { key: 'home', icon: Home, label: 'Home', screen: 'consumer-home' as ScreenType, badge: 0 },
+        { key: 'benchmark', icon: TrendingUp, label: 'Benchmark', screen: 'market-benchmark' as ScreenType, badge: 0 },
+        { key: 'rewards', icon: Gift, label: 'Rewards', screen: 'rewards' as ScreenType, badge: 0 },
+        { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType, badge: unreadMessages },
+        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: pendingQuotes }
       ];
 
   return (
@@ -51,7 +53,21 @@ const BottomNav = ({ active, userType, onNavigate }: BottomNavProps) => {
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <item.icon className="w-5 h-5 relative z-10" />
+              <div className="relative">
+                <item.icon className="w-5 h-5 relative z-10" />
+                <AnimatePresence>
+                  {item.badge > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1 z-20"
+                    >
+                      {item.badge > 9 ? '9+' : item.badge}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </div>
               <span className="text-[10px] font-semibold relative z-10">{item.label}</span>
             </motion.button>
           );

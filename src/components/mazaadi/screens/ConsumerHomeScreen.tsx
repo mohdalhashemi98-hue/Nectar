@@ -402,7 +402,13 @@ const ConsumerHomeScreen = ({
         <Plus className="w-6 h-6" />
       </motion.button>
 
-      <BottomNav active="home" userType="consumer" onNavigate={onNavigate} />
+      <BottomNav 
+        active="home" 
+        userType="consumer" 
+        onNavigate={onNavigate} 
+        pendingQuotes={jobs.filter(j => j.status === 'Pending' && j.offersCount && j.offersCount > 0).length}
+        unreadMessages={2}
+      />
     </div>
   );
 };
