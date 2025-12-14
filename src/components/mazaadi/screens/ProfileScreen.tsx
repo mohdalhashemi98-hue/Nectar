@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, ChevronRight, User, CreditCard, Bell, Shield, HelpCircle, LogOut, Trophy, Sparkles, Receipt, Download, Calendar, CheckCircle2, XCircle, Clock, Wallet as WalletIcon, TrendingUp } from 'lucide-react';
-import { UserProfile, Rewards, ScreenType, UserType } from '@/types/mazaadi';
-import { initialTransactions } from '@/data/mazaadi-data';
+import { Settings, ChevronRight, User, CreditCard, Bell, Shield, HelpCircle, LogOut, Trophy, Sparkles, Receipt, Download, Calendar, CheckCircle2, XCircle, Clock, Wallet as WalletIcon, TrendingUp, Briefcase, FileText } from 'lucide-react';
+import { UserProfile, Rewards, ScreenType, UserType, Job } from '@/types/mazaadi';
+import { initialTransactions, initialJobs } from '@/data/mazaadi-data';
 import { Transaction } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../BottomNav';
@@ -13,6 +13,7 @@ interface ProfileScreenProps {
   userType: UserType;
   onNavigate: (screen: ScreenType) => void;
   onLogout: () => void;
+  onSelectJob?: (job: Job) => void;
 }
 
 const ProfileScreen = ({
@@ -20,17 +21,19 @@ const ProfileScreen = ({
   rewards,
   userType,
   onNavigate,
-  onLogout
+  onLogout,
+  onSelectJob
 }: ProfileScreenProps) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'history'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'activity'>('overview');
   const [transactions] = useState<Transaction[]>(initialTransactions);
+  const [jobs] = useState<Job[]>(initialJobs);
 
   const menuItems = [
     { icon: User, label: 'Personal Info', screen: null },
     { icon: CreditCard, label: 'Payment Methods', screen: null },
     { icon: Bell, label: 'Notifications', screen: 'notifications' as ScreenType },
     { icon: Shield, label: 'Privacy & Security', screen: null },
-    { icon: HelpCircle, label: 'Help & Support', screen: null }
+    { icon: HelpCircle, label: 'Help & Support', screen: 'help' as ScreenType }
   ];
 
   const totalSpent = transactions
@@ -117,15 +120,15 @@ const ProfileScreen = ({
             Overview
           </button>
           <button
-            onClick={() => setActiveTab('history')}
+            onClick={() => setActiveTab('activity')}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-              activeTab === 'history'
+              activeTab === 'activity'
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground'
             }`}
           >
-            <Receipt className="w-4 h-4" />
-            History
+            <Briefcase className="w-4 h-4" />
+            Activity
           </button>
         </div>
       </div>
@@ -196,123 +199,194 @@ const ProfileScreen = ({
           </>
         )}
 
-        {activeTab === 'history' && (
+        {activeTab === 'activity' && (
           <>
-            {/* Stats Summary */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  <span className="text-xs text-muted-foreground">Total Spent</span>
-                </div>
-                <p className="text-2xl font-bold text-foreground">{totalSpent}</p>
-                <p className="text-xs text-muted-foreground">AED</p>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  <span className="text-xs text-muted-foreground">Points Earned</span>
-                </div>
-                <p className="text-2xl font-bold text-primary">{totalPointsEarned}</p>
-                <p className="text-xs text-muted-foreground">Nectar Points</p>
-              </motion.div>
-            </div>
-
-            {/* Transactions List */}
-            {transactions.map((transaction, index) => (
+            {/* Active Jobs Section */}
+            {userType === 'consumer' && (
               <motion.div
-                key={transaction.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-card rounded-2xl p-4 shadow-sm border border-border"
+                className="mb-4"
               >
-                {/* Transaction Header */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-foreground">{transaction.jobTitle}</h3>
-                      {getStatusIcon(transaction.status)}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{transaction.vendor}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-lg text-foreground">
-                      {transaction.status === 'refunded' ? '-' : ''}{transaction.amount + transaction.serviceFee}
-                    </p>
-                    <p className="text-xs text-muted-foreground">AED</p>
-                  </div>
-                </div>
-
-                {/* Transaction Details */}
-                <div className="grid grid-cols-2 gap-3 mb-3 p-3 bg-muted/50 rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Date</p>
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(transaction.date).toLocaleDateString('en-GB', { 
-                          day: 'numeric', 
-                          month: 'short', 
-                          year: 'numeric' 
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {getPaymentIcon(transaction.paymentMethod)}
-                    <div>
-                      <p className="text-xs text-muted-foreground">Payment</p>
-                      <p className="text-sm font-medium text-foreground">{transaction.paymentMethod}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Price Breakdown */}
-                <div className="space-y-1 mb-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Service Amount</span>
-                    <span className="text-foreground">{transaction.amount} AED</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Service Fee</span>
-                    <span className="text-foreground">{transaction.serviceFee} AED</span>
-                  </div>
-                  {transaction.pointsEarned > 0 && (
-                    <div className="flex justify-between text-primary">
-                      <span>Points Earned</span>
-                      <span className="font-medium">+{transaction.pointsEarned}</span>
+                <h3 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-primary" />
+                  Active Jobs
+                </h3>
+                <div className="space-y-3">
+                  {jobs.filter(j => j.status === 'Pending' || j.status === 'In Progress' || j.status === 'Awaiting Completion').map((job, index) => (
+                    <motion.button
+                      key={job.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ y: -2 }}
+                      onClick={() => {
+                        if (onSelectJob) onSelectJob(job);
+                        if (job.status === 'Pending' && job.offersCount && job.offersCount > 0) {
+                          onNavigate('quote-management');
+                        } else {
+                          onNavigate('job-detail');
+                        }
+                      }}
+                      className="w-full bg-card rounded-2xl p-4 border border-border text-left hover:border-primary/30 transition-all"
+                      style={{ boxShadow: 'var(--shadow-sm)' }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-foreground">{job.title}</h4>
+                        <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+                          job.status === 'Pending' ? 'bg-warning/10 text-warning' :
+                          job.status === 'In Progress' ? 'bg-primary/10 text-primary' :
+                          'bg-muted text-muted-foreground'
+                        }`}>
+                          {job.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">
+                          {job.status === 'Pending' && job.offersCount 
+                            ? `${job.offersCount} quotes received`
+                            : job.vendor || 'Awaiting quotes'
+                          }
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {job.status === 'Pending' && job.offersCount && job.offersCount > 0 && (
+                            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                              Compare Quotes
+                            </span>
+                          )}
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </motion.button>
+                  ))}
+                  {jobs.filter(j => j.status === 'Pending' || j.status === 'In Progress' || j.status === 'Awaiting Completion').length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Briefcase className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">No active jobs</p>
                     </div>
                   )}
                 </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => handleDownloadReceipt(transaction)}
-                    variant="outline"
-                    className="flex-1 h-10"
-                    disabled={transaction.status === 'refunded'}
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Receipt
-                  </Button>
-                  <div className="px-3 py-2 bg-muted rounded-xl text-xs text-muted-foreground">
-                    #{transaction.receiptId}
-                  </div>
-                </div>
               </motion.div>
-            ))}
+            )}
+
+            {/* Payment History Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h3 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary" />
+                Payment History
+              </h3>
+
+              {/* Stats Summary */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="w-4 h-4 text-primary" />
+                    <span className="text-xs text-muted-foreground">Total Spent</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">{totalSpent}</p>
+                  <p className="text-xs text-muted-foreground">AED</p>
+                </div>
+
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span className="text-xs text-muted-foreground">Points Earned</span>
+                  </div>
+                  <p className="text-2xl font-bold text-primary">{totalPointsEarned}</p>
+                  <p className="text-xs text-muted-foreground">Nectar Points</p>
+                </div>
+              </div>
+
+              {/* Transactions List */}
+              {transactions.map((transaction, index) => (
+                <motion.div
+                  key={transaction.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + index * 0.05 }}
+                  className="bg-card rounded-2xl p-4 shadow-sm border border-border mb-3"
+                >
+                  {/* Transaction Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-foreground">{transaction.jobTitle}</h3>
+                        {getStatusIcon(transaction.status)}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{transaction.vendor}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-lg text-foreground">
+                        {transaction.status === 'refunded' ? '-' : ''}{transaction.amount + transaction.serviceFee}
+                      </p>
+                      <p className="text-xs text-muted-foreground">AED</p>
+                    </div>
+                  </div>
+
+                  {/* Transaction Details */}
+                  <div className="grid grid-cols-2 gap-3 mb-3 p-3 bg-muted/50 rounded-xl">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Date</p>
+                        <p className="text-sm font-medium text-foreground">
+                          {new Date(transaction.date).toLocaleDateString('en-GB', { 
+                            day: 'numeric', 
+                            month: 'short', 
+                            year: 'numeric' 
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {getPaymentIcon(transaction.paymentMethod)}
+                      <div>
+                        <p className="text-xs text-muted-foreground">Payment</p>
+                        <p className="text-sm font-medium text-foreground">{transaction.paymentMethod}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Price Breakdown */}
+                  <div className="space-y-1 mb-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Service Amount</span>
+                      <span className="text-foreground">{transaction.amount} AED</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Service Fee</span>
+                      <span className="text-foreground">{transaction.serviceFee} AED</span>
+                    </div>
+                    {transaction.pointsEarned > 0 && (
+                      <div className="flex justify-between text-primary">
+                        <span>Points Earned</span>
+                        <span className="font-medium">+{transaction.pointsEarned}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleDownloadReceipt(transaction)}
+                      variant="outline"
+                      className="flex-1 h-10"
+                      disabled={transaction.status === 'refunded'}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Receipt
+                    </Button>
+                    <div className="px-3 py-2 bg-muted rounded-xl text-xs text-muted-foreground">
+                      #{transaction.receiptId}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </>
         )}
       </div>

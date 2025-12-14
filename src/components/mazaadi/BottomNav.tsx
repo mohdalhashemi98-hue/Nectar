@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Home, Briefcase, Gift, MessageCircle, User, Building2 } from 'lucide-react';
+import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/mazaadi';
 
 interface BottomNavProps {
@@ -19,7 +19,7 @@ const BottomNav = ({ active, userType, onNavigate }: BottomNavProps) => {
       ]
     : [
         { key: 'home', icon: Home, label: 'Home', screen: 'consumer-home' as ScreenType },
-        { key: 'transactions', icon: Briefcase, label: 'Jobs', screen: 'transactions' as ScreenType },
+        { key: 'benchmark', icon: TrendingUp, label: 'Benchmark', screen: 'market-benchmark' as ScreenType },
         { key: 'rewards', icon: Gift, label: 'Rewards', screen: 'rewards' as ScreenType },
         { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType },
         { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType }

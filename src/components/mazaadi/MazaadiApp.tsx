@@ -26,6 +26,8 @@ import VendorWorkScreen from './screens/VendorWorkScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import TransactionsScreen from './screens/TransactionsScreen';
 import QuoteManagementScreen from './screens/QuoteManagementScreen';
+import MarketBenchmarkScreen from './screens/MarketBenchmarkScreen';
+import HelpScreen from './screens/HelpScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -224,6 +226,7 @@ const MazaadiApp = () => {
             userType={userType}
             onNavigate={navigateTo}
             onLogout={handleLogout}
+            onSelectJob={setSelectedJob}
           />
         );
       
@@ -454,6 +457,22 @@ const MazaadiApp = () => {
               setSelectedJob(job);
               navigateTo('quote-management');
             }}
+          />
+        );
+      
+      case 'market-benchmark':
+        return (
+          <MarketBenchmarkScreen
+            onNavigate={navigateTo}
+            onSelectCategory={setSelectedCategory}
+            onResetRequestForm={resetRequestForm}
+          />
+        );
+      
+      case 'help':
+        return (
+          <HelpScreen
+            onNavigate={navigateTo}
           />
         );
       
