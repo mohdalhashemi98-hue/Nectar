@@ -224,4 +224,5 @@ export type ScreenType =
   | 'notifications'
   | 'profile'
   | 'company-profile'
-  | 'review';
+  | 'review'
+  | 'quote-management';

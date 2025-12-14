@@ -244,6 +244,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
             activeJobs.map((job, index) => {
               const statusConfig = getStatusConfig(job.status);
               const StatusIcon = statusConfig.icon;
+              const hasPendingOffers = job.status === 'Pending' && job.offersCount && job.offersCount > 0;
               
               return (
                 <motion.div
@@ -253,7 +254,15 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                   transition={{ delay: 0.15 + index * 0.03 }}
                   whileHover={{ y: -2 }}
                   className="card-interactive p-4"
-                  onClick={() => onSelectJob(job)}
+                  onClick={() => {
+                    onSelectJob(job);
+                    // Navigate to quote management if pending with offers
+                    if (hasPendingOffers) {
+                      onNavigate('quote-management');
+                    } else {
+                      onNavigate('job-detail');
+                    }
+                  }}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3">
@@ -281,9 +290,9 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                           <span className="text-sm text-muted-foreground">{job.vendor}</span>
                         </div>
                       )}
-                      {job.offersCount && (
-                        <span className="text-sm font-semibold text-foreground">
-                          {job.offersCount} offers
+                      {hasPendingOffers && (
+                        <span className="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg">
+                          {job.offersCount} offers - Compare
                         </span>
                       )}
                     </div>
