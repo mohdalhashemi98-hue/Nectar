@@ -44,8 +44,25 @@ const getNotificationColor = (type: string) => {
   }
 };
 
-const NotificationsScreen = ({ notifications, userType, onBack, onNavigate }: NotificationsScreenProps) => {
+const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSelectJobForQuotes }: NotificationsScreenProps & { onSelectJobForQuotes?: (jobId: number) => void }) => {
   const unreadCount = notifications.filter(n => n.unread).length;
+
+  const handleNotificationTap = (notification: Notification) => {
+    // Handle navigation based on notification type
+    if (notification.type === 'offer' && onSelectJobForQuotes) {
+      // Navigate to quote management for offer notifications
+      onSelectJobForQuotes(3); // Job ID 3 is "Painting Service" with offers
+      onNavigate('quote-management');
+    } else if (notification.type === 'message') {
+      onNavigate('messages-list');
+    } else if (notification.type === 'job') {
+      onNavigate('transactions');
+    } else if (notification.type === 'payment') {
+      onNavigate('transactions');
+    } else if (notification.type === 'reward') {
+      onNavigate('rewards');
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -104,7 +121,8 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate }: No
 
                   {/* Notification card */}
                   <div 
-                    className={`card-elevated p-4 ${notification.unread ? 'ring-2 ring-primary/30' : ''}`}
+                    className={`card-elevated p-4 cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all ${notification.unread ? 'ring-2 ring-primary/30' : ''}`}
+                    onClick={() => handleNotificationTap(notification)}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
@@ -120,6 +138,11 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate }: No
                           {notification.message}
                         </p>
                       </div>
+                      {notification.type === 'offer' && (
+                        <div className="flex-shrink-0 px-2 py-1 bg-primary/10 rounded-lg">
+                          <span className="text-xs font-semibold text-primary">View Quotes</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground">
                       <Clock className="w-3 h-3" />

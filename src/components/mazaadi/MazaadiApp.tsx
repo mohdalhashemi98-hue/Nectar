@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob } from '@/types/mazaadi';
+import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob, Offer } from '@/types/mazaadi';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
@@ -25,6 +25,7 @@ import RequestDetailScreen from './screens/RequestDetailScreen';
 import VendorWorkScreen from './screens/VendorWorkScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import TransactionsScreen from './screens/TransactionsScreen';
+import QuoteManagementScreen from './screens/QuoteManagementScreen';
 
 const MazaadiApp = () => {
   // Auth state
@@ -233,6 +234,10 @@ const MazaadiApp = () => {
             userType={userType}
             onBack={goBack}
             onNavigate={navigateTo}
+            onSelectJobForQuotes={(jobId) => {
+              const job = jobs.find(j => j.id === jobId);
+              if (job) setSelectedJob(job);
+            }}
           />
         );
       
@@ -397,6 +402,57 @@ const MazaadiApp = () => {
             onSelectJob={(job) => {
               setSelectedJob(job);
               navigateTo('payment');
+            }}
+          />
+        );
+      
+      case 'quote-management':
+        return selectedJob ? (
+          <QuoteManagementScreen
+            job={selectedJob}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectVendorId={(vendorId) => {
+              const vendor = previousVendors.find(v => v.id === vendorId);
+              if (vendor) setSelectedVendor(vendor);
+            }}
+            onStartChatWithVendor={(vendorId) => {
+              const vendor = previousVendors.find(v => v.id === vendorId);
+              if (vendor) {
+                const existingConv = conversations.find(c => c.name === vendor.name);
+                if (existingConv) {
+                  setSelectedConversation(existingConv);
+                } else {
+                  const newConv = {
+                    id: Date.now(),
+                    name: vendor.name,
+                    avatar: vendor.avatar,
+                    lastMessage: '',
+                    time: 'Now',
+                    unread: false,
+                    online: true,
+                    messages: []
+                  };
+                  setConversations(prev => [newConv, ...prev]);
+                  setSelectedConversation(newConv);
+                }
+              }
+            }}
+            onAcceptOffer={(offer: Offer) => {
+              // Update the job with vendor info
+              console.log('Accepted offer:', offer);
+              navigateTo('consumer-home');
+            }}
+          />
+        ) : (
+          <JobsScreen
+            jobs={jobs}
+            userType={userType}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSelectJob={(job) => {
+              setSelectedJob(job);
+              navigateTo('quote-management');
             }}
           />
         );
