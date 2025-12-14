@@ -39,7 +39,7 @@ const WelcomeScreen = ({
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
-        }} src="/lovable-uploads/295de576-689e-44cb-baa0-5e4a8954d2c5.png" className="w-28 h-28 mx-auto border-secondary rounded-none object-cover" />
+        }} src="/lovable-uploads/295de576-689e-44cb-baa0-5e4a8954d2c5.png" className="w-28 h-28 mx-auto bg-background rounded-none object-cover" />
         </motion.div>
         <h1 className="font-display text-5xl font-bold text-foreground mb-3 tracking-tight">Nectar</h1>
         <p className="text-lg text-muted-foreground">Verified Pros. Guaranteed Value.</p>
