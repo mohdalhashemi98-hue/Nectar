@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Camera, X, Zap, Clock, Calendar, MapPin, CheckCircle, RefreshCw, CalendarDays, Repeat, Send, FileText, DollarSign, Info } from 'lucide-react';
+import { ArrowLeft, Camera, X, Zap, Clock, Calendar, MapPin, CheckCircle, RefreshCw, CalendarDays, Repeat, Send, FileText, DollarSign, Info, TrendingUp, Sparkles, Users, BarChart3 } from 'lucide-react';
 import { ScreenType, RequestDetails, SubscriptionFrequency } from '@/types/mazaadi';
 import { categories } from '@/data/mazaadi-data';
 import { getCategoryIcon } from '../utils/categoryIcons';
@@ -8,6 +8,34 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+
+// Generate AI market benchmark data
+const generateMarketData = (category: string, subService: string | null, location: string) => {
+  const categoryData = categories.find(c => c.name === category);
+  const subServiceData = subService ? categoryData?.subServices?.find(s => s.name === subService) : null;
+  
+  const basePrice = subServiceData?.avgPrice || categoryData?.avgPrice || '200 AED';
+  const basePriceNum = parseInt(basePrice.replace(/[^0-9]/g, ''));
+  
+  const minPrice = Math.round(basePriceNum * 0.7);
+  const maxPrice = Math.round(basePriceNum * 1.4);
+  const avgPrice = Math.round((minPrice + maxPrice) / 2);
+  
+  // Generate consistent values based on inputs
+  const seed = (category.length + (subService?.length || 0) + location.length);
+  const confidence = 78 + (seed % 18);
+  const activeVendors = 8 + (seed % 15);
+  const responseTime = 12 + (seed % 20);
+  
+  return {
+    minPrice,
+    avgPrice,
+    maxPrice,
+    confidence,
+    activeVendors,
+    responseTime
+  };
+};
 
 interface JobConfigurationScreenProps {
   requestDetails: RequestDetails;
@@ -55,6 +83,7 @@ const JobConfigurationScreen = ({
   onSubmit
 }: JobConfigurationScreenProps) => {
   const [location, setLocation] = useState('Dubai Marina, Dubai');
+  const [showMarketInsights, setShowMarketInsights] = useState(false);
   
   // Get category details
   const categoryData = useMemo(() => {
@@ -66,6 +95,18 @@ const JobConfigurationScreen = ({
     if (!categoryData || !selectedSubService) return null;
     return categoryData.subServices?.find(s => s.name === selectedSubService);
   }, [categoryData, selectedSubService]);
+  
+  // Generate AI market data
+  const marketData = useMemo(() => {
+    if (!selectedCategory) return null;
+    return generateMarketData(selectedCategory, selectedSubService, location);
+  }, [selectedCategory, selectedSubService, location]);
+  
+  // Animate in the market insights after a delay
+  useEffect(() => {
+    const timer = setTimeout(() => setShowMarketInsights(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
   
   const supportsSubscription = selectedCategory ? subscriptionCategories.includes(selectedCategory) : false;
   
@@ -160,6 +201,88 @@ const JobConfigurationScreen = ({
             )}
           </div>
         </motion.div>
+
+        {/* AI Market Price Range */}
+        <AnimatePresence>
+          {showMarketInsights && marketData && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 rounded-2xl border border-primary/20 p-4 relative overflow-hidden">
+                {/* Decorative sparkle */}
+                <div className="absolute top-2 right-2">
+                  <Sparkles className="w-4 h-4 text-primary/40" />
+                </div>
+                
+                {/* Header */}
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground text-sm">AI Market Insights</h3>
+                    <p className="text-xs text-muted-foreground">{marketData.confidence}% confidence • {location}</p>
+                  </div>
+                </div>
+                
+                {/* Price Range Visualization */}
+                <div className="bg-card rounded-xl p-3 mb-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-muted-foreground">Market Price Range</span>
+                    <span className="text-xs font-medium text-primary flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" />
+                      Fair pricing
+                    </span>
+                  </div>
+                  
+                  {/* Price bar */}
+                  <div className="relative h-8 rounded-lg bg-secondary overflow-hidden mb-2">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500/20 via-primary/30 to-orange-500/20"
+                      style={{ width: '100%' }}
+                    />
+                    {/* Markers */}
+                    <div className="absolute inset-0 flex items-center justify-between px-2">
+                      <div className="flex flex-col items-center">
+                        <span className="text-[10px] text-muted-foreground">Low</span>
+                        <span className="font-bold text-xs text-foreground">{marketData.minPrice} AED</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[10px] text-primary font-medium">Average</span>
+                        <span className="font-bold text-sm text-primary">{marketData.avgPrice} AED</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[10px] text-muted-foreground">High</span>
+                        <span className="font-bold text-xs text-foreground">{marketData.maxPrice} AED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-card rounded-xl px-3 py-2 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-primary" />
+                    <div>
+                      <div className="font-bold text-sm text-foreground">{marketData.activeVendors}</div>
+                      <div className="text-[10px] text-muted-foreground">Active vendors</div>
+                    </div>
+                  </div>
+                  <div className="bg-card rounded-xl px-3 py-2 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-primary" />
+                    <div>
+                      <div className="font-bold text-sm text-foreground">{marketData.responseTime} min</div>
+                      <div className="text-[10px] text-muted-foreground">Avg response</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Description */}
         <motion.div
