@@ -165,7 +165,7 @@ const PostJobScreen = ({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 pb-32">
+      <div className="flex-1 overflow-y-auto px-4 py-5 pb-32">
         {/* Step 1: Category Selection */}
         {step === 1 && (
           <motion.div 
