@@ -4,7 +4,8 @@ import {
   ArrowLeft, Star, Heart, MapPin, Clock, CheckCircle, MessageCircle, 
   Phone, Briefcase, Award, Shield, Play, ChevronRight, Zap, Users,
   ThumbsUp, Image as ImageIcon, Quote, TrendingUp, Timer, Target,
-  Sparkles, ExternalLink
+  Sparkles, ExternalLink, Filter, Pin, FileCheck, Lightbulb, UserCircle,
+  BadgeCheck, ShieldCheck, Info
 } from 'lucide-react';
 import { Vendor, ScreenType, Conversation } from '@/types/mazaadi';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,7 @@ interface VendorProfileScreenProps {
 
 // Enhanced vendor data for marketing page
 const vendorMarketingData = {
-  coverVideo: null, // URL or null for image fallback
+  coverVideo: null,
   coverImage: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
   tagline: 'Experts in European A/C Systems Since 2018',
   story: 'We are a family-owned AC service company serving Dubai and the greater UAE since 2018. Specializing in European climate systems (Daikin, Mitsubishi, Carrier), we bring German precision and Middle Eastern hospitality to every job. Our mission? To keep you cool, comfortable, and worry-free.',
@@ -29,17 +30,18 @@ const vendorMarketingData = {
     'Eco-friendly cleaning solutions'
   ],
   services: [
-    { name: 'AC Deep Clean', price: 'From 199 AED', benefit: 'Breathe cleaner air and reduce utility bills by up to 20%' },
-    { name: 'Split AC Installation', price: '450-650 AED', benefit: 'Professional mounting with 1-year installation warranty' },
-    { name: 'Central AC Repair', price: 'From 299 AED', benefit: 'Restore cooling efficiency within 24 hours' },
-    { name: 'Duct Cleaning & Sanitization', price: 'From 399 AED', benefit: 'Eliminate allergens and improve air quality for your family' },
-    { name: 'Annual Maintenance Contract', price: '799 AED/year', benefit: 'Priority service + 4 scheduled visits + parts discount' }
+    { name: 'AC Deep Clean', price: 'From 199 AED', benefit: 'Breathe cleaner air and reduce utility bills by up to 20%', category: 'AC Maintenance' },
+    { name: 'Split AC Installation', price: '450-650 AED', benefit: 'Professional mounting with 1-year installation warranty', category: 'AC Installation' },
+    { name: 'Central AC Repair', price: 'From 299 AED', benefit: 'Restore cooling efficiency within 24 hours', category: 'AC Repair' },
+    { name: 'Duct Cleaning & Sanitization', price: 'From 399 AED', benefit: 'Eliminate allergens and improve air quality for your family', category: 'AC Maintenance' },
+    { name: 'Annual Maintenance Contract', price: '799 AED/year', benefit: 'Priority service + 4 scheduled visits + parts discount', category: 'Maintenance' }
   ],
   portfolio: [
     { before: '🏢', after: '❄️', title: 'Villa AC Overhaul', location: 'Palm Jumeirah', description: 'Complete replacement of 6 split units' },
     { before: '🔧', after: '✨', title: 'Central AC Restoration', location: 'Business Bay', description: 'Full duct cleaning and compressor repair' },
     { before: '🌡️', after: '🏠', title: 'Smart Home Integration', location: 'Dubai Marina', description: 'Connected 4 units to smart thermostat system' }
   ],
+  // Enhanced reviews with service categories and pinned status
   reviews: [
     { 
       id: 1, 
@@ -47,7 +49,9 @@ const vendorMarketingData = {
       rating: 5, 
       date: '2 weeks ago',
       text: 'Excellent service! The technician arrived on time, explained everything clearly, and left the place spotless. My AC has never worked better.',
-      proResponse: 'Thank you Mohammed! It was our pleasure to serve you. Looking forward to your annual maintenance visit!'
+      proResponse: 'Thank you Mohammed! It was our pleasure to serve you. Looking forward to your annual maintenance visit!',
+      serviceCategory: 'AC Maintenance',
+      pinned: true
     },
     { 
       id: 2, 
@@ -55,7 +59,9 @@ const vendorMarketingData = {
       rating: 5, 
       date: '1 month ago',
       text: 'Called them for an emergency repair on a Friday evening. They came within 2 hours and fixed the issue. Highly recommended!',
-      proResponse: 'We are glad we could help during the emergency, Sarah. Stay cool! 🌟'
+      proResponse: 'We are glad we could help during the emergency, Sarah. Stay cool! 🌟',
+      serviceCategory: 'AC Repair',
+      pinned: true
     },
     { 
       id: 3, 
@@ -63,9 +69,75 @@ const vendorMarketingData = {
       rating: 4, 
       date: '1 month ago',
       text: 'Good work overall. Slightly pricier than others but the quality justifies it. Will use again.',
-      proResponse: 'Thank you for your feedback Ahmed. We pride ourselves on using premium materials. See you next time!'
+      proResponse: 'Thank you for your feedback Ahmed. We pride ourselves on using premium materials. See you next time!',
+      serviceCategory: 'AC Installation',
+      pinned: false
+    },
+    { 
+      id: 4, 
+      author: 'Fatima H.', 
+      rating: 5, 
+      date: '2 months ago',
+      text: 'The annual maintenance contract is worth every dirham. They are always punctual and thorough.',
+      proResponse: 'Thank you Fatima! We appreciate your continued trust in our services.',
+      serviceCategory: 'Maintenance',
+      pinned: false
+    },
+    { 
+      id: 5, 
+      author: 'James P.', 
+      rating: 5, 
+      date: '3 months ago',
+      text: 'Professional installation of 3 new AC units. Clean work, no mess left behind. Very impressed.',
+      proResponse: 'Thank you James! Enjoy your new cooling system!',
+      serviceCategory: 'AC Installation',
+      pinned: false
     }
   ],
+  // Certifications & Licenses
+  certifications: [
+    { name: 'Dubai DED Trade License', number: 'TL-2018-XXXX', verified: true, icon: 'license' },
+    { name: 'HVAC Technician Certification', issuer: 'UAE Technical Institute', verified: true, icon: 'cert' },
+    { name: 'Daikin Authorized Service', issuer: 'Daikin Middle East', verified: true, icon: 'brand' },
+    { name: 'Carrier Certified Installer', issuer: 'Carrier UAE', verified: true, icon: 'brand' }
+  ],
+  // Tips & Expertise content
+  expertiseTips: [
+    { 
+      id: 1,
+      title: '3 Things to Check Before Summer',
+      content: 'Clean your filters monthly, check thermostat batteries, and schedule a professional service. Your AC will thank you!',
+      date: '1 week ago'
+    },
+    { 
+      id: 2,
+      title: 'Why Your AC Smells Musty',
+      content: 'A musty smell usually means mold in the ducts or a clogged drain line. Don\'t ignore it - it affects air quality.',
+      date: '2 weeks ago'
+    },
+    { 
+      id: 3,
+      title: 'Save 20% on Electricity Bills',
+      content: 'Set your AC to 24°C, use fans to circulate air, and ensure your home is well-insulated. Small changes, big savings!',
+      date: '1 month ago'
+    }
+  ],
+  // Team members
+  team: [
+    { name: 'Ahmed Al-Mansouri', role: 'Founder & Lead Technician', experience: '15+ years', photo: 'AA', bio: 'Trained in Germany, specializes in European AC systems' },
+    { name: 'Omar Hassan', role: 'Senior Technician', experience: '10 years', photo: 'OH', bio: 'Expert in central AC systems and duct work' },
+    { name: 'Raj Kumar', role: 'Installation Specialist', experience: '8 years', photo: 'RK', bio: 'Certified by Daikin and Carrier for installations' }
+  ],
+  // Warranty info
+  warranty: {
+    title: '30-Day Service Guarantee',
+    description: 'If you\'re not satisfied with our work, we\'ll come back and fix it for free within 30 days. No questions asked.',
+    details: [
+      'Full refund if issue not resolved',
+      'Parts warranty: 6 months',
+      'Labor warranty: 30 days'
+    ]
+  },
   metrics: {
     responseTime: '12 min',
     completionRate: 98,
@@ -78,6 +150,16 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<number | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<string>('all');
+  const [showWarrantyDetails, setShowWarrantyDetails] = useState(false);
+
+  // Get unique service categories for filtering
+  const serviceCategories = ['all', ...new Set(vendorMarketingData.reviews.map(r => r.serviceCategory))];
+
+  // Filter and sort reviews (pinned first)
+  const filteredReviews = vendorMarketingData.reviews
+    .filter(r => reviewFilter === 'all' || r.serviceCategory === reviewFilter)
+    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
   const handleGetQuote = () => {
     const newConversation: Conversation = {
@@ -140,7 +222,6 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             />
           )}
           
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
           
           {/* Navigation */}
@@ -170,7 +251,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </div>
 
-        {/* Core Credentials Block - Floating Card */}
+        {/* Core Credentials Block */}
         <div className="px-4 -mt-16 relative z-20">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -179,10 +260,8 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             style={{ boxShadow: 'var(--shadow-lg)' }}
           >
             <div className="flex items-start gap-4">
-              {/* Profile Photo */}
               <div className="w-18 h-18 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-3xl font-bold text-primary-foreground relative">
                 {vendor.avatar}
-                {/* Verification Badge */}
                 {vendor.verified && (
                   <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-verified rounded-full flex items-center justify-center border-2 border-card">
                     <CheckCircle className="w-4 h-4 text-verified-foreground" />
@@ -191,12 +270,10 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
               </div>
               
               <div className="flex-1">
-                {/* Company Name & Badge */}
                 <div className="flex items-center gap-2 mb-1">
                   <h1 className="font-display text-xl font-bold text-foreground">{vendor.name}</h1>
                 </div>
                 
-                {/* Nectar Verified Tag */}
                 {vendor.verified && (
                   <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-verified/10 rounded-full mb-2">
                     <Shield className="w-3 h-3 text-verified" />
@@ -204,7 +281,6 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                   </div>
                 )}
                 
-                {/* Social Proof Summary */}
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1">
                     <Star className="w-5 h-5 text-primary fill-primary" />
@@ -218,7 +294,6 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
               </div>
             </div>
 
-            {/* Primary CTA */}
             <Button 
               onClick={handleGetQuote}
               size="lg"
@@ -234,7 +309,53 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-32">
         
-        {/* PART 2A: Portfolio / Gallery */}
+        {/* CERTIFICATION & LICENSE VERIFICATION BLOCK */}
+        <motion.section 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <FileCheck className="w-5 h-5 text-primary" />
+              Licenses & Certifications
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {vendorMarketingData.certifications.map((cert, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.05 + idx * 0.05 }}
+                className="card-elevated p-3 relative overflow-hidden"
+              >
+                <div className="absolute top-2 right-2">
+                  {cert.verified && (
+                    <div className="w-5 h-5 bg-verified rounded-full flex items-center justify-center">
+                      <BadgeCheck className="w-3 h-3 text-verified-foreground" />
+                    </div>
+                  )}
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
+                  {cert.icon === 'license' && <FileCheck className="w-5 h-5 text-primary" />}
+                  {cert.icon === 'cert' && <Award className="w-5 h-5 text-primary" />}
+                  {cert.icon === 'brand' && <ShieldCheck className="w-5 h-5 text-primary" />}
+                </div>
+                <h4 className="font-semibold text-foreground text-xs leading-tight mb-1">{cert.name}</h4>
+                <p className="text-[10px] text-muted-foreground">
+                  {cert.issuer || cert.number}
+                </p>
+                {cert.verified && (
+                  <span className="text-[9px] text-verified font-bold mt-1 inline-block">✓ Verified</span>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* PORTFOLIO / GALLERY */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -250,15 +371,14 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             </button>
           </div>
           
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none' }}>
             {vendorMarketingData.portfolio.map((item, idx) => (
               <motion.button
                 key={idx}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedPortfolioItem(idx)}
-                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden"
+                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden snap-start"
               >
-                {/* Before/After Visual */}
                 <div className="h-28 bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center relative">
                   <div className="flex items-center gap-2">
                     <span className="text-3xl">{item.before}</span>
@@ -281,7 +401,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </motion.section>
 
-        {/* PART 2B: Company Story & USP */}
+        {/* COMPANY STORY & USP */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -297,7 +417,6 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             {vendorMarketingData.story}
           </p>
           
-          {/* USPs */}
           <div className="space-y-2">
             {vendorMarketingData.usps.map((usp, idx) => (
               <div key={idx} className="flex items-center gap-2">
@@ -310,7 +429,44 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </motion.section>
 
-        {/* PART 2C: Service Listings & Pricing */}
+        {/* MEET THE TEAM */}
+        <motion.section 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.17 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              Meet the Team
+            </h2>
+          </div>
+          
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none' }}>
+            {vendorMarketingData.team.map((member, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 + idx * 0.05 }}
+                className="flex-shrink-0 w-44 card-elevated p-4 text-center snap-start"
+              >
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-xl font-bold text-primary-foreground">
+                  {member.photo}
+                </div>
+                <h4 className="font-semibold text-foreground text-sm">{member.name}</h4>
+                <p className="text-xs text-primary font-medium mb-1">{member.role}</p>
+                <div className="flex items-center justify-center gap-1 mb-2">
+                  <Clock className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-[10px] text-muted-foreground">{member.experience}</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">{member.bio}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* SERVICES & PRICING */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -329,7 +485,10 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                 className="card-elevated p-4 cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold text-foreground">{service.name}</h4>
+                  <div>
+                    <h4 className="font-semibold text-foreground">{service.name}</h4>
+                    <span className="text-[10px] text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">{service.category}</span>
+                  </div>
                   <span className="font-bold text-primary text-sm">{service.price}</span>
                 </div>
                 <p className="text-xs text-muted-foreground flex items-start gap-1.5">
@@ -341,7 +500,44 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </motion.section>
 
-        {/* PART 3: Performance Metrics (Transparency) */}
+        {/* TIPS & EXPERTISE FEED */}
+        <motion.section 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.22 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <Lightbulb className="w-5 h-5 text-primary" />
+              Tips & Expertise
+            </h2>
+          </div>
+          
+          <div className="space-y-3">
+            {vendorMarketingData.expertiseTips.map((tip, idx) => (
+              <motion.div
+                key={tip.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 + idx * 0.05 }}
+                className="card-elevated p-4 border-l-4 border-primary"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Lightbulb className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-foreground text-sm mb-1">{tip.title}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{tip.content}</p>
+                    <span className="text-[10px] text-muted-foreground mt-2 inline-block">{tip.date}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* PERFORMANCE METRICS */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -384,7 +580,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </motion.section>
 
-        {/* PART 3: Customer Reviews */}
+        {/* CUSTOMER REVIEWS WITH FILTERING */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -415,19 +611,45 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
               <div className="text-xs text-muted-foreground">Last 12 months</div>
             </div>
           </div>
+
+          {/* SERVICE CATEGORY FILTER */}
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+            <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            {serviceCategories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setReviewFilter(category)}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  reviewFilter === category
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-muted-foreground hover:bg-secondary/80'
+                }`}
+              >
+                {category === 'all' ? 'All Reviews' : category}
+              </button>
+            ))}
+          </div>
           
           <div className="space-y-4">
             <AnimatePresence>
-              {vendorMarketingData.reviews.slice(0, showAllReviews ? undefined : 3).map((review, idx) => (
+              {filteredReviews.slice(0, showAllReviews ? undefined : 3).map((review, idx) => (
                 <motion.div
                   key={review.id}
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="card-elevated overflow-hidden"
+                  className={`card-elevated overflow-hidden ${review.pinned ? 'ring-2 ring-primary/30' : ''}`}
                 >
+                  {/* PINNED BADGE - "Reviews I Love" */}
+                  {review.pinned && (
+                    <div className="bg-primary/10 px-4 py-2 flex items-center gap-2">
+                      <Pin className="w-3 h-3 text-primary" />
+                      <span className="text-[10px] font-bold text-primary uppercase">Pinned by Vendor</span>
+                    </div>
+                  )}
+                  
                   {/* Customer Review */}
-                  <div className="p-4">
+                  <div className={`p-4 ${review.pinned ? 'bg-primary/5' : ''}`}>
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center font-bold text-foreground">
@@ -435,7 +657,10 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                         </div>
                         <div>
                           <div className="font-semibold text-foreground text-sm">{review.author}</div>
-                          <div className="text-xs text-muted-foreground">{review.date}</div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-muted-foreground">{review.date}</span>
+                            <span className="text-[10px] text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">{review.serviceCategory}</span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-0.5">
@@ -444,7 +669,11 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                         ))}
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{review.text}</p>
+                    <p className={`text-muted-foreground ${review.pinned ? 'text-base font-medium text-foreground' : 'text-sm'}`}>
+                      {review.pinned && <span className="text-2xl text-primary mr-1">"</span>}
+                      {review.text}
+                      {review.pinned && <span className="text-2xl text-primary ml-1">"</span>}
+                    </p>
                   </div>
                   
                   {/* Pro Response */}
@@ -469,7 +698,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           </div>
         </motion.section>
 
-        {/* Badges Section */}
+        {/* CREDENTIALS BADGES */}
         <motion.section 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -478,7 +707,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
         >
           <h2 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
             <Award className="w-5 h-5 text-primary" />
-            Credentials
+            Trust Badges
           </h2>
           <div className="flex flex-wrap gap-2">
             {vendor.verified && (
@@ -503,25 +732,68 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
         </motion.section>
       </div>
 
-      {/* PART 4: Sticky Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-background/80 backdrop-blur-sm border-t border-border z-30">
-        <div className="flex gap-3 max-w-lg mx-auto">
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="h-14 px-6 border-primary/20"
-            onClick={handleCall}
+      {/* STICKY BOTTOM CTA WITH WARRANTY TRANSPARENCY */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-background/80 backdrop-blur-sm border-t border-border z-30">
+        {/* Warranty Toggle */}
+        <AnimatePresence>
+          {showWarrantyDetails && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 bg-green-500/10 border-b border-green-500/20">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                    <ShieldCheck className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-foreground text-sm mb-1">{vendorMarketingData.warranty.title}</h4>
+                    <p className="text-xs text-muted-foreground mb-2">{vendorMarketingData.warranty.description}</p>
+                    <div className="space-y-1">
+                      {vendorMarketingData.warranty.details.map((detail, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5">
+                          <CheckCircle className="w-3 h-3 text-green-500" />
+                          <span className="text-xs text-foreground">{detail}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        <div className="p-4">
+          {/* Warranty Link */}
+          <button 
+            onClick={() => setShowWarrantyDetails(!showWarrantyDetails)}
+            className="w-full flex items-center justify-center gap-2 text-xs text-green-600 font-medium mb-3 hover:text-green-700 transition-colors"
           >
-            <Phone className="w-5 h-5" />
-          </Button>
-          <Button 
-            onClick={handleGetQuote}
-            size="lg"
-            className="flex-1 h-14 bg-primary text-primary-foreground hover:bg-primary/90 text-base font-bold rounded-2xl"
-          >
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Contact & Get Quote
-          </Button>
+            <Info className="w-3 h-3" />
+            {showWarrantyDetails ? 'Hide warranty details' : 'Click here to see our 30-Day Service Guarantee and Warranty details'}
+          </button>
+          
+          <div className="flex gap-3 max-w-lg mx-auto">
+            <Button 
+              variant="outline" 
+              size="lg"
+              className="h-14 px-6 border-primary/20"
+              onClick={handleCall}
+            >
+              <Phone className="w-5 h-5" />
+            </Button>
+            <Button 
+              onClick={handleGetQuote}
+              size="lg"
+              className="flex-1 h-14 bg-primary text-primary-foreground hover:bg-primary/90 text-base font-bold rounded-2xl"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Contact & Get Quote
+            </Button>
+          </div>
         </div>
       </div>
     </div>
