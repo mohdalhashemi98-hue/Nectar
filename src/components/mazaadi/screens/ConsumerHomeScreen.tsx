@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/mazaadi';
 import { tierConfig, categories } from '@/data/mazaadi-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
@@ -87,15 +87,23 @@ const ConsumerHomeScreen = ({
                 <p className="text-sm text-muted-foreground">What can we help with today?</p>
               </div>
             </div>
-            <button 
-              onClick={() => onNavigate('notifications')} 
-              className="relative p-3 bg-secondary rounded-3xl hover:bg-secondary/80 transition-colors"
-            >
-              <Bell className="w-5 h-5 text-foreground" />
-              {notifications.filter(n => n.unread).length > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => onNavigate('help')} 
+                className="p-3 bg-secondary rounded-3xl hover:bg-secondary/80 transition-colors"
+              >
+                <HelpCircle className="w-5 h-5 text-foreground" />
+              </button>
+              <button 
+                onClick={() => onNavigate('notifications')} 
+                className="relative p-3 bg-secondary rounded-3xl hover:bg-secondary/80 transition-colors"
+              >
+                <Bell className="w-5 h-5 text-foreground" />
+                {notifications.filter(n => n.unread).length > 0 && (
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
+                )}
+              </button>
+            </div>
           </motion.div>
 
           {/* Search Bar */}

@@ -225,4 +225,6 @@ export type ScreenType =
   | 'profile'
   | 'company-profile'
   | 'review'
-  | 'quote-management';
+  | 'quote-management'
+  | 'market-benchmark'
+  | 'help';
