@@ -4,7 +4,8 @@ import {
   ArrowLeft, Plus, Edit2, Star, Camera, Trash2, DollarSign, Clock, 
   CheckCircle, Sparkles, Image as ImageIcon, Upload, Play, MapPin,
   ThumbsUp, TrendingUp, Timer, Target, Users, Quote, ChevronRight,
-  X, Save, Eye, MessageCircle
+  X, Save, Eye, MessageCircle, Shield, Award, Lightbulb, UserCircle,
+  BadgeCheck, FileText, Briefcase, GraduationCap
 } from 'lucide-react';
 import { ScreenType, UserType } from '@/types/mazaadi';
 import BottomNav from '../BottomNav';
@@ -31,6 +32,30 @@ interface PortfolioItem {
   afterEmoji: string;
 }
 
+interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  type: 'license' | 'certification';
+  verified: boolean;
+}
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
+}
+
+interface ExpertiseTip {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  publishedDate: string;
+}
+
 interface CompanyProfileScreenProps {
   userType: UserType;
   onBack: () => void;
@@ -48,6 +73,31 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
     'All major European brands certified',
     'Eco-friendly cleaning solutions'
   ]);
+
+  // Certifications & Licenses State
+  const [certifications, setCertifications] = useState<Certification[]>([
+    { id: '1', name: 'Dubai DED Trade License', issuer: 'Dubai Economic Department', type: 'license', verified: true },
+    { id: '2', name: 'HVAC Certified Technician', issuer: 'Daikin Professional Academy', type: 'certification', verified: true },
+    { id: '3', name: 'Refrigeration Safety Certificate', issuer: 'UAE Safety Council', type: 'certification', verified: false },
+  ]);
+  const [isAddingCertification, setIsAddingCertification] = useState(false);
+  const [newCertification, setNewCertification] = useState({ name: '', issuer: '', type: 'certification' as 'license' | 'certification' });
+
+  // Team Members State
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+    { id: '1', name: 'Ahmed Al-Mansouri', role: 'Lead Technician', bio: '10+ years experience in residential and commercial HVAC systems', initials: 'AM' },
+    { id: '2', name: 'Khalid Rahman', role: 'Senior Installer', bio: 'Certified Daikin & Mitsubishi installer, specializing in duct systems', initials: 'KR' },
+  ]);
+  const [isAddingTeamMember, setIsAddingTeamMember] = useState(false);
+  const [newTeamMember, setNewTeamMember] = useState({ name: '', role: '', bio: '' });
+
+  // Tips & Expertise State
+  const [expertiseTips, setExpertiseTips] = useState<ExpertiseTip[]>([
+    { id: '1', title: '3 Things to Check Before Summer', content: 'Before the UAE summer hits, check your AC filters, thermostat settings, and outdoor unit clearance to ensure optimal performance.', category: 'Maintenance', publishedDate: '2 days ago' },
+    { id: '2', title: 'How to Spot a Refrigerant Leak', content: 'Look for ice buildup on the coils, hissing sounds, or reduced cooling. Early detection saves money!', category: 'Troubleshooting', publishedDate: '1 week ago' },
+  ]);
+  const [isAddingTip, setIsAddingTip] = useState(false);
+  const [newTip, setNewTip] = useState({ title: '', content: '', category: '' });
 
   const [services, setServices] = useState<Service[]>([
     { id: '1', name: 'AC Deep Clean', description: 'Complete AC servicing and deep cleaning', benefit: 'Breathe cleaner air and reduce utility bills by up to 20%', price: 'From 199 AED', duration: '1-2 hours', category: 'HVAC' },
@@ -69,7 +119,7 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
     if (!portfolioScrollRef.current) return;
     const container = portfolioScrollRef.current;
     const scrollLeft = container.scrollLeft;
-    const itemWidth = 192 + 12; // w-48 (192px) + gap-3 (12px)
+    const itemWidth = 192 + 12;
     const newIndex = Math.round(scrollLeft / itemWidth);
     setActivePortfolioIndex(Math.min(newIndex, portfolio.length));
   }, [portfolio.length]);
@@ -90,6 +140,73 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
     yearsInBusiness: 3,
     totalJobs: 500,
     successRate: 98
+  };
+
+  // Certification Handlers
+  const handleAddCertification = () => {
+    if (!newCertification.name || !newCertification.issuer) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+    const cert: Certification = {
+      id: Date.now().toString(),
+      ...newCertification,
+      verified: false
+    };
+    setCertifications([...certifications, cert]);
+    setNewCertification({ name: '', issuer: '', type: 'certification' });
+    setIsAddingCertification(false);
+    toast.success('Certification added! Pending verification.');
+  };
+
+  const handleDeleteCertification = (id: string) => {
+    setCertifications(certifications.filter(c => c.id !== id));
+    toast.success('Certification removed');
+  };
+
+  // Team Member Handlers
+  const handleAddTeamMember = () => {
+    if (!newTeamMember.name || !newTeamMember.role) {
+      toast.error('Please fill in name and role');
+      return;
+    }
+    const member: TeamMember = {
+      id: Date.now().toString(),
+      ...newTeamMember,
+      initials: newTeamMember.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    };
+    setTeamMembers([...teamMembers, member]);
+    setNewTeamMember({ name: '', role: '', bio: '' });
+    setIsAddingTeamMember(false);
+    toast.success('Team member added!');
+  };
+
+  const handleDeleteTeamMember = (id: string) => {
+    setTeamMembers(teamMembers.filter(m => m.id !== id));
+    toast.success('Team member removed');
+  };
+
+  // Tips Handlers
+  const handleAddTip = () => {
+    if (!newTip.title || !newTip.content) {
+      toast.error('Please fill in title and content');
+      return;
+    }
+    const tip: ExpertiseTip = {
+      id: Date.now().toString(),
+      ...newTip,
+      category: newTip.category || 'General',
+      publishedDate: 'Just now'
+    };
+    setExpertiseTips([tip, ...expertiseTips]);
+    setNewTip({ title: '', content: '', category: '' });
+    setIsAddingTip(false);
+    toast.success('Tip published!');
+  };
+
+  const handleDeleteTip = (id: string) => {
+    setExpertiseTips(expertiseTips.filter(t => t.id !== id));
+    toast.success('Tip removed');
   };
 
   const handleCoverImageUpload = () => {
@@ -565,11 +682,340 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
           </div>
         </motion.section>
 
+        {/* CERTIFICATIONS & LICENSES */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.27 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
+              Certifications & Licenses
+            </h2>
+            <Button 
+              size="sm" 
+              onClick={() => setIsAddingCertification(true)}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Add
+            </Button>
+          </div>
+
+          <div className="text-xs text-muted-foreground mb-3 p-2 bg-secondary/50 rounded-lg">
+            💡 Verified credentials build trust and can increase conversions by 35%
+          </div>
+
+          {/* Add Certification Form */}
+          <AnimatePresence>
+            {isAddingCertification && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="card-elevated p-4 mb-3 space-y-3"
+              >
+                <input
+                  type="text"
+                  value={newCertification.name}
+                  onChange={(e) => setNewCertification({ ...newCertification, name: e.target.value })}
+                  placeholder="Certificate/License Name"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <input
+                  type="text"
+                  value={newCertification.issuer}
+                  onChange={(e) => setNewCertification({ ...newCertification, issuer: e.target.value })}
+                  placeholder="Issuing Authority (e.g., Dubai DED)"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setNewCertification({ ...newCertification, type: 'license' })}
+                    className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-colors ${
+                      newCertification.type === 'license' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
+                    }`}
+                  >
+                    Trade License
+                  </button>
+                  <button
+                    onClick={() => setNewCertification({ ...newCertification, type: 'certification' })}
+                    className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-colors ${
+                      newCertification.type === 'certification' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
+                    }`}
+                  >
+                    Certification
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleAddCertification} size="sm" className="bg-primary text-primary-foreground">
+                    <Save className="w-3 h-3 mr-1" />
+                    Save
+                  </Button>
+                  <Button onClick={() => setIsAddingCertification(false)} size="sm" variant="outline">
+                    Cancel
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="space-y-2">
+            {certifications.map((cert, idx) => (
+              <motion.div
+                key={cert.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="card-elevated p-4 group"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                      cert.type === 'license' ? 'bg-blue-500/10' : 'bg-primary/10'
+                    }`}>
+                      {cert.type === 'license' ? (
+                        <FileText className="w-5 h-5 text-blue-500" />
+                      ) : (
+                        <Award className="w-5 h-5 text-primary" />
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-semibold text-foreground text-sm">{cert.name}</h4>
+                        {cert.verified && (
+                          <div className="flex items-center gap-1 px-1.5 py-0.5 bg-verified/10 rounded-lg">
+                            <BadgeCheck className="w-3 h-3 text-verified" />
+                            <span className="text-[10px] font-medium text-verified">Verified</span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{cert.issuer}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteCertification(cert.id)}
+                    className="p-2 bg-destructive/10 rounded-lg hover:bg-destructive/20 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* MEET THE TEAM */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.29 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              Meet the Team
+            </h2>
+            <Button 
+              size="sm" 
+              onClick={() => setIsAddingTeamMember(true)}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Add
+            </Button>
+          </div>
+
+          <div className="text-xs text-muted-foreground mb-3 p-2 bg-secondary/50 rounded-lg">
+            💡 Customers trust companies where they can see who's coming to their home
+          </div>
+
+          {/* Add Team Member Form */}
+          <AnimatePresence>
+            {isAddingTeamMember && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="card-elevated p-4 mb-3 space-y-3"
+              >
+                <input
+                  type="text"
+                  value={newTeamMember.name}
+                  onChange={(e) => setNewTeamMember({ ...newTeamMember, name: e.target.value })}
+                  placeholder="Full Name"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <input
+                  type="text"
+                  value={newTeamMember.role}
+                  onChange={(e) => setNewTeamMember({ ...newTeamMember, role: e.target.value })}
+                  placeholder="Role (e.g., Lead Technician)"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <textarea
+                  value={newTeamMember.bio}
+                  onChange={(e) => setNewTeamMember({ ...newTeamMember, bio: e.target.value })}
+                  placeholder="Short bio (experience, specializations...)"
+                  rows={2}
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none text-sm"
+                />
+                <div className="flex gap-2">
+                  <Button onClick={handleAddTeamMember} size="sm" className="bg-primary text-primary-foreground">
+                    <Save className="w-3 h-3 mr-1" />
+                    Save
+                  </Button>
+                  <Button onClick={() => setIsAddingTeamMember(false)} size="sm" variant="outline">
+                    Cancel
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="space-y-3">
+            {teamMembers.map((member, idx) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="card-elevated p-4 group"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                      <span className="font-bold text-primary text-lg">{member.initials}</span>
+                    </div>
+                    <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-card border border-border rounded-full flex items-center justify-center hover:bg-secondary transition-colors">
+                      <Camera className="w-3 h-3 text-muted-foreground" />
+                    </button>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-semibold text-foreground">{member.name}</h4>
+                        <p className="text-sm text-primary font-medium">{member.role}</p>
+                      </div>
+                      <button 
+                        onClick={() => handleDeleteTeamMember(member.id)}
+                        className="p-2 bg-destructive/10 rounded-lg hover:bg-destructive/20 transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{member.bio}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* TIPS & EXPERTISE */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.31 }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
+              <Lightbulb className="w-5 h-5 text-primary" />
+              Tips & Expertise
+            </h2>
+            <Button 
+              size="sm" 
+              onClick={() => setIsAddingTip(true)}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Add Tip
+            </Button>
+          </div>
+
+          <div className="text-xs text-muted-foreground mb-3 p-2 bg-secondary/50 rounded-lg">
+            💡 Share your expertise! Helpful tips position you as an industry authority
+          </div>
+
+          {/* Add Tip Form */}
+          <AnimatePresence>
+            {isAddingTip && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="card-elevated p-4 mb-3 space-y-3"
+              >
+                <input
+                  type="text"
+                  value={newTip.title}
+                  onChange={(e) => setNewTip({ ...newTip, title: e.target.value })}
+                  placeholder="Tip Title (e.g., 'How to Save on AC Bills')"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <textarea
+                  value={newTip.content}
+                  onChange={(e) => setNewTip({ ...newTip, content: e.target.value })}
+                  placeholder="Share your expertise... What should homeowners know?"
+                  rows={3}
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none text-sm"
+                />
+                <input
+                  type="text"
+                  value={newTip.category}
+                  onChange={(e) => setNewTip({ ...newTip, category: e.target.value })}
+                  placeholder="Category (e.g., Maintenance, Energy Saving)"
+                  className="w-full px-3 py-2 bg-secondary border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <div className="flex gap-2">
+                  <Button onClick={handleAddTip} size="sm" className="bg-primary text-primary-foreground">
+                    <Save className="w-3 h-3 mr-1" />
+                    Publish
+                  </Button>
+                  <Button onClick={() => setIsAddingTip(false)} size="sm" variant="outline">
+                    Cancel
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="space-y-3">
+            {expertiseTips.map((tip, idx) => (
+              <motion.div
+                key={tip.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="card-elevated p-4 group"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-lg text-xs font-medium">
+                      {tip.category}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{tip.publishedDate}</span>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteTip(tip.id)}
+                    className="p-2 bg-destructive/10 rounded-lg hover:bg-destructive/20 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </button>
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">{tip.title}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{tip.content}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
         {/* RECENT REVIEWS PREVIEW */}
         <motion.section
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.33 }}
         >
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
