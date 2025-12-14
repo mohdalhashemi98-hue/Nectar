@@ -96,7 +96,7 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
       <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground relative overflow-hidden">
         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         
-        <div className="px-6 py-5 relative z-10">
+        <div className="px-4 py-5 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +142,7 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 pb-32 space-y-5">
+      <div className="flex-1 overflow-y-auto px-4 py-5 pb-32 space-y-5">
         {/* Vendor Info */}
         {job.vendor && (
           <motion.div 
