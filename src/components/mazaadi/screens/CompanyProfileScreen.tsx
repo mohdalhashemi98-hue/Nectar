@@ -433,12 +433,12 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             💡 Tip: Before/After photos of your best work help convert 40% more leads
           </div>
           
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
             {portfolio.map((item, idx) => (
               <motion.div
                 key={item.id}
                 whileTap={{ scale: 0.98 }}
-                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden group"
+                className="flex-shrink-0 w-48 bg-card rounded-2xl border border-border overflow-hidden group snap-start"
               >
                 {/* Before/After Visual */}
                 <div className="h-28 bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center relative">
