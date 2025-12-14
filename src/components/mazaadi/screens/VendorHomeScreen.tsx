@@ -362,12 +362,13 @@ const VendorHomeScreen = ({
           
           <div className="space-y-3">
             {highProbabilityLeads.map((lead, idx) => (
-              <motion.button
+              <motion.div
                 key={lead.id}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + idx * 0.05 }}
                 whileTap={{ scale: 0.98 }}
+                className="w-full bg-card rounded-2xl border border-border p-4 text-left hover:border-primary/30 transition-colors group cursor-pointer"
                 onClick={() => {
                   const job = availableJobs.find(j => j.id === lead.id) || {
                     id: lead.id,
@@ -383,7 +384,6 @@ const VendorHomeScreen = ({
                   onSelectJob(job as AvailableJob);
                   onNavigate('request-detail');
                 }}
-                className="w-full bg-card rounded-2xl border border-border p-4 text-left hover:border-primary/30 transition-colors group"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -418,11 +418,11 @@ const VendorHomeScreen = ({
                   </div>
                 </div>
                 
-                <button className="w-full mt-2 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+                <div className="w-full mt-2 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
                   Quote Now
                   <ChevronRight className="w-4 h-4" />
-                </button>
-              </motion.button>
+                </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
