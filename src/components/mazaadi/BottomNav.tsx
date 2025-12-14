@@ -32,7 +32,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bg-card/95 backdrop-blur-xl border-t border-border px-2 py-2 fixed bottom-0 left-0 right-0 max-w-md mx-auto safe-area-pb z-50"
+      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border px-2 py-2"
     >
       <div className="flex justify-around items-center">
         {navItems.map((item) => {

@@ -32,7 +32,7 @@ const MessagesScreen = ({
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden px-5 pt-6 pb-5 relative overflow-hidden">
+      <div className="bg-gradient-golden px-4 pt-6 pb-5 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         
         <div className="relative">

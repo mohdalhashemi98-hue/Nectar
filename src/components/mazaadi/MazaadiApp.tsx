@@ -560,7 +560,7 @@ const MazaadiApp = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-background min-h-screen shadow-2xl overflow-hidden relative">
+    <div className="screen-container shadow-2xl overflow-hidden">
       <AnimatePresence mode="wait" custom={directionRef.current}>
         <motion.div
           key={currentScreen}

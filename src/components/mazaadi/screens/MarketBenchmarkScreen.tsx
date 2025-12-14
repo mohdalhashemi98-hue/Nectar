@@ -84,7 +84,7 @@ const MarketBenchmarkScreen = ({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground p-6 pb-8 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
         
