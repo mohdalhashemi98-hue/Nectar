@@ -19,6 +19,7 @@ import MessagesScreen from './screens/MessagesScreen';
 import ChatScreen from './screens/ChatScreen';
 import CompanyProfileScreen from './screens/CompanyProfileScreen';
 import PostJobScreen from './screens/PostJobScreen';
+import JobConfigurationScreen from './screens/JobConfigurationScreen';
 import ReviewScreen from './screens/ReviewScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import RequestDetailScreen from './screens/RequestDetailScreen';
@@ -53,6 +54,7 @@ const MazaadiApp = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [selectedAvailableJob, setSelectedAvailableJob] = useState<AvailableJob | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSubService, setSelectedSubService] = useState<string | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [searchQuery, setSearchQuery] = useState('');
@@ -103,8 +105,20 @@ const MazaadiApp = () => {
 
   const resetRequestForm = () => {
     setRequestDetails({
-      title: '', description: '', category: selectedCategory || '', budget: '', urgency: 'flexible', photos: [], bookingType: 'one-time'
+      title: selectedSubService || selectedCategory || '', 
+      description: '', 
+      category: selectedCategory || '', 
+      subService: selectedSubService || '',
+      budget: '', 
+      urgency: 'flexible', 
+      photos: [], 
+      bookingType: 'one-time'
     });
+  };
+
+  const handleSelectSubService = (category: string, subService: string) => {
+    setSelectedCategory(category);
+    setSelectedSubService(subService);
   };
 
   const handleLogout = () => {
@@ -482,7 +496,21 @@ const MazaadiApp = () => {
           <ServicesScreen
             onNavigate={navigateTo}
             onSelectCategory={setSelectedCategory}
+            onSelectSubService={handleSelectSubService}
             onResetRequestForm={resetRequestForm}
+          />
+        );
+      
+      case 'job-configuration':
+        return (
+          <JobConfigurationScreen
+            requestDetails={requestDetails}
+            setRequestDetails={setRequestDetails}
+            selectedCategory={selectedCategory}
+            selectedSubService={selectedSubService}
+            onBack={goBack}
+            onNavigate={navigateTo}
+            onSubmit={resetRequestForm}
           />
         );
       

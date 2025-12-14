@@ -78,7 +78,7 @@ const MarketBenchmarkScreen = ({
   const handlePostJob = () => {
     onSelectCategory(selectedCategory);
     onResetRequestForm();
-    onNavigate('post-request');
+    onNavigate('job-configuration');
   };
 
   return (
