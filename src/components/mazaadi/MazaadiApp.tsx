@@ -59,7 +59,7 @@ const MazaadiApp = () => {
 
   // Form state
   const [requestDetails, setRequestDetails] = useState<RequestDetails>({
-    title: '', description: '', category: '', budget: '', urgency: 'flexible', photos: []
+    title: '', description: '', category: '', budget: '', urgency: 'flexible', photos: [], bookingType: 'one-time'
   });
 
   // Track navigation direction for animations
@@ -103,7 +103,7 @@ const MazaadiApp = () => {
 
   const resetRequestForm = () => {
     setRequestDetails({
-      title: '', description: '', category: selectedCategory || '', budget: '', urgency: 'flexible', photos: []
+      title: '', description: '', category: selectedCategory || '', budget: '', urgency: 'flexible', photos: [], bookingType: 'one-time'
     });
   };
 

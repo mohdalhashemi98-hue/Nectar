@@ -173,13 +173,21 @@ export interface VendorStats {
   };
 }
 
+export type BookingType = 'one-time' | 'subscription';
+export type SubscriptionFrequency = 'weekly' | 'bi-weekly' | 'monthly';
+
 export interface RequestDetails {
   title: string;
   description: string;
   category: string;
+  subService?: string;
   budget: string;
   urgency: 'flexible' | 'today' | 'urgent';
   photos: string[];
+  bookingType: BookingType;
+  subscriptionFrequency?: SubscriptionFrequency;
+  preferredDay?: string;
+  preferredTime?: string;
 }
 
 export interface ReviewData {
