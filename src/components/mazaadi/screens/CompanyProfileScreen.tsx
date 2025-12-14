@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, Plus, Edit2, Star, Camera, Trash2, DollarSign, Clock, 
@@ -61,6 +61,18 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
     { id: '2', title: 'Central AC Restoration', location: 'Business Bay', description: 'Full duct cleaning and compressor repair', category: 'AC', beforeEmoji: '🔧', afterEmoji: '✨' },
     { id: '3', title: 'Smart Home Integration', location: 'Dubai Marina', description: 'Connected 4 units to smart thermostat', category: 'AC', beforeEmoji: '🌡️', afterEmoji: '🏠' },
   ]);
+
+  const [activePortfolioIndex, setActivePortfolioIndex] = useState(0);
+  const portfolioScrollRef = useRef<HTMLDivElement>(null);
+
+  const handlePortfolioScroll = useCallback(() => {
+    if (!portfolioScrollRef.current) return;
+    const container = portfolioScrollRef.current;
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = 192 + 12; // w-48 (192px) + gap-3 (12px)
+    const newIndex = Math.round(scrollLeft / itemWidth);
+    setActivePortfolioIndex(Math.min(newIndex, portfolio.length));
+  }, [portfolio.length]);
 
   const metrics = {
     responseTime: '12 min',
@@ -433,7 +445,12 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
             💡 Tip: Before/After photos of your best work help convert 40% more leads
           </div>
           
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div 
+            ref={portfolioScrollRef}
+            onScroll={handlePortfolioScroll}
+            className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth" 
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+          >
             {portfolio.map((item, idx) => (
               <motion.div
                 key={item.id}
@@ -482,6 +499,26 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
               </div>
               <span className="text-sm font-medium text-muted-foreground">Add Work</span>
             </motion.button>
+          </div>
+
+          {/* Dot Indicators */}
+          <div className="flex justify-center gap-1.5 mt-3">
+            {[...portfolio, { id: 'add' }].map((item, idx) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  if (portfolioScrollRef.current) {
+                    const itemWidth = 192 + 12;
+                    portfolioScrollRef.current.scrollTo({ left: idx * itemWidth, behavior: 'smooth' });
+                  }
+                }}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activePortfolioIndex === idx 
+                    ? 'bg-primary w-4' 
+                    : 'bg-border hover:bg-muted-foreground/50'
+                }`}
+              />
+            ))}
           </div>
         </motion.section>
 
