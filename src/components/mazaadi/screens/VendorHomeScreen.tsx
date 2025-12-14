@@ -160,59 +160,59 @@ const VendorHomeScreen = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+          <div className="grid grid-cols-3 gap-2">
             {/* New Requests Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('transactions')}
-              className="flex-shrink-0 w-40 bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-4"
+              className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-xl p-3"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <span className="w-7 h-7 bg-primary text-primary-foreground rounded-full text-sm font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.newRequests}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-foreground">New Requests</div>
-              <div className="text-xs text-muted-foreground">Awaiting Quote</div>
+              <div className="text-xs font-semibold text-foreground">New Requests</div>
+              <div className="text-[10px] text-muted-foreground">Awaiting Quote</div>
             </motion.button>
 
             {/* Unread Messages Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('messages-list')}
-              className="flex-shrink-0 w-40 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-2xl p-4"
+              className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-xl p-3"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4 text-white" />
                 </div>
-                <span className="w-7 h-7 bg-blue-500 text-white rounded-full text-sm font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.unreadMessages}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-foreground">Unread Chats</div>
-              <div className="text-xs text-muted-foreground">Customer Messages</div>
+              <div className="text-xs font-semibold text-foreground">Unread Chats</div>
+              <div className="text-[10px] text-muted-foreground">Messages</div>
             </motion.button>
 
             {/* Today's Bookings Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('transactions')}
-              className="flex-shrink-0 w-40 bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 rounded-2xl p-4"
+              className="bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 rounded-xl p-3"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-white" />
                 </div>
-                <span className="w-7 h-7 bg-green-500 text-white rounded-full text-sm font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-green-500 text-white rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.todaysBookings}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-foreground">Today's Jobs</div>
-              <div className="text-xs text-muted-foreground">Scheduled</div>
+              <div className="text-xs font-semibold text-foreground">Today's Jobs</div>
+              <div className="text-[10px] text-muted-foreground">Scheduled</div>
             </motion.button>
           </div>
         </motion.div>
