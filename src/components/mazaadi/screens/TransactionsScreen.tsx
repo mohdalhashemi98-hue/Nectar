@@ -10,13 +10,9 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
-  Filter,
   Calendar,
   TrendingUp,
-  Sparkles,
-  BarChart3,
-  PieChart,
-  Activity
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +20,6 @@ import { Transaction } from '@/types/mazaadi';
 import { initialTransactions } from '@/data/mazaadi-data';
 import BottomNav from '../BottomNav';
 import { ScreenType } from '@/types/mazaadi';
-import { BarChart, Bar, PieChart as RechartsPie, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 interface TransactionsScreenProps {
   onBack: () => void;
@@ -35,7 +30,6 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
   const [transactions] = useState<Transaction[]>(initialTransactions);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'completed' | 'refunded'>('all');
-  const [activeTab, setActiveTab] = useState<'list' | 'analytics'>('analytics');
 
   const filteredTransactions = transactions.filter(transaction => {
     const matchesSearch = transaction.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -51,35 +45,8 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
   const totalPointsEarned = transactions
     .reduce((sum, t) => sum + t.pointsEarned, 0);
 
-  // Analytics calculations
-  const getCategorySpending = () => {
-    const categoryMap = new Map<string, number>();
-    transactions.filter(t => t.status === 'completed').forEach(t => {
-      const category = t.jobTitle.split(' ')[0]; // Simple category extraction
-      const current = categoryMap.get(category) || 0;
-      categoryMap.set(category, current + t.amount + t.serviceFee);
-    });
-    return Array.from(categoryMap.entries()).map(([name, value]) => ({ name, value }));
-  };
-
-  const getMonthlySpending = () => {
-    const monthMap = new Map<string, number>();
-    transactions.filter(t => t.status === 'completed').forEach(t => {
-      const month = new Date(t.date).toLocaleDateString('en-US', { month: 'short' });
-      const current = monthMap.get(month) || 0;
-      monthMap.set(month, current + t.amount + t.serviceFee);
-    });
-    return Array.from(monthMap.entries()).map(([month, amount]) => ({ month, amount }));
-  };
-
-  const categoryData = getCategorySpending();
-  const monthlyData = getMonthlySpending();
-
-  const COLORS = ['#F59E0B', '#3B82F6', '#10B981', '#EF4444', '#8B5CF6', '#EC4899'];
-
   const handleDownloadReceipt = (transaction: Transaction) => {
     console.log('Downloading receipt for:', transaction.receiptId);
-    // In a real app, this would generate and download a PDF receipt
   };
 
   const getStatusIcon = (status: string) => {
@@ -144,190 +111,42 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
           </motion.div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-2 mb-4">
-          <button
-            onClick={() => setActiveTab('analytics')}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-              activeTab === 'analytics'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-card text-muted-foreground border border-border'
-            }`}
-          >
-            <BarChart3 className="w-4 h-4" />
-            Analytics
-          </button>
-          <button
-            onClick={() => setActiveTab('list')}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-              activeTab === 'list'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-card text-muted-foreground border border-border'
-            }`}
-          >
-            <Receipt className="w-4 h-4" />
-            Transactions
-          </button>
+        {/* Search Bar */}
+        <div className="relative mb-3">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search transactions..."
+            className="pl-12 h-12 bg-background/80 backdrop-blur-sm border-border rounded-xl"
+          />
         </div>
 
-        {activeTab === 'list' && (
-          <>
-            {/* Search Bar */}
-            <div className="relative mb-3">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search transactions..."
-                className="pl-12 h-12 bg-background/80 backdrop-blur-sm border-border rounded-xl"
-              />
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex gap-2">
-              {[
-                { id: 'all', label: 'All' },
-                { id: 'completed', label: 'Completed' },
-                { id: 'refunded', label: 'Refunded' }
-              ].map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => setFilterStatus(filter.id as typeof filterStatus)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                    filterStatus === filter.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card text-muted-foreground border border-border'
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
+        {/* Filter Tabs */}
+        <div className="flex gap-2">
+          {[
+            { id: 'all', label: 'All' },
+            { id: 'completed', label: 'Completed' },
+            { id: 'refunded', label: 'Refunded' }
+          ].map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => setFilterStatus(filter.id as typeof filterStatus)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                filterStatus === filter.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-muted-foreground border border-border'
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Content Area */}
+      {/* Transactions List */}
       <div className="flex-1 overflow-auto px-4 py-4 space-y-3">
-        {activeTab === 'analytics' ? (
-          <>
-            {/* Monthly Spending Chart */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Activity className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold text-foreground">Monthly Spending Trend</h3>
-              </div>
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke="hsl(var(--muted-foreground))"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <YAxis 
-                    stroke="hsl(var(--muted-foreground))"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#F59E0B" 
-                    strokeWidth={3}
-                    dot={{ fill: '#F59E0B', r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </motion.div>
-
-            {/* Category Breakdown */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <PieChart className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold text-foreground">Spending by Category</h3>
-              </div>
-              <ResponsiveContainer width="100%" height={250}>
-                <RechartsPie>
-                  <Pie
-                    data={categoryData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {categoryData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }}
-                  />
-                </RechartsPie>
-              </ResponsiveContainer>
-            </motion.div>
-
-            {/* Category List with Bars */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-card rounded-2xl p-4 shadow-sm border border-border"
-            >
-              <h3 className="font-semibold text-foreground mb-4">Category Breakdown</h3>
-              <div className="space-y-3">
-                {categoryData.map((category, index) => {
-                  const percentage = (category.value / totalSpent) * 100;
-                  return (
-                    <div key={category.name}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-medium text-foreground">{category.name}</span>
-                        <span className="text-sm font-semibold text-foreground">{category.value} AED</span>
-                      </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${percentage}%` }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                          className="h-full rounded-full"
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">{percentage.toFixed(1)}% of total</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-
-          </>
-        ) : (
-          // Transactions List
-          <>
-            {filteredTransactions.length === 0 ? (
+        {filteredTransactions.length === 0 ? (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -422,14 +241,12 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
             </motion.div>
           ))
         )}
-          </>
-        )}
       </div>
 
       <BottomNav 
-        userType="consumer" 
-        active="transactions" 
-        onNavigate={onNavigate} 
+        active="profile"
+        onNavigate={onNavigate}
+        userType="consumer"
       />
     </div>
   );
