@@ -11,6 +11,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import ConsumerHomeScreen from './screens/ConsumerHomeScreen';
 import VendorHomeScreen from './screens/VendorHomeScreen';
 import VendorProfileScreen from './screens/VendorProfileScreen';
+import VendorScheduleScreen from './screens/VendorScheduleScreen';
 import RewardsScreen from './screens/RewardsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import JobsScreen from './screens/JobsScreen';
@@ -183,6 +184,13 @@ const MazaadiApp = () => {
             availableJobs={availableJobs}
             onNavigate={navigateTo}
             onSelectJob={(job) => setSelectedAvailableJob(job)}
+          />
+        );
+      
+      case 'vendor-schedule':
+        return (
+          <VendorScheduleScreen
+            onNavigate={navigateTo}
           />
         );
       

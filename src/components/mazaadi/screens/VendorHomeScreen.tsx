@@ -436,7 +436,7 @@ const VendorHomeScreen = ({
           <h3 className="font-display text-lg font-bold text-foreground mb-3">Quick Access</h3>
           <div className="grid grid-cols-3 gap-3">
             <button
-              onClick={() => onNavigate('transactions')}
+              onClick={() => onNavigate('vendor-schedule')}
               className="bg-card rounded-2xl border border-border p-4 text-center hover:border-primary/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-2 bg-secondary rounded-xl flex items-center justify-center">

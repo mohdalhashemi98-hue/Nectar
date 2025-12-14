@@ -225,6 +225,7 @@ export type ScreenType =
   | 'login'
   | 'consumer-home'
   | 'vendor-home'
+  | 'vendor-schedule'
   | 'post-request'
   | 'job-configuration'
   | 'view-offers'
