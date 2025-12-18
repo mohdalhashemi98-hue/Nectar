@@ -32,14 +32,15 @@ const WelcomeScreen = ({
       }} transition={{
         delay: 0.2,
         duration: 0.5
-      }} className="mb-6">
+      }} className="mb-6 relative">
+          <div className="absolute inset-0 w-28 h-28 mx-auto bg-primary/30 rounded-full blur-xl animate-pulse" />
           <motion.img alt="Nectar Logo" animate={{
           y: [0, -8, 0]
         }} transition={{
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
-        }} src="/lovable-uploads/295de576-689e-44cb-baa0-5e4a8954d2c5.png" className="w-28 h-28 mx-auto bg-background rounded-none object-cover" />
+        }} src="/lovable-uploads/295de576-689e-44cb-baa0-5e4a8954d2c5.png" className="w-28 h-28 mx-auto bg-background rounded-none object-cover relative z-10" />
         </motion.div>
         <h1 className="font-display text-5xl font-bold text-foreground mb-3 tracking-tight">Nectar</h1>
         <p className="text-lg text-muted-foreground">Verified Pros. Guaranteed Value.</p>
