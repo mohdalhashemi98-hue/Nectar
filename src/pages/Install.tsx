@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, Smartphone, Share, Plus, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import nectarLogo from "@/assets/nectar-logo.png";
+import stackLogo from "@/assets/stack-logo.png";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -68,14 +68,14 @@ const Install = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12">
         {/* Logo */}
         <div className="mb-8">
-          <img src={nectarLogo} alt="Nectar" className="h-24 w-24" />
+          <img src={stackLogo} alt="Stack" className="h-24 w-24" />
         </div>
 
         <h1 className="text-2xl font-bold text-foreground mb-2 font-display text-center">
-          Install Nectar
+          Install Stack
         </h1>
         <p className="text-muted-foreground text-center mb-8 max-w-sm">
-          Add Nectar to your home screen for quick access and a native app experience
+          Add Stack to your home screen for quick access and a native app experience
         </p>
 
         {isInstalled ? (
