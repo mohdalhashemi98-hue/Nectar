@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* NECTAR Design System - Warm Amber Gold Elegance */
+/* STACK Design System - Warm Amber Gold Elegance */
 
 @layer base {
   :root {
-    /* Nectar Color Palette - Warm Amber & Cream */
+    /* Stack Color Palette - Warm Amber & Cream */
     --background: 48 100% 98%;
     --foreground: 240 10% 10%;
 
@@ -52,7 +52,7 @@
 
     --radius: 1rem;
 
-    /* Gradients - Nectar Gold */
+    /* Gradients - Stack Gold */
     --gradient-primary: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(45 93% 58%) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(48 100% 98%) 0%, hsl(48 50% 94%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(38 92% 45%) 0%, hsl(38 92% 50%) 50%, hsl(45 93% 58%) 100%);

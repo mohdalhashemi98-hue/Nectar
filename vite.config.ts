@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "pwa-192x192.png", "pwa-512x512.png"],
       manifest: {
-        name: "Nectar - Verified Pros. Guaranteed Value.",
-        short_name: "Nectar",
+        name: "Stack - Verified Pros. Guaranteed Value.",
+        short_name: "Stack",
         description: "Connect with verified professionals for all your service needs",
         theme_color: "#F59E0B",
         background_color: "#FFFBEB",
