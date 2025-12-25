@@ -158,7 +158,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
         resetEmail.trim(),
         {
-          redirectTo: `${window.location.origin}/login`,
+          redirectTo: `${window.location.origin}/reset-password`,
         }
       );
 

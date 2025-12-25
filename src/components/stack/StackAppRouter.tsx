@@ -37,6 +37,7 @@ const TransactionsScreen = lazy(() => import('@/features/screens/TransactionsScr
 const VendorWorkScreen = lazy(() => import('@/features/vendor/VendorWorkScreen'));
 const VendorOnboarding = lazy(() => import('@/features/vendor/VendorOnboarding'));
 const VendorSignupScreen = lazy(() => import('@/features/vendor/VendorSignupScreen'));
+const ResetPasswordScreen = lazy(() => import('@/components/stack/screens/ResetPasswordScreen'));
 
 // Map routes to screen types for animation logic
 const routeToScreen: Record<string, ScreenType> = {
@@ -318,10 +319,11 @@ const StackAppRouter: React.FC = () => {
               className="w-full h-full touch-pan-y"
             >
               <Routes location={location}>
-                {/* Public routes */}
+              {/* Public routes */}
                 <Route path="/" element={<WelcomeScreen />} />
                 <Route path="/vendor/signup" element={<VendorSignupScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
+                <Route path="/reset-password" element={<ResetPasswordScreen />} />
                 
                 {/* Consumer routes - protected */}
                 <Route path="/consumer" element={
