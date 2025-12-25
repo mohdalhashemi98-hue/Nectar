@@ -10,6 +10,7 @@ import BottomNav from '../BottomNav';
 import { VendorHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon } from '../utils/categoryIcons';
 import AvailabilityToggle from '../AvailabilityToggle';
+import { ThemeToggle } from '@/components/theme-toggle';
 import stackLogo from '@/assets/stack-logo.png';
 
 // Mock priority action data
@@ -118,6 +119,7 @@ const VendorHomeScreen = ({
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <button 
                 onClick={() => onNavigate('notifications')} 
                 className="relative p-2.5 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
