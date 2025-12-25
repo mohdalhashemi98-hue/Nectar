@@ -115,10 +115,8 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => onSelectUserType('vendor')} className="group w-full bg-gradient-golden text-primary-foreground py-5 px-5 rounded-3xl transition-all duration-300" style={{
-        boxShadow: 'var(--shadow-golden)'
-      }}>
-          <div className="flex items-center justify-between">
+      }} onClick={() => onSelectUserType('vendor')} className="card-gradient-animated group w-full text-primary-foreground py-5 px-5 transition-all duration-300">
+          <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center">
                 <Briefcase className="w-6 h-6" />

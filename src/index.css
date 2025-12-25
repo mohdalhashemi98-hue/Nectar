@@ -167,7 +167,7 @@
 }
 
 @layer components {
-  /* Gradient backgrounds */
+  /* Animated gradient backgrounds */
   .bg-gradient-primary {
     background: var(--gradient-primary);
   }
@@ -188,6 +188,60 @@
     background: var(--gradient-golden);
   }
 
+  /* Animated gradient - subtle shimmer effect */
+  .gradient-animated {
+    background: linear-gradient(
+      135deg,
+      hsl(12 76% 61%) 0%,
+      hsl(340 82% 58%) 25%,
+      hsl(12 76% 61%) 50%,
+      hsl(25 85% 65%) 75%,
+      hsl(12 76% 61%) 100%
+    );
+    background-size: 300% 300%;
+    animation: gradient-shift 6s ease infinite;
+  }
+
+  /* Subtle gradient border animation */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    z-index: 1;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      135deg,
+      hsl(12 76% 61%) 0%,
+      hsl(340 82% 58%) 50%,
+      hsl(12 76% 61%) 100%
+    );
+    background-size: 200% 200%;
+    border-radius: inherit;
+    z-index: -1;
+    animation: gradient-rotate 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes gradient-rotate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
   /* Glass effects */
   .glass {
     @apply bg-card/80 backdrop-blur-2xl;
@@ -205,14 +259,67 @@
 
   .card-interactive {
     @apply bg-card rounded-3xl border border-border
-           hover:border-primary/30 
            transition-all duration-300 cursor-pointer;
     box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-interactive::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(12 76% 61% / 0) 0%,
+      hsl(12 76% 61% / 0.03) 50%,
+      hsl(340 82% 58% / 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .card-interactive:hover::before {
+    opacity: 1;
   }
 
   .card-interactive:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
+    border-color: hsl(12 76% 61% / 0.3);
+  }
+
+  /* Animated gradient card */
+  .card-gradient-animated {
+    @apply rounded-3xl text-primary-foreground relative overflow-hidden;
+    background: linear-gradient(
+      135deg,
+      hsl(12 76% 61%) 0%,
+      hsl(340 82% 58%) 50%,
+      hsl(12 76% 61%) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+    box-shadow: var(--shadow-golden);
+  }
+
+  .card-gradient-animated::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      hsl(0 0% 100% / 0.1) 50%,
+      transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: shimmer-overlay 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer-overlay {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
   /* Golden ticket card */
@@ -227,12 +334,52 @@
     @apply bg-primary text-primary-foreground 
            font-semibold py-4 px-6 rounded-3xl 
            transition-all duration-300 
-           hover:opacity-90 active:scale-[0.98];
+           active:scale-[0.98];
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(0 0% 100% / 0) 0%,
+      hsl(0 0% 100% / 0.15) 50%,
+      hsl(0 0% 100% / 0) 100%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .btn-primary:hover::before {
+    transform: translateX(100%);
   }
 
   .btn-primary:hover {
     box-shadow: var(--shadow-lg);
+  }
+
+  /* Animated gradient button */
+  .btn-gradient {
+    @apply text-primary-foreground font-semibold py-4 px-6 rounded-3xl 
+           transition-all duration-300 active:scale-[0.98];
+    background: linear-gradient(
+      135deg,
+      hsl(12 76% 61%) 0%,
+      hsl(340 82% 58%) 50%,
+      hsl(12 76% 61%) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+    box-shadow: var(--shadow-golden);
+  }
+
+  .btn-gradient:hover {
+    box-shadow: 0 8px 32px -4px hsl(12 76% 61% / 0.5);
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
