@@ -8,52 +8,52 @@ import {
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
 } from '@/data/stack-data';
 
-// Simulate async data fetching with artificial delay
-const simulateDelay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, ms));
+// Simulate async data fetching with minimal delay for demo purposes
+const simulateDelay = (ms: number = 50) => new Promise(resolve => setTimeout(resolve, ms));
 
 // API simulation functions
 const fetchUserProfile = async (): Promise<UserProfile> => {
-  await simulateDelay(200);
+  await simulateDelay(50);
   return initialUserProfile;
 };
 
 const fetchRewards = async (): Promise<Rewards> => {
-  await simulateDelay(250);
+  await simulateDelay(50);
   return initialRewards;
 };
 
 const fetchJobs = async (): Promise<Job[]> => {
-  await simulateDelay(300);
+  await simulateDelay(50);
   return initialJobs;
 };
 
 const fetchVendors = async (): Promise<Vendor[]> => {
-  await simulateDelay(350);
+  await simulateDelay(50);
   return initialVendors;
 };
 
 const fetchConversations = async (): Promise<Conversation[]> => {
-  await simulateDelay(200);
+  await simulateDelay(50);
   return initialConversations;
 };
 
 const fetchNotifications = async (): Promise<Notification[]> => {
-  await simulateDelay(150);
+  await simulateDelay(50);
   return initialNotifications;
 };
 
 const fetchAvailableJobs = async (): Promise<AvailableJob[]> => {
-  await simulateDelay(300);
+  await simulateDelay(50);
   return initialAvailableJobs;
 };
 
 const fetchVendorStats = async (): Promise<VendorStats> => {
-  await simulateDelay(200);
+  await simulateDelay(50);
   return initialVendorStats;
 };
 
 const fetchVendorById = async (id: number): Promise<Vendor | null> => {
-  await simulateDelay(200);
+  await simulateDelay(50);
   return initialVendors.find(v => v.id === id) || null;
 };
 

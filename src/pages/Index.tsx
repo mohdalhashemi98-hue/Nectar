@@ -1,9 +1,9 @@
-import StackApp from '@/components/stack/StackApp';
+import StackAppRouter from '@/components/stack/StackAppRouter';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-      <StackApp />
+      <StackAppRouter />
     </div>
   );
 };
