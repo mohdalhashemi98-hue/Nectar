@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/stack';
+import { triggerFeedback } from '@/hooks/use-feedback';
 
 interface BottomNavProps {
   active: string;
@@ -27,6 +28,11 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
         { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: pendingQuotes }
       ];
 
+  const handleNavClick = (screen: ScreenType) => {
+    triggerFeedback('tap');
+    onNavigate(screen);
+  };
+
   return (
     <motion.div 
       initial={{ y: 100 }}
@@ -40,7 +46,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
           return (
             <motion.button
               key={item.key}
-              onClick={() => onNavigate(item.screen)}
+              onClick={() => handleNavClick(item.screen)}
               whileTap={{ scale: 0.9 }}
               className={`relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-200 ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary/70'
