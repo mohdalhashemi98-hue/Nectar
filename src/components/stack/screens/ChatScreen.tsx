@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Send, Phone, Video, MoreHorizontal, Image, Smile, CheckCheck, Check, Clock, BadgeCheck } from 'lucide-react';
 import { Conversation, ScreenType, Message } from '@/types/stack';
+import StackPattern from '../StackPattern';
 
 interface ExtendedMessage extends Message {
   status?: 'sending' | 'sent' | 'delivered' | 'read';
@@ -141,9 +142,9 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
     <div className="h-screen flex flex-col bg-[#FAF9F6]">
       {/* Header */}
       <div className="bg-gradient-golden px-4 pt-4 pb-6 relative overflow-hidden">
-        {/* Decorative circles */}
+        {/* Stack pattern background */}
+        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl" />
         
         <div className="relative flex items-center gap-3">
           <motion.button 
