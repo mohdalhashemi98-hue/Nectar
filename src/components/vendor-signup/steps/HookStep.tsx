@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Briefcase, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { categories } from '@/data/stack-data';
 
 interface HookStepProps {
@@ -12,11 +13,17 @@ interface HookStepProps {
 }
 
 const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNext }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const trades = categories.map(cat => ({
     name: cat.name,
     icon: cat.icon,
     jobs: cat.jobs,
   }));
+
+  const filteredTrades = trades.filter(trade => 
+    trade.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
@@ -67,17 +74,31 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
             <p className="text-sm text-muted-foreground mt-1">Select the service you specialize in</p>
           </div>
           
-          <Command className="border-0">
-            <CommandInput placeholder="Search trades..." className="border-0" />
-            <CommandList className="max-h-[320px]">
-              <CommandEmpty>No trade found.</CommandEmpty>
-              <CommandGroup>
-                {trades.map((trade) => (
-                  <CommandItem
+          {/* Search Input */}
+          <div className="flex items-center border-b border-border/50 px-4 py-3">
+            <Search className="mr-3 h-4 w-4 shrink-0 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search trades..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border-0 p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+          </div>
+          
+          {/* Trades List */}
+          <ScrollArea className="h-[320px]">
+            <div className="p-2">
+              {filteredTrades.length === 0 ? (
+                <div className="py-6 text-center text-sm text-muted-foreground">
+                  No trade found.
+                </div>
+              ) : (
+                filteredTrades.map((trade) => (
+                  <button
                     key={trade.name}
-                    value={trade.name}
-                    onSelect={() => onTradeSelect(trade.name)}
-                    className={`flex items-center justify-between py-4 px-4 cursor-pointer transition-colors ${
+                    onClick={() => onTradeSelect(trade.name)}
+                    className={`w-full flex items-center justify-between py-4 px-4 rounded-xl cursor-pointer transition-colors ${
                       selectedTrade === trade.name 
                         ? 'bg-primary/10 text-primary' 
                         : 'hover:bg-muted/50'
@@ -91,7 +112,7 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
                       }`}>
                         <Briefcase className="w-5 h-5" />
                       </div>
-                      <div>
+                      <div className="text-left">
                         <span className="font-medium">{trade.name}</span>
                         <p className="text-xs text-muted-foreground">{trade.jobs.toLocaleString()} jobs available</p>
                       </div>
@@ -105,11 +126,11 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
                         <ChevronRight className="w-4 h-4 text-primary-foreground" />
                       </motion.div>
                     )}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
+                  </button>
+                ))
+              )}
+            </div>
+          </ScrollArea>
         </div>
       </motion.div>
 
