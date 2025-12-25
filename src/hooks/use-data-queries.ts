@@ -259,9 +259,7 @@ export const useAvailableJobs = () => {
   return useQuery({
     queryKey: ['availableJobs'],
     queryFn: async () => {
-      const user = await getAuthUser();
-      if (!user) return initialAvailableJobs;
-      
+      // Available jobs are public - fetch them regardless of auth status
       const { data, error } = await supabase
         .from('available_jobs')
         .select('*')
