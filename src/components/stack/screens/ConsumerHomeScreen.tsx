@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
 import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
@@ -17,6 +17,7 @@ interface ConsumerHomeScreenProps {
   userProfile: { name: string };
   rewards: Rewards;
   previousVendors: Vendor[];
+  recommendedVendors: Vendor[];
   jobs: Job[];
   notifications: Notification[];
   searchQuery: string;
@@ -40,6 +41,7 @@ const ConsumerHomeScreen = ({
   userProfile,
   rewards,
   previousVendors,
+  recommendedVendors,
   jobs,
   notifications,
   searchQuery,
@@ -375,7 +377,70 @@ const ConsumerHomeScreen = ({
           </div>
         </motion.div>
 
-        {/* Active Jobs */}
+        {/* Recommended Pros */}
+        {recommendedVendors.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display text-lg font-bold text-foreground">Recommended Pros</h3>
+              <button onClick={() => onNavigate('services')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+                View All
+              </button>
+            </div>
+            <div className="space-y-3">
+              {recommendedVendors.slice(0, 4).map((vendor) => (
+                <motion.button
+                  key={vendor.id}
+                  whileHover={{ y: -2 }}
+                  onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
+                  className="card-interactive w-full p-4 text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="avatar-primary w-14 h-14 text-lg">
+                        {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
+                      {vendor.verified && (
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                          <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-semibold text-foreground truncate">{vendor.name}</h4>
+                        {vendor.verified && (
+                          <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full whitespace-nowrap">
+                            Verified
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">{vendor.specialty}</p>
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-primary fill-primary" />
+                          <span className="font-semibold">{vendor.rating}</span>
+                          <span className="text-muted-foreground">({vendor.reviews})</span>
+                        </div>
+                        {vendor.distance && (
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span>{vendor.distance}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {activeJobs.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
