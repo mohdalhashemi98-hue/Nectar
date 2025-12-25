@@ -43,15 +43,15 @@ const WelcomeScreen = ({
       }} transition={{
         delay: 0.2,
         duration: 0.5
-      }} className="mb-6 relative">
-          <div className="absolute inset-0 w-28 h-28 mx-auto bg-primary/30 rounded-full blur-xl animate-pulse" />
+      }} className="mb-6 relative flex items-center justify-center">
+          <div className="absolute w-28 h-28 bg-primary/30 rounded-full blur-xl animate-pulse" />
           <motion.div animate={{
           y: [0, -8, 0]
         }} transition={{
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
-        }} className="relative z-10">
+        }} className="relative z-10 flex items-center justify-center">
             <StackLogo size={112} />
           </motion.div>
         </motion.div>
