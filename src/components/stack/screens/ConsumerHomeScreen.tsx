@@ -21,7 +21,7 @@ interface ConsumerHomeScreenProps {
   notifications: Notification[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  onNavigate: (screen: ScreenType) => void;
+  onNavigate: (screen: ScreenType, params?: { id?: string | number }) => void;
   onSelectCategory: (category: string) => void;
   onSelectVendor: (vendor: Vendor) => void;
   onSelectJob: (job: Job) => void;
@@ -311,7 +311,7 @@ const ConsumerHomeScreen = ({
                 <motion.button
                   key={vendor.id}
                   whileHover={{ y: -4 }}
-                  onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile'); }}
+                  onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
                   className="flex-shrink-0 w-32 bg-card p-4 rounded-3xl border border-border transition-all duration-300 group"
                   style={{ boxShadow: 'var(--shadow-sm)' }}
                 >
