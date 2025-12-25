@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown, ArrowUpDown } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
 import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
@@ -57,6 +57,7 @@ const ConsumerHomeScreen = ({
   const [specialtyFilter, setSpecialtyFilter] = useState<string>('all');
   const [ratingFilter, setRatingFilter] = useState<number>(0);
   const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState<'rating' | 'reviews' | 'distance'>('rating');
 
   // Get unique specialties from vendors
   const specialties = Array.from(new Set(recommendedVendors.map(v => v.specialty).filter(Boolean)));
@@ -66,6 +67,23 @@ const ConsumerHomeScreen = ({
     const matchesSpecialty = specialtyFilter === 'all' || vendor.specialty === specialtyFilter;
     const matchesRating = vendor.rating >= ratingFilter;
     return matchesSpecialty && matchesRating;
+  });
+
+  // Sort filtered vendors
+  const sortedVendors = [...filteredVendors].sort((a, b) => {
+    switch (sortBy) {
+      case 'rating':
+        return b.rating - a.rating;
+      case 'reviews':
+        return b.reviews - a.reviews;
+      case 'distance':
+        // Parse distance strings like "2.3 km" to numbers
+        const distA = parseFloat(a.distance?.replace(/[^\d.]/g, '') || '999');
+        const distB = parseFloat(b.distance?.replace(/[^\d.]/g, '') || '999');
+        return distA - distB;
+      default:
+        return 0;
+    }
   });
 
   const handleRefresh = useCallback(async () => {
@@ -473,11 +491,36 @@ const ConsumerHomeScreen = ({
                       </div>
                     </div>
 
+                    {/* Sort Options */}
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">Sort By</label>
+                      <div className="flex gap-2">
+                        {([
+                          { value: 'rating', label: 'Rating', icon: Star },
+                          { value: 'reviews', label: 'Reviews', icon: Star },
+                          { value: 'distance', label: 'Nearest', icon: MapPin },
+                        ] as const).map(({ value, label, icon: Icon }) => (
+                          <button
+                            key={value}
+                            onClick={() => setSortBy(value)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                              sortBy === value 
+                                ? 'bg-primary text-primary-foreground' 
+                                : 'bg-card border border-border text-foreground hover:border-primary/50'
+                            }`}
+                          >
+                            <Icon className="w-3 h-3" />
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Active Filters Summary */}
                     {(specialtyFilter !== 'all' || ratingFilter > 0) && (
                       <div className="flex items-center justify-between pt-2 border-t border-border">
                         <span className="text-sm text-muted-foreground">
-                          {filteredVendors.length} {filteredVendors.length === 1 ? 'pro' : 'pros'} found
+                          {sortedVendors.length} {sortedVendors.length === 1 ? 'pro' : 'pros'} found
                         </span>
                         <button 
                           onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
@@ -494,8 +537,8 @@ const ConsumerHomeScreen = ({
 
             {/* Vendor List */}
             <div className="space-y-3">
-              {filteredVendors.length > 0 ? (
-                filteredVendors.slice(0, 6).map((vendor) => (
+              {sortedVendors.length > 0 ? (
+                sortedVendors.slice(0, 6).map((vendor) => (
                   <motion.button
                     key={vendor.id}
                     whileHover={{ y: -2 }}
