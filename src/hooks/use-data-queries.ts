@@ -46,15 +46,15 @@ const transformRewards = (row: any): Rewards => ({
   recentEarnings: [],
 });
 
-const transformVendor = (row: any): Vendor => ({
-  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+const transformVendor = (row: any, isFavorite: boolean = false): Vendor => ({
+  id: row.id, // Keep as UUID string for database operations
   name: row.name || '',
   rating: parseFloat(row.rating) || 5.0,
   reviews: row.reviews || 0,
   avatar: row.avatar || row.name?.charAt(0) || 'V',
   specialty: row.specialty || '',
   verified: row.verified || false,
-  favorite: row.favorite || false,
+  favorite: isFavorite || row.favorite || false,
   lastJob: row.last_job || '',
   completedJobs: row.completed_jobs || 0,
   lastJobDate: row.last_job_date || '',
@@ -199,7 +199,7 @@ export const useVendors = () => {
         .limit(20);
       
       if (error || !data || data.length === 0) return initialVendors;
-      return data.map(transformVendor);
+      return data.map(row => transformVendor(row));
     },
   });
 };
@@ -385,6 +385,87 @@ export const useSendMessage = () => {
       if (context?.previousConversations) {
         queryClient.setQueryData(['conversations'], context.previousConversations);
       }
+    },
+  });
+};
+
+// ============= Favorites Queries =============
+
+export const useFavoriteVendors = () => {
+  return useQuery({
+    queryKey: ['favoriteVendors'],
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return [];
+      
+      const { data, error } = await supabase
+        .from('user_favorites')
+        .select(`
+          id,
+          vendor_id,
+          vendors (*)
+        `)
+        .eq('user_id', user.id);
+      
+      if (error || !data) return [];
+      
+      return data
+        .filter(fav => fav.vendors)
+        .map(fav => transformVendor(fav.vendors, true));
+    },
+  });
+};
+
+export const useFavoriteVendorIds = () => {
+  return useQuery({
+    queryKey: ['favoriteVendorIds'],
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return new Set<string>();
+      
+      const { data, error } = await supabase
+        .from('user_favorites')
+        .select('vendor_id')
+        .eq('user_id', user.id);
+      
+      if (error || !data) return new Set<string>();
+      
+      return new Set(data.map(fav => fav.vendor_id));
+    },
+  });
+};
+
+export const useToggleFavorite = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ vendorId, isFavorite }: { vendorId: string; isFavorite: boolean }) => {
+      const user = await getAuthUser();
+      if (!user) throw new Error('User not authenticated');
+      
+      if (isFavorite) {
+        // Remove from favorites
+        const { error } = await supabase
+          .from('user_favorites')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('vendor_id', vendorId);
+        
+        if (error) throw error;
+      } else {
+        // Add to favorites
+        const { error } = await supabase
+          .from('user_favorites')
+          .insert({ user_id: user.id, vendor_id: vendorId });
+        
+        if (error) throw error;
+      }
+      
+      return { vendorId, newState: !isFavorite };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favoriteVendors'] });
+      queryClient.invalidateQueries({ queryKey: ['favoriteVendorIds'] });
     },
   });
 };
