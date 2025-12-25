@@ -10,6 +10,7 @@ import StackLogo from '@/components/StackLogo';
 import BottomNav from '../BottomNav';
 import PullToRefresh from '../PullToRefresh';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
+import { ConsumerRefreshSkeleton } from '../RefreshSkeleton';
 
 interface ConsumerHomeScreenProps {
   userProfile: { name: string };
@@ -183,6 +184,7 @@ const ConsumerHomeScreen = ({
         isPulling={isPulling}
         handlers={handlers}
         className="flex-1"
+        refreshSkeleton={<ConsumerRefreshSkeleton />}
       >
         <div className="px-4 py-5 pb-24 space-y-6">
         {/* Review Reminder Banner */}
