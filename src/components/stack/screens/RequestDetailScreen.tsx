@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { CategoryIcon } from '../utils/categoryIcons';
+import { supabase } from '@/integrations/supabase/client';
+import { useHasSubmittedQuote } from '@/hooks/use-quotes';
 
 interface RequestDetailScreenProps {
   job: AvailableJob;
@@ -19,23 +21,64 @@ interface RequestDetailScreenProps {
 const RequestDetailScreen = ({ job, onBack, onNavigate }: RequestDetailScreenProps) => {
   const [offerPrice, setOfferPrice] = useState('');
   const [offerMessage, setOfferMessage] = useState('');
+  const [estimatedDuration, setEstimatedDuration] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerSent, setOfferSent] = useState(false);
+  // Use the job id - AvailableJob.id maps to the available_jobs table, but we need job_id for quotes
+  // Since available_jobs references jobs, we need to handle both cases
+  const jobIdForQuote = (job as any).job_id || String(job.id);
+  const { data: hasSubmitted, refetch: refetchHasSubmitted } = useHasSubmittedQuote(jobIdForQuote);
 
-  const handleSubmitOffer = () => {
+  const handleSubmitOffer = async () => {
     if (!offerPrice) {
       toast.error('Please enter your price');
       return;
     }
     
+    if (!estimatedDuration) {
+      toast.error('Please provide an estimated duration');
+      return;
+    }
+    
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('You must be logged in to submit a quote');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const { error } = await supabase
+        .from('quotes')
+        .insert({
+          job_id: jobIdForQuote,
+          vendor_id: user.id,
+          amount: parseFloat(offerPrice),
+          message: offerMessage.trim(),
+          estimated_duration: estimatedDuration.trim(),
+          status: 'pending',
+        });
+
+      if (error) {
+        if (error.message.includes('duplicate')) {
+          toast.error('You have already submitted a quote for this job');
+        } else {
+          toast.error(error.message);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
       setOfferSent(true);
+      refetchHasSubmitted();
       toast.success('Offer sent successfully!');
-    }, 1000);
+    } catch (err) {
+      toast.error('An unexpected error occurred');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (offerSent) {
@@ -248,73 +291,104 @@ const RequestDetailScreen = ({ job, onBack, onNavigate }: RequestDetailScreenPro
             Submit Your Offer
           </h3>
           
-          {/* Price Input */}
-          <div className="mb-4">
-            <label className="text-sm font-medium text-foreground mb-2 block">Your Price (AED)</label>
-            <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="number"
-                value={offerPrice}
-                onChange={(e) => setOfferPrice(e.target.value)}
-                placeholder="Enter your price"
-                className="w-full pl-10 pr-4 py-3 bg-secondary border-transparent rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
+          {hasSubmitted ? (
+            <div className="text-center py-4">
+              <div className="w-16 h-16 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-primary" />
+              </div>
+              <h4 className="font-semibold text-foreground mb-1">Quote Already Submitted</h4>
+              <p className="text-sm text-muted-foreground">
+                You've already submitted a quote for this job. The client will review and respond.
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Client budget: {job.budget}
-            </p>
-          </div>
+          ) : (
+            <>
+              {/* Price Input */}
+              <div className="mb-4">
+                <label className="text-sm font-medium text-foreground mb-2 block">Your Price (AED)</label>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type="number"
+                    value={offerPrice}
+                    onChange={(e) => setOfferPrice(e.target.value)}
+                    placeholder="Enter your price"
+                    className="w-full pl-10 pr-4 py-3 bg-secondary border-transparent rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Client budget: {job.budget}
+                </p>
+              </div>
 
-          {/* Message Input */}
-          <div className="mb-4">
-            <label className="text-sm font-medium text-foreground mb-2 block">Message to Client (Optional)</label>
-            <Textarea
-              value={offerMessage}
-              onChange={(e) => setOfferMessage(e.target.value)}
-              placeholder="Introduce yourself and explain why you're the best fit for this job..."
-              className="bg-secondary border-transparent focus:border-foreground/30 min-h-[100px]"
-              maxLength={500}
-            />
-            <p className="text-xs text-muted-foreground mt-1 text-right">
-              {offerMessage.length}/500 characters
-            </p>
-          </div>
+              {/* Estimated Duration */}
+              <div className="mb-4">
+                <label className="text-sm font-medium text-foreground mb-2 block">Estimated Duration</label>
+                <div className="relative">
+                  <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={estimatedDuration}
+                    onChange={(e) => setEstimatedDuration(e.target.value)}
+                    placeholder="e.g., 2-3 hours, 1 day"
+                    className="w-full pl-10 pr-4 py-3 bg-secondary border-transparent rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+              </div>
 
-          {/* Warning */}
-          <div className="flex items-start gap-2 p-3 bg-primary/5 rounded-xl mb-4">
-            <AlertCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              By submitting an offer, you agree to complete the job at the quoted price if accepted by the client.
-            </p>
-          </div>
+              {/* Message Input */}
+              <div className="mb-4">
+                <label className="text-sm font-medium text-foreground mb-2 block">Message to Client</label>
+                <Textarea
+                  value={offerMessage}
+                  onChange={(e) => setOfferMessage(e.target.value)}
+                  placeholder="Introduce yourself and explain why you're the best fit for this job..."
+                  className="bg-secondary border-transparent focus:border-foreground/30 min-h-[100px]"
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground mt-1 text-right">
+                  {offerMessage.length}/500 characters
+                </p>
+              </div>
+
+              {/* Warning */}
+              <div className="flex items-start gap-2 p-3 bg-primary/5 rounded-xl mb-4">
+                <AlertCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-muted-foreground">
+                  By submitting an offer, you agree to complete the job at the quoted price if accepted by the client.
+                </p>
+              </div>
+            </>
+          )}
         </motion.div>
       </div>
 
       {/* Bottom Action */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
-        <Button
-          onClick={handleSubmitOffer}
-          disabled={!offerPrice || isSubmitting}
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full"
-              />
-              Sending Offer...
-            </span>
-          ) : (
-            <span className="flex items-center gap-2">
-              <Send className="w-5 h-5" />
-              Submit Offer {offerPrice && `(${offerPrice} AED)`}
-            </span>
-          )}
-        </Button>
-      </div>
+      {!hasSubmitted && (
+        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
+          <Button
+            onClick={handleSubmitOffer}
+            disabled={!offerPrice || !estimatedDuration || isSubmitting}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full"
+                />
+                Sending Offer...
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <Send className="w-5 h-5" />
+                Submit Offer {offerPrice && `(${offerPrice} AED)`}
+              </span>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
