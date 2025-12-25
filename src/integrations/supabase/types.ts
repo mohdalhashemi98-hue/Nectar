@@ -262,42 +262,90 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_otp: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          otp_code: string
+          phone: string
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          otp_code: string
+          phone: string
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          otp_code?: string
+          phone?: string
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar: string | null
           created_at: string | null
           email: string | null
           id: string
+          id_document_url: string | null
+          id_verified: boolean | null
           location: string | null
           member_since: string | null
           name: string
           phone: string | null
+          phone_verified: boolean | null
+          selfie_url: string | null
           updated_at: string | null
           user_id: string
+          verification_status: string | null
+          verification_submitted_at: string | null
         }
         Insert: {
           avatar?: string | null
           created_at?: string | null
           email?: string | null
           id?: string
+          id_document_url?: string | null
+          id_verified?: boolean | null
           location?: string | null
           member_since?: string | null
           name?: string
           phone?: string | null
+          phone_verified?: boolean | null
+          selfie_url?: string | null
           updated_at?: string | null
           user_id: string
+          verification_status?: string | null
+          verification_submitted_at?: string | null
         }
         Update: {
           avatar?: string | null
           created_at?: string | null
           email?: string | null
           id?: string
+          id_document_url?: string | null
+          id_verified?: boolean | null
           location?: string | null
           member_since?: string | null
           name?: string
           phone?: string | null
+          phone_verified?: boolean | null
+          selfie_url?: string | null
           updated_at?: string | null
           user_id?: string
+          verification_status?: string | null
+          verification_submitted_at?: string | null
         }
         Relationships: []
       }
@@ -586,7 +634,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_user_verified: { Args: { user_uuid: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
