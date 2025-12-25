@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles } from 'lucide-react';
+import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles, Rocket } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
 import StackLogo from '@/components/StackLogo';
@@ -17,7 +18,15 @@ const handleSelectWithFeedback = (type: UserType, onSelect: (type: UserType) => 
 
 const WelcomeScreen = ({
   onSelectUserType
-}: WelcomeScreenProps) => <div className="flex flex-col h-screen bg-background relative overflow-hidden">
+}: WelcomeScreenProps) => {
+  const navigate = useNavigate();
+
+  const handleBecomeAPro = () => {
+    triggerFeedback('tap');
+    navigate('/vendor/signup');
+  };
+
+  return <div className="flex flex-col h-screen bg-background relative overflow-hidden">
     {/* Theme Toggle */}
     <div className="absolute top-4 right-4 z-20">
       <ThemeToggle />
@@ -145,6 +154,18 @@ const WelcomeScreen = ({
             <ChevronRight className="w-5 h-5 opacity-80 group-hover:translate-x-1 transition-all duration-300" />
           </div>
         </motion.button>
+        
+        {/* Become a Pro Link */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          onClick={handleBecomeAPro}
+          className="w-full mt-4 py-3 text-center text-primary font-medium hover:underline flex items-center justify-center gap-2"
+        >
+          <Rocket className="w-4 h-4" />
+          New here? Become a Pro today
+        </motion.button>
       </motion.div>
 
       <motion.div initial={{
@@ -174,4 +195,6 @@ const WelcomeScreen = ({
       </motion.div>
     </div>
   </div>;
+};
+
 export default WelcomeScreen;
