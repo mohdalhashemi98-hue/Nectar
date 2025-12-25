@@ -1,9 +1,109 @@
+import React from 'react';
+
 // Golden shimmer skeleton component
 const GoldenSkeleton = ({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div 
     className={`rounded-md bg-primary/10 shimmer ${className}`} 
     {...props} 
   />
+);
+
+// Screen type to skeleton mapping
+export type SkeletonType = 'consumer-home' | 'vendor-home' | 'messages' | 'profile' | 'list' | 'detail' | 'chat' | 'default';
+
+/**
+ * Get the appropriate skeleton component based on route/screen type
+ */
+export const getSkeletonForRoute = (path: string): React.ReactNode => {
+  if (path === '/consumer' || path.startsWith('/consumer')) {
+    return <ConsumerHomeSkeleton />;
+  }
+  if (path === '/vendor' || path.startsWith('/vendor')) {
+    return <VendorHomeSkeleton />;
+  }
+  if (path === '/messages' || path.startsWith('/chat')) {
+    return <MessagesSkeleton />;
+  }
+  if (path === '/profile' || path === '/rewards') {
+    return <ProfileSkeleton />;
+  }
+  if (path === '/jobs' || path === '/notifications' || path === '/services') {
+    return <ListSkeleton />;
+  }
+  if (path.startsWith('/job/') || path.startsWith('/request/') || path.startsWith('/quote-management/')) {
+    return <DetailSkeleton />;
+  }
+  return <DefaultSkeleton />;
+};
+
+// Default loading skeleton
+export const DefaultSkeleton = () => (
+  <div className="flex flex-col h-screen bg-background items-center justify-center">
+    <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center animate-pulse">
+      <div className="w-6 h-6 rounded-lg bg-primary/40" />
+    </div>
+  </div>
+);
+
+// List skeleton for jobs, notifications, services
+export const ListSkeleton = () => (
+  <div className="flex flex-col h-screen bg-background p-4 space-y-4">
+    <div className="flex items-center gap-3 pt-12 pb-4">
+      <GoldenSkeleton className="h-10 w-10 rounded-full" />
+      <GoldenSkeleton className="h-6 w-32 rounded-lg" />
+    </div>
+    <GoldenSkeleton className="h-12 w-full rounded-2xl" />
+    <div className="flex gap-2">
+      {[1, 2, 3].map(i => (
+        <GoldenSkeleton key={i} className="h-8 w-20 rounded-full" />
+      ))}
+    </div>
+    <div className="space-y-3 flex-1">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border">
+          <GoldenSkeleton className="h-14 w-14 rounded-2xl" />
+          <div className="flex-1 space-y-2">
+            <GoldenSkeleton className="h-4 w-3/4 rounded-lg" />
+            <GoldenSkeleton className="h-3 w-1/2 rounded-lg" />
+          </div>
+          <GoldenSkeleton className="h-4 w-12 rounded-lg" />
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// Detail skeleton for job details, request details
+export const DetailSkeleton = () => (
+  <div className="flex flex-col h-screen bg-background p-4 space-y-6">
+    <div className="flex items-center gap-3 pt-12">
+      <GoldenSkeleton className="h-10 w-10 rounded-full" />
+      <GoldenSkeleton className="h-6 w-24 rounded-lg" />
+    </div>
+    <GoldenSkeleton className="h-48 w-full rounded-3xl" />
+    <div className="space-y-3">
+      <GoldenSkeleton className="h-7 w-3/4 rounded-lg" />
+      <GoldenSkeleton className="h-4 w-full rounded-lg" />
+      <GoldenSkeleton className="h-4 w-2/3 rounded-lg" />
+    </div>
+    <div className="flex gap-4">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="flex-1 p-4 rounded-2xl bg-card border border-border">
+          <GoldenSkeleton className="h-6 w-12 rounded-lg mb-2" />
+          <GoldenSkeleton className="h-3 w-16 rounded-lg" />
+        </div>
+      ))}
+    </div>
+    <div className="space-y-3">
+      <GoldenSkeleton className="h-5 w-28 rounded-lg" />
+      <GoldenSkeleton className="h-4 w-full rounded-lg" />
+      <GoldenSkeleton className="h-4 w-full rounded-lg" />
+      <GoldenSkeleton className="h-4 w-3/4 rounded-lg" />
+    </div>
+    <div className="mt-auto pb-6">
+      <GoldenSkeleton className="h-14 w-full rounded-2xl" />
+    </div>
+  </div>
 );
 
 export const ConsumerHomeSkeleton = () => (

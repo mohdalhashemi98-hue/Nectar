@@ -1,11 +1,13 @@
-import React, { Suspense, lazy, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { Suspense, lazy, useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useAppStore } from '@/stores/app-store';
 import { ScreenType } from '@/types/stack';
-import ScreenFallback from '@/components/stack/ScreenFallback';
 import { preloadCriticalScreens, preloadScreens, getPreloadTargets } from '@/components/stack/screenPreloader';
+import { getSkeletonForRoute, DefaultSkeleton } from '@/components/stack/ScreenSkeleton';
+import { ProtectedRoute, ScrollToTop, DocumentTitle, LazyLoadErrorBoundary } from '@/components/routing';
+import { useDataPrefetch } from '@/hooks/use-data-prefetch';
 
 // Lazy load all screens from features folder
 const WelcomeScreen = lazy(() => import('@/features/screens/WelcomeScreen'));
@@ -61,6 +63,9 @@ const routeToScreen: Record<string, ScreenType> = {
   '/help': 'help',
 };
 
+// Edge swipe zone width in pixels
+const EDGE_SWIPE_ZONE = 40;
+
 const StackAppRouter: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,15 +74,36 @@ const StackAppRouter: React.FC = () => {
     userType, 
     navigationHistory, 
     popHistory, 
-    setNavigationDirection 
+    setNavigationDirection,
+    pushHistory,
   } = useAppStore();
   
   const directionRef = useRef<'forward' | 'back'>(navigationDirection);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartXRef = useRef<number>(0);
+
+  // Initialize data prefetching
+  useDataPrefetch();
 
   // Update direction ref when store changes
   useEffect(() => {
     directionRef.current = navigationDirection;
   }, [navigationDirection]);
+
+  // Update navigation history on route change
+  useEffect(() => {
+    const path = location.pathname;
+    const currentScreen = routeToScreen[path];
+    
+    // Only push to history on forward navigation
+    if (currentScreen && navigationDirection === 'forward') {
+      // Don't push if it's the same as the last history item
+      const lastInHistory = navigationHistory[navigationHistory.length - 1];
+      if (lastInHistory !== currentScreen) {
+        // Handled by navigateTo in useAppNavigation
+      }
+    }
+  }, [location.pathname, navigationDirection, navigationHistory, pushHistory]);
 
   // Get current screen type from route
   const currentScreen = useMemo(() => {
@@ -87,6 +113,11 @@ const StackAppRouter: React.FC = () => {
       if (path.startsWith(route) && route !== '/') return screen;
     }
     return 'welcome';
+  }, [location.pathname]);
+
+  // Get skeleton for current route
+  const currentSkeleton = useMemo(() => {
+    return getSkeletonForRoute(location.pathname);
   }, [location.pathname]);
 
   // Preload critical screens on mount
@@ -136,7 +167,7 @@ const StackAppRouter: React.FC = () => {
     ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
   }), []);
 
-  // Swipe back logic
+  // Swipe back logic - only from edge
   const homeRoutes = ['/', '/login', '/consumer', '/vendor'];
   const canSwipeBack = !homeRoutes.includes(location.pathname) && navigationHistory.length > 0;
 
@@ -171,17 +202,44 @@ const StackAppRouter: React.FC = () => {
     return isNaN(val) ? 0 : val;
   });
 
+  // Edge-only drag start detection
+  const handleDragStart = useCallback((event: MouseEvent | TouchEvent | PointerEvent) => {
+    const clientX = 'touches' in event 
+      ? event.touches[0].clientX 
+      : (event as MouseEvent).clientX;
+    
+    dragStartXRef.current = clientX;
+    
+    // Only allow drag if started from left edge
+    if (clientX <= EDGE_SWIPE_ZONE && canSwipeBack) {
+      setIsDragging(true);
+    }
+  }, [canSwipeBack]);
+
   const handleDragEnd = useCallback((event: any, info: any) => {
     const threshold = 100;
     const velocity = 500;
     
-    if (canSwipeBack && info.offset.x > threshold && info.velocity.x > velocity) {
-      goBack();
+    // Only trigger if drag started from edge
+    if (isDragging && canSwipeBack && dragStartXRef.current <= EDGE_SWIPE_ZONE) {
+      if (info.offset.x > threshold && info.velocity.x > velocity) {
+        goBack();
+      }
     }
-  }, [canSwipeBack, goBack]);
+    
+    setIsDragging(false);
+    dragStartXRef.current = 0;
+  }, [canSwipeBack, goBack, isDragging]);
+
+  // Determine if drag should be enabled
+  const shouldEnableDrag = canSwipeBack && isDragging;
 
   return (
     <div className="screen-container shadow-2xl overflow-hidden relative">
+      {/* Scroll restoration and dynamic titles */}
+      <ScrollToTop />
+      <DocumentTitle />
+      
       {/* Swipe back indicator */}
       {canSwipeBack && (
         <>
@@ -221,69 +279,192 @@ const StackAppRouter: React.FC = () => {
         </>
       )}
       
-      <Suspense fallback={<ScreenFallback />}>
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.div
-            key={location.pathname}
-            custom={directionRef.current}
-            variants={screenVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={transitionConfig}
-            drag={canSwipeBack ? "x" : false}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={{ left: 0, right: 0.5 }}
-            onDragEnd={handleDragEnd}
-            style={{ 
-              x: dragX,
-              willChange: 'transform, opacity',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0
-            }}
-            className="w-full h-full touch-pan-y"
-          >
-            <Routes location={location}>
-              <Route path="/" element={<WelcomeScreen />} />
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/consumer" element={<ConsumerHomeScreen />} />
-              <Route path="/vendor" element={<VendorHomeScreen />} />
-              <Route path="/vendor/schedule" element={<VendorScheduleScreen />} />
-              <Route path="/vendor/profile-preview" element={<VendorProfileScreen />} />
-              <Route path="/vendor/profile/:id" element={<VendorProfileScreen />} />
-              <Route path="/profile" element={<ProfileScreen />} />
-              <Route path="/rewards" element={<RewardsScreen />} />
-              <Route path="/notifications" element={<NotificationsScreen />} />
-              <Route path="/messages" element={<MessagesScreen />} />
-              <Route path="/chat" element={<ChatScreen />} />
-              <Route path="/chat/:id" element={<ChatScreen />} />
-              <Route path="/jobs" element={<JobsScreen />} />
-              <Route path="/job" element={<JobDetailScreen />} />
-              <Route path="/job/:id" element={<JobDetailScreen />} />
-              <Route path="/post-request" element={<PostJobScreen />} />
-              <Route path="/job-configuration" element={<JobConfigurationScreen />} />
-              <Route path="/quote-management" element={<QuoteManagementScreen />} />
-              <Route path="/quote-management/:id" element={<QuoteManagementScreen />} />
-              <Route path="/review" element={<ReviewScreen />} />
-              <Route path="/review/:id" element={<ReviewScreen />} />
-              <Route path="/payment" element={<PaymentScreen />} />
-              <Route path="/payment/:id" element={<PaymentScreen />} />
-              <Route path="/request" element={<RequestDetailScreen />} />
-              <Route path="/request/:id" element={<RequestDetailScreen />} />
-              <Route path="/services" element={<ServicesScreen />} />
-              <Route path="/market-benchmark" element={<MarketBenchmarkScreen />} />
-              <Route path="/company-profile" element={<CompanyProfileScreen />} />
-              <Route path="/help" element={<HelpScreen />} />
-              <Route path="/transactions" element={<TransactionsScreen />} />
-              <Route path="/vendor-work" element={<VendorWorkScreen />} />
-              <Route path="*" element={<WelcomeScreen />} />
-            </Routes>
-          </motion.div>
-        </AnimatePresence>
-      </Suspense>
+      {/* Edge swipe detection zone - invisible touch area */}
+      {canSwipeBack && (
+        <div 
+          className="absolute inset-y-0 left-0 z-40"
+          style={{ width: EDGE_SWIPE_ZONE }}
+          onTouchStart={(e) => handleDragStart(e.nativeEvent)}
+          onMouseDown={(e) => handleDragStart(e.nativeEvent)}
+        />
+      )}
+      
+      <LazyLoadErrorBoundary>
+        <Suspense fallback={currentSkeleton || <DefaultSkeleton />}>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={location.pathname}
+              custom={directionRef.current}
+              variants={screenVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={transitionConfig}
+              drag={shouldEnableDrag ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={{ left: 0, right: 0.5 }}
+              onDragEnd={handleDragEnd}
+              style={{ 
+                x: isDragging ? dragX : 0,
+                willChange: 'transform, opacity',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+              className="w-full h-full touch-pan-y"
+            >
+              <Routes location={location}>
+                {/* Public routes */}
+                <Route path="/" element={<WelcomeScreen />} />
+                <Route path="/login" element={<LoginScreen />} />
+                
+                {/* Consumer routes - protected */}
+                <Route path="/consumer" element={
+                  <ProtectedRoute allowedUserTypes={['consumer']}>
+                    <ConsumerHomeScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/post-request" element={
+                  <ProtectedRoute allowedUserTypes={['consumer']}>
+                    <PostJobScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/job-configuration" element={
+                  <ProtectedRoute allowedUserTypes={['consumer']}>
+                    <JobConfigurationScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/quote-management" element={
+                  <ProtectedRoute allowedUserTypes={['consumer']}>
+                    <QuoteManagementScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/quote-management/:id" element={
+                  <ProtectedRoute allowedUserTypes={['consumer']}>
+                    <QuoteManagementScreen />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Vendor routes - protected */}
+                <Route path="/vendor" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <VendorHomeScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/vendor/schedule" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <VendorScheduleScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/vendor/profile-preview" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <VendorProfileScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/request" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <RequestDetailScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/request/:id" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <RequestDetailScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/vendor-work" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <VendorWorkScreen />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Shared authenticated routes */}
+                <Route path="/vendor/profile/:id" element={<VendorProfileScreen />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <ProfileScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/rewards" element={
+                  <ProtectedRoute>
+                    <RewardsScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/notifications" element={
+                  <ProtectedRoute>
+                    <NotificationsScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/messages" element={
+                  <ProtectedRoute>
+                    <MessagesScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/chat" element={
+                  <ProtectedRoute>
+                    <ChatScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/chat/:id" element={
+                  <ProtectedRoute>
+                    <ChatScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/jobs" element={
+                  <ProtectedRoute>
+                    <JobsScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/job" element={
+                  <ProtectedRoute>
+                    <JobDetailScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/job/:id" element={
+                  <ProtectedRoute>
+                    <JobDetailScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/review" element={
+                  <ProtectedRoute>
+                    <ReviewScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/review/:id" element={
+                  <ProtectedRoute>
+                    <ReviewScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/payment" element={
+                  <ProtectedRoute>
+                    <PaymentScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/payment/:id" element={
+                  <ProtectedRoute>
+                    <PaymentScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/transactions" element={
+                  <ProtectedRoute>
+                    <TransactionsScreen />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Public info routes */}
+                <Route path="/services" element={<ServicesScreen />} />
+                <Route path="/market-benchmark" element={<MarketBenchmarkScreen />} />
+                <Route path="/company-profile" element={<CompanyProfileScreen />} />
+                <Route path="/help" element={<HelpScreen />} />
+                
+                {/* Fallback */}
+                <Route path="*" element={<WelcomeScreen />} />
+              </Routes>
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </LazyLoadErrorBoundary>
     </div>
   );
 };
