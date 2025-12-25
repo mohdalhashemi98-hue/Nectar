@@ -7,12 +7,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { categories } from '@/data/stack-data';
 
 interface HookStepProps {
-  selectedTrade: string;
-  onTradeSelect: (trade: string) => void;
+  selectedTrades: string[];
+  onTradeToggle: (trade: string) => void;
   onNext: () => void;
 }
 
-const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNext }) => {
+const HookStep: React.FC<HookStepProps> = ({ selectedTrades, onTradeToggle, onNext }) => {
   const [searchQuery, setSearchQuery] = useState('');
   
   const trades = categories.map(cat => ({
@@ -70,8 +70,8 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
       >
         <div className="bg-card rounded-3xl shadow-lg overflow-hidden border border-border/50">
           <div className="p-4 border-b border-border/50">
-            <h2 className="font-semibold text-foreground text-lg">What is your primary trade?</h2>
-            <p className="text-sm text-muted-foreground mt-1">Select the service you specialize in</p>
+            <h2 className="font-semibold text-foreground text-lg">What are your primary trades?</h2>
+            <p className="text-sm text-muted-foreground mt-1">Select all services you specialize in</p>
           </div>
           
           {/* Search Input */}
@@ -97,16 +97,16 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
                 filteredTrades.map((trade) => (
                   <button
                     key={trade.name}
-                    onClick={() => onTradeSelect(trade.name)}
+                    onClick={() => onTradeToggle(trade.name)}
                     className={`w-full flex items-center justify-between py-4 px-4 rounded-xl cursor-pointer transition-colors ${
-                      selectedTrade === trade.name 
+                      selectedTrades.includes(trade.name) 
                         ? 'bg-primary/10 text-primary' 
                         : 'hover:bg-muted/50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        selectedTrade === trade.name 
+                        selectedTrades.includes(trade.name) 
                           ? 'bg-primary text-primary-foreground' 
                           : 'bg-muted'
                       }`}>
@@ -117,7 +117,7 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
                         <p className="text-xs text-muted-foreground">{trade.jobs.toLocaleString()} jobs available</p>
                       </div>
                     </div>
-                    {selectedTrade === trade.name && (
+                    {selectedTrades.includes(trade.name) && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -134,16 +134,21 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrade, onTradeSelect, onNex
         </div>
       </motion.div>
 
-      {/* Next Button */}
+      {/* Selected Count & Next Button */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
         className="p-4 pb-8"
       >
+        {selectedTrades.length > 0 && (
+          <p className="text-center text-sm text-muted-foreground mb-3">
+            {selectedTrades.length} trade{selectedTrades.length > 1 ? 's' : ''} selected
+          </p>
+        )}
         <Button
           onClick={onNext}
-          disabled={!selectedTrade}
+          disabled={selectedTrades.length === 0}
           className="w-full h-14 rounded-2xl text-lg font-semibold"
         >
           Continue
