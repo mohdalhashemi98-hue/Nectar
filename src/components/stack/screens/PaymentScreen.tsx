@@ -47,7 +47,7 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
 
   const paymentMethods = [
     { id: 'card', label: 'Credit/Debit Card', icon: CreditCard, subtitle: '**** 4242' },
-    { id: 'wallet', label: 'Nectar Wallet', icon: Wallet, subtitle: 'Balance: 500 AED' },
+    { id: 'wallet', label: 'Stack Wallet', icon: Wallet, subtitle: 'Balance: 500 AED' },
     { id: 'cash', label: 'Cash on Completion', icon: Wallet, subtitle: 'Pay when job is done' },
   ];
 
@@ -82,7 +82,7 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
             </p>
             <div className="bg-primary/10 rounded-xl p-4 mb-6">
               <p className="text-sm text-primary font-medium">
-                +{job.pointsEarned || 50} Nectar Points Earned! 🎉
+                +{job.pointsEarned || 50} Stack Points Earned! 🎉
               </p>
             </div>
             <Button 
@@ -296,7 +296,7 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
           <div className="flex items-center gap-2 mt-4 p-3 bg-green-50 rounded-xl">
             <Shield className="w-5 h-5 text-green-600" />
             <p className="text-xs text-green-700">
-              Your payment is secure and protected by Nectar
+              Your payment is secure and protected by Stack
             </p>
           </div>
         </motion.div>

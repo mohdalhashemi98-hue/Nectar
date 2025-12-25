@@ -238,10 +238,10 @@ const HelpScreen = ({ onNavigate }: HelpScreenProps) => {
             Can't find what you're looking for?
           </p>
           <p className="text-sm text-foreground font-medium">
-            Email us at <span className="text-primary">support@nectar.ae</span>
+            Email us at <span className="text-primary">support@stack.ae</span>
           </p>
           <p className="text-sm text-foreground font-medium">
-            or call <span className="text-primary">800-NECTAR</span>
+            or call <span className="text-primary">800-STACK</span>
           </p>
         </motion.div>
       </div>

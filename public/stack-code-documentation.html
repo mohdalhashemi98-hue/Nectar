@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nectar App - Code Documentation for Presentation</title>
+    <title>Stack App - Code Documentation for Presentation</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -119,11 +119,11 @@
 </head>
 <body>
 
-<h1>🍯 Nectar - Service Marketplace Platform</h1>
+<h1>📦 Stack - Service Marketplace Platform</h1>
 
 <div class="section">
     <h2>📋 Executive Summary</h2>
-    <p><strong>Nectar</strong> is a modern service marketplace application that connects consumers with verified professionals. The platform enables job posting, service requests, vendor-to-consumer interactions, messaging, reviews, and rewards systems.</p>
+    <p><strong>Stack</strong> is a modern service marketplace application that connects consumers with verified professionals. The platform enables job posting, service requests, vendor-to-consumer interactions, messaging, reviews, and rewards systems.</p>
     
     <h3>Key Value Propositions</h3>
     <div class="feature-list">
@@ -208,7 +208,7 @@
 <div class="section">
     <h2>💻 Core Code Structure</h2>
     
-    <h3>Main Application Router (MazaadiApp.tsx)</h3>
+    <h3>Main Application Router (StackApp.tsx)</h3>
     <pre><code>// State Management
 const [isAuthenticated, setIsAuthenticated] = useState(false);
 const [userType, setUserType] = useState&lt;UserType&gt;(null);
@@ -250,7 +250,7 @@ const renderScreen = () => {
     
     {/* Logo & Tagline */}
     &lt;motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}&gt;
-      &lt;h1 className="font-display text-5xl font-bold"&gt;Mazaadi&lt;/h1&gt;
+      &lt;h1 className="font-display text-5xl font-bold"&gt;Stack&lt;/h1&gt;
       &lt;p&gt;Find. Connect. Complete.&lt;/p&gt;
     &lt;/motion.div&gt;
 
@@ -367,7 +367,7 @@ const renderScreen = () => {
 <div class="section">
     <h2>📊 Data Models</h2>
     
-    <h3>TypeScript Types (types/mazaadi.ts)</h3>
+    <h3>TypeScript Types (types/stack.ts)</h3>
     <pre><code>export type UserType = 'consumer' | 'vendor' | null;
 
 export type ScreenType = 
@@ -473,8 +473,8 @@ export const ConsumerHomeSkeleton = () => (
     <h2>📁 File Structure</h2>
     <pre><code>src/
 ├── components/
-│   ├── mazaadi/
-│   │   ├── MazaadiApp.tsx          # Main app container & router
+│   ├── stack/
+│   │   ├── StackApp.tsx             # Main app container & router
 │   │   ├── BottomNav.tsx           # Navigation bar
 │   │   ├── ScreenSkeleton.tsx      # Loading skeletons
 │   │   ├── PointsBadge.tsx         # Points display
@@ -495,9 +495,9 @@ export const ConsumerHomeSkeleton = () => (
 │   │       └── ReviewScreen.tsx
 │   └── ui/                         # Shadcn UI components
 ├── data/
-│   └── mazaadi-data.ts             # Mock data & configurations
+│   └── stack-data.ts               # Mock data & configurations
 ├── types/
-│   └── mazaadi.ts                  # TypeScript interfaces
+│   └── stack.ts                    # TypeScript interfaces
 ├── hooks/                          # Custom React hooks
 ├── lib/
 │   └── utils.ts                    # Utility functions
@@ -555,7 +555,7 @@ export const ConsumerHomeSkeleton = () => (
 </div>
 
 <footer style="text-align: center; margin-top: 60px; padding: 20px; color: #666;">
-    <p><strong>Mazaadi</strong> - Find. Connect. Complete.</p>
+    <p><strong>Stack</strong> - Find. Connect. Complete.</p>
     <p>Built with React, TypeScript, and Tailwind CSS</p>
     <p>Documentation generated for presentation purposes</p>
 </footer>

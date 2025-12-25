@@ -84,7 +84,7 @@ const Install = () => {
               <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
               <h3 className="font-semibold text-green-800 mb-1">Already Installed!</h3>
               <p className="text-sm text-green-600">
-                Nectar is installed on your device. Look for it on your home screen.
+                Stack is installed on your device. Look for it on your home screen.
               </p>
             </CardContent>
           </Card>
@@ -122,9 +122,9 @@ const Install = () => {
                     <Smartphone className="h-4 w-4 text-primary" />
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">3. Open Nectar</p>
+                    <p className="font-medium text-foreground">3. Open Stack</p>
                     <p className="text-sm text-muted-foreground">
-                      Tap the Nectar icon on your home screen
+                      Tap the Stack icon on your home screen
                     </p>
                   </div>
                 </div>
@@ -138,7 +138,7 @@ const Install = () => {
             className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
           >
             <Download className="h-5 w-5" />
-            Install Nectar
+            Install Stack
           </Button>
         ) : (
           <Card className="w-full max-w-sm">
@@ -148,7 +148,7 @@ const Install = () => {
                 Open in a Mobile Browser
               </h3>
               <p className="text-sm text-muted-foreground">
-                Visit this page on your mobile device to install Nectar
+                Visit this page on your mobile device to install Stack
               </p>
             </CardContent>
           </Card>
