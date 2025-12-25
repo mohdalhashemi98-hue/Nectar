@@ -31,6 +31,7 @@ const screenToRoute: Record<ScreenType, string> = {
   'previous-vendors': '/vendors',
   'quick-rehire': '/quick-rehire',
   'view-offers': '/offers',
+  'vendor-onboarding': '/vendor/onboarding',
 };
 
 // Map routes back to screen types

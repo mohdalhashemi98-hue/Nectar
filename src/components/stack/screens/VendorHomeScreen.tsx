@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Star, Bell, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, 
   TrendingDown, Users, Calendar, Target, Award, BarChart3, MessageSquare, 
-  Wallet, Settings, Sparkles, ArrowUpRight, CheckCircle2, AlertCircle
+  Wallet, Settings, Sparkles, ArrowUpRight, CheckCircle2, AlertCircle, Wand2
 } from 'lucide-react';
 import { VendorStats, AvailableJob, ScreenType } from '@/types/stack';
 import BottomNav from '../BottomNav';
@@ -178,6 +178,25 @@ const VendorHomeScreen = ({
             onToggle={setIsAvailable}
           />
         </motion.div>
+
+        {/* Expertise Builder CTA */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.07 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => onNavigate('vendor-onboarding' as ScreenType)}
+          className="w-full bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-4 flex items-center gap-4 text-left"
+        >
+          <div className="w-12 h-12 rounded-xl bg-gradient-golden flex items-center justify-center flex-shrink-0">
+            <Wand2 className="w-6 h-6 text-primary-foreground" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-foreground">Complete Your Expertise Profile</h3>
+            <p className="text-sm text-muted-foreground">Add skills, certifications & portfolio to win more jobs</p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+        </motion.button>
 
         {/* Priority Action Cards - Horizontal Scroll */}
         <motion.div

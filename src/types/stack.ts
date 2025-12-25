@@ -247,4 +247,5 @@ export type ScreenType =
   | 'quote-management'
   | 'market-benchmark'
   | 'help'
-  | 'services';
+  | 'services'
+  | 'vendor-onboarding';
