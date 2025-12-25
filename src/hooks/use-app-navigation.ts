@@ -50,8 +50,24 @@ export const useAppNavigation = () => {
     navigationHistory,
   } = useAppStore();
 
-  const navigateTo = useCallback((screen: ScreenType) => {
-    const route = screenToRoute[screen] || '/';
+  const navigateTo = useCallback((screen: ScreenType, params?: { id?: string | number }) => {
+    let route = screenToRoute[screen] || '/';
+    
+    // Handle parameterized routes
+    if (params?.id) {
+      if (screen === 'vendor-profile') {
+        route = `/vendor/profile/${params.id}`;
+      } else if (screen === 'chat') {
+        route = `/chat/${params.id}`;
+      } else if (screen === 'job-detail') {
+        route = `/job/${params.id}`;
+      } else if (screen === 'quote-management') {
+        route = `/quote-management/${params.id}`;
+      } else if (screen === 'request-detail') {
+        route = `/request/${params.id}`;
+      }
+    }
+    
     const currentPath = location.pathname;
     
     if (currentPath !== route) {
