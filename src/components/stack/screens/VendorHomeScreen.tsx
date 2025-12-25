@@ -13,6 +13,7 @@ import AvailabilityToggle from '../AvailabilityToggle';
 import { ThemeToggle } from '@/components/theme-toggle';
 import PullToRefresh from '../PullToRefresh';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
+import { VendorRefreshSkeleton } from '../RefreshSkeleton';
 
 
 // Mock priority action data
@@ -161,6 +162,7 @@ const VendorHomeScreen = ({
         isPulling={isPulling}
         handlers={handlers}
         className="flex-1"
+        refreshSkeleton={<VendorRefreshSkeleton />}
       >
         <div className="px-4 py-4 pb-24 space-y-4">
         {/* Availability Toggle */}

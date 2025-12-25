@@ -14,6 +14,8 @@ interface PullToRefreshProps {
     onTouchEnd: () => void;
   };
   className?: string;
+  /** Optional skeleton component to show during refresh */
+  refreshSkeleton?: ReactNode;
 }
 
 const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
@@ -23,7 +25,8 @@ const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
   isPulling,
   threshold = 80,
   handlers,
-  className = ''
+  className = '',
+  refreshSkeleton
 }, ref) => {
   const progress = Math.min(pullDistance / threshold, 1);
   const showIndicator = pullDistance > 10 || isRefreshing;
@@ -74,7 +77,19 @@ const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
           transition: isPulling ? 'none' : 'transform 0.3s ease-out'
         }}
       >
-        {children}
+        {/* Show skeleton during refresh if provided */}
+        {isRefreshing && refreshSkeleton ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {refreshSkeleton}
+          </motion.div>
+        ) : (
+          children
+        )}
       </div>
     </div>
   );
