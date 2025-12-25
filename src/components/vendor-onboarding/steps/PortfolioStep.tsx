@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, Image as ImageIcon, Camera, Pencil } from 'lucide-react';
+import { Plus, X, Camera, Pencil } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useVendorOnboardingStore, PortfolioItem } from '@/stores/vendor-onboarding-store';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import SignedImage from '@/components/shared/SignedImage';
 
 interface PortfolioStepProps {
   onValidChange: (isValid: boolean) => void;
@@ -67,13 +68,10 @@ const PortfolioStep = ({ onValidChange }: PortfolioStepProps) => {
           continue;
         }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('vendor-uploads')
-          .getPublicUrl(fileName);
-
+        // Store the file path for signed URL generation
         const item: PortfolioItem = {
           id: itemId,
-          imageUrl: publicUrl,
+          imageUrl: fileName, // Store path, not public URL
           caption: '',
         };
 
@@ -137,8 +135,9 @@ const PortfolioStep = ({ onValidChange }: PortfolioStepProps) => {
               layout
               className="relative aspect-square rounded-2xl overflow-hidden group bg-secondary"
             >
-              <img
-                src={item.imageUrl}
+              <SignedImage
+                bucket="vendor-uploads"
+                path={item.imageUrl}
                 alt={item.caption || 'Portfolio item'}
                 className="w-full h-full object-cover"
               />

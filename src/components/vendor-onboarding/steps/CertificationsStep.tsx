@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Upload, Award, Building, Image as ImageIcon, X, FileText } from 'lucide-react';
+import { Plus, Trash2, Upload, Award, Building, X, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useVendorOnboardingStore, Certification } from '@/stores/vendor-onboarding-store';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import SignedImage from '@/components/shared/SignedImage';
 
 interface CertificationsStepProps {
   onValidChange: (isValid: boolean) => void;
@@ -83,11 +84,8 @@ const CertificationsStep = ({ onValidChange }: CertificationsStepProps) => {
 
       if (error) throw error;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('vendor-uploads')
-        .getPublicUrl(fileName);
-
-      updateCertification(activeUploadId, { imageUrl: publicUrl });
+      // Store the file path for signed URL generation (not public URL)
+      updateCertification(activeUploadId, { imageUrl: fileName });
       toast.success('Certificate uploaded!');
     } catch (error) {
       console.error('Upload error:', error);
@@ -137,8 +135,9 @@ const CertificationsStep = ({ onValidChange }: CertificationsStepProps) => {
                 <div className="flex-shrink-0">
                   {cert.imageUrl ? (
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden group">
-                      <img 
-                        src={cert.imageUrl} 
+                      <SignedImage 
+                        bucket="vendor-uploads"
+                        path={cert.imageUrl} 
                         alt={cert.title}
                         className="w-full h-full object-cover"
                       />
