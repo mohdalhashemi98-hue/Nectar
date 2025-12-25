@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Briefcase, Check, ChevronRight } from 'lucide-react';
+import { Search, Briefcase, Check, ChevronRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { categories } from '@/data/stack-data';
+import { useAppNavigation } from '@/hooks/use-app-navigation';
 
 interface HookStepProps {
   selectedTrades: string[];
@@ -13,6 +14,7 @@ interface HookStepProps {
 }
 
 const HookStep: React.FC<HookStepProps> = ({ selectedTrades, onTradeToggle, onNext }) => {
+  const { navigateTo } = useAppNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   
   const trades = categories.map(cat => ({
@@ -27,6 +29,16 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrades, onTradeToggle, onNe
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
+      {/* Back Button */}
+      <motion.button
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        onClick={() => navigateTo('welcome')}
+        className="absolute top-4 left-4 z-10 p-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-foreground hover:bg-muted transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5" />
+      </motion.button>
+
       {/* Hero Section */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
