@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Star, Bell, DollarSign, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp, 
@@ -11,6 +11,8 @@ import { VendorHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon } from '../utils/categoryIcons';
 import AvailabilityToggle from '../AvailabilityToggle';
 import { ThemeToggle } from '@/components/theme-toggle';
+import PullToRefresh from '../PullToRefresh';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 
 
 // Mock priority action data
@@ -85,6 +87,15 @@ const VendorHomeScreen = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isAvailable, setIsAvailable] = useState(true);
 
+  const handleRefresh = useCallback(async () => {
+    // Simulate refresh - in a real app this would refetch data
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }, []);
+
+  const { pullDistance, isRefreshing, isPulling, handlers, containerRef } = usePullToRefresh({
+    onRefresh: handleRefresh
+  });
+
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
@@ -143,7 +154,15 @@ const VendorHomeScreen = ({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-4">
+      <PullToRefresh
+        ref={containerRef}
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isPulling={isPulling}
+        handlers={handlers}
+        className="flex-1"
+      >
+        <div className="px-4 py-4 pb-24 space-y-4">
         {/* Availability Toggle */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -468,7 +487,8 @@ const VendorHomeScreen = ({
             </button>
           </div>
         </motion.div>
-      </div>
+        </div>
+      </PullToRefresh>
 
       <BottomNav active="home" userType="vendor" onNavigate={onNavigate} />
     </div>
