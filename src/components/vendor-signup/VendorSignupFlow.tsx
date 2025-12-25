@@ -122,13 +122,17 @@ const VendorSignupFlow: React.FC = () => {
   };
 
   const handleGoToDashboard = () => {
-    resetSignup();
+    // Navigate first, then reset signup state (don't reset auth!)
     navigateTo('vendor-home');
+    // Reset signup form data after navigation
+    setTimeout(() => resetSignup(), 100);
   };
 
   const handleCompleteProfile = () => {
-    resetSignup();
+    // Navigate first, then reset signup state (don't reset auth!)
     navigateTo('vendor-onboarding');
+    // Reset signup form data after navigation
+    setTimeout(() => resetSignup(), 100);
   };
 
   // Progress bar
