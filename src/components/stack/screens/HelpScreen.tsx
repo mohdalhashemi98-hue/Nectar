@@ -6,6 +6,7 @@ import StackPattern from '../StackPattern';
 
 interface HelpScreenProps {
   onNavigate: (screen: ScreenType) => void;
+  onBack: () => void;
 }
 
 const faqs = [
@@ -71,7 +72,7 @@ const faqs = [
   }
 ];
 
-const HelpScreen = ({ onNavigate }: HelpScreenProps) => {
+const HelpScreen = ({ onNavigate, onBack }: HelpScreenProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategory, setExpandedCategory] = useState<string | null>('Getting Started');
   const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null);
@@ -93,7 +94,7 @@ const HelpScreen = ({ onNavigate }: HelpScreenProps) => {
         <StackPattern opacity="0.03" color="auto" className="absolute inset-0" />
         <div className="flex items-center gap-4 mb-4">
           <button
-            onClick={() => onNavigate('consumer-home')}
+            onClick={onBack}
             className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />

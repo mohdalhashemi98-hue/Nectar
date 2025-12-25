@@ -164,9 +164,10 @@ const generateMockJobs = (): ScheduledJob[] => {
 
 interface VendorScheduleScreenProps {
   onNavigate: (screen: ScreenType) => void;
+  onBack: () => void;
 }
 
-const VendorScheduleScreen = ({ onNavigate }: VendorScheduleScreenProps) => {
+const VendorScheduleScreen = ({ onNavigate, onBack }: VendorScheduleScreenProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 0 }));
   const [selectedJob, setSelectedJob] = useState<ScheduledJob | null>(null);
@@ -214,7 +215,7 @@ const VendorScheduleScreen = ({ onNavigate }: VendorScheduleScreenProps) => {
             className="flex items-center gap-4 mb-4"
           >
             <button
-              onClick={() => onNavigate('vendor-home')}
+              onClick={onBack}
               className="w-10 h-10 rounded-2xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />

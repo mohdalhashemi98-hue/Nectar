@@ -9,6 +9,7 @@ import StackPattern from '../StackPattern';
 
 interface ServicesScreenProps {
   onNavigate: (screen: ScreenType) => void;
+  onBack: () => void;
   onSelectCategory: (category: string) => void;
   onSelectSubService: (category: string, subService: string) => void;
   onResetRequestForm: () => void;
@@ -25,6 +26,7 @@ const groupLabels: Record<GroupType, string> = {
 
 const ServicesScreen = ({
   onNavigate,
+  onBack,
   onSelectCategory,
   onSelectSubService,
   onResetRequestForm
@@ -89,7 +91,7 @@ const ServicesScreen = ({
         >
           <div className="flex items-center gap-4 mb-5">
             <button
-              onClick={() => onNavigate('consumer-home')}
+              onClick={onBack}
               className="w-10 h-10 rounded-2xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
