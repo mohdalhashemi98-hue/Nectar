@@ -99,7 +99,7 @@ const StackApp = () => {
     setCurrentScreen(screen);
   };
 
-  const goBack = () => {
+  const goBack = useCallback(() => {
     directionRef.current = 'back';
     if (navigationHistory.length > 0) {
       const newHistory = [...navigationHistory];
@@ -109,7 +109,7 @@ const StackApp = () => {
     } else {
       setCurrentScreen(userType === 'consumer' ? 'consumer-home' : userType === 'vendor' ? 'vendor-home' : 'welcome');
     }
-  };
+  }, [navigationHistory, userType]);
 
   // Optimized animation variants for smooth screen transitions
   const slideVariants = useMemo(() => ({
@@ -619,6 +619,22 @@ const StackApp = () => {
     ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
   }, [isModalScreen]);
 
+  // Check if current screen can go back (has navigation history or is not a home screen)
+  const canSwipeBack = useMemo(() => {
+    const homeScreens: ScreenType[] = ['welcome', 'login', 'consumer-home', 'vendor-home'];
+    return !homeScreens.includes(currentScreen) && navigationHistory.length > 0;
+  }, [currentScreen, navigationHistory.length]);
+
+  // Handle swipe gesture
+  const handleDragEnd = useCallback((event: any, info: any) => {
+    const threshold = 100; // minimum swipe distance
+    const velocity = 500; // minimum velocity
+    
+    if (canSwipeBack && info.offset.x > threshold && info.velocity.x > velocity) {
+      goBack();
+    }
+  }, [canSwipeBack, goBack]);
+
   return (
     <div className="screen-container shadow-2xl overflow-hidden relative">
       <Suspense fallback={<ScreenFallback />}>
@@ -631,7 +647,11 @@ const StackApp = () => {
             animate="center"
             exit="exit"
             transition={transitionConfig}
-            className="w-full h-full"
+            drag={canSwipeBack ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={{ left: 0, right: 0.5 }}
+            onDragEnd={handleDragEnd}
+            className="w-full h-full touch-pan-y"
             style={{ 
               willChange: 'transform, opacity',
               position: 'absolute',
