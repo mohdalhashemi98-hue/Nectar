@@ -11,6 +11,7 @@ import BottomNav from '../BottomNav';
 import PullToRefresh from '../PullToRefresh';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { ConsumerRefreshSkeleton } from '../RefreshSkeleton';
+import { StackPatternCorner } from '../StackPattern';
 
 interface ConsumerHomeScreenProps {
   userProfile: { name: string };
@@ -238,15 +239,8 @@ const ConsumerHomeScreen = ({
           transition={{ delay: 0.15 }}
           className="card-golden p-5 relative overflow-hidden"
         >
-          {/* Decorative honeycomb pattern */}
-          <div className="absolute top-0 right-0 w-32 h-32 opacity-20">
-            <svg viewBox="0 0 100 100" className="w-full h-full">
-              <pattern id="honeycomb" width="20" height="23" patternUnits="userSpaceOnUse">
-                <polygon points="10,0 20,5 20,15 10,20 0,15 0,5" fill="none" stroke="currentColor" strokeWidth="1"/>
-              </pattern>
-              <rect width="100" height="100" fill="url(#honeycomb)"/>
-            </svg>
-          </div>
+          {/* Decorative stack pattern */}
+          <StackPatternCorner className="absolute top-0 right-0 w-32 h-32 opacity-20" />
           
           <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex items-center gap-3">

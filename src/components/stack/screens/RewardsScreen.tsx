@@ -3,6 +3,7 @@ import { Target, Trophy, Coins, Flame, Gift, Sparkles, Gem, Zap, Star, PiggyBank
 import { Rewards, ScreenType, UserType } from '@/types/stack';
 import { tierConfig } from '@/data/stack-data';
 import BottomNav from '../BottomNav';
+import StackPattern from '../StackPattern';
 
 const achievementIcons: Record<string, LucideIcon> = {
   Trophy, Gem, Zap, Star, PiggyBank, Crown
@@ -20,8 +21,8 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
+        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/10 rounded-full blur-xl" />
         
         <div className="relative z-10">
           <motion.div 

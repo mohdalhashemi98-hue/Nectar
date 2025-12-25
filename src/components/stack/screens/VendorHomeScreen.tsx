@@ -14,6 +14,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import PullToRefresh from '../PullToRefresh';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { VendorRefreshSkeleton } from '../RefreshSkeleton';
+import StackPattern from '../StackPattern';
 
 
 // Mock priority action data
@@ -110,6 +111,7 @@ const VendorHomeScreen = ({
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
+        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
         <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
         
         <div className="px-4 py-4 relative z-10">
