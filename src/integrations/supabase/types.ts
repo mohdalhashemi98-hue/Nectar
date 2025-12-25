@@ -301,6 +301,50 @@ export type Database = {
         }
         Relationships: []
       }
+      quotes: {
+        Row: {
+          amount: number
+          created_at: string
+          estimated_duration: string | null
+          id: string
+          job_id: string
+          message: string | null
+          status: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          estimated_duration?: string | null
+          id?: string
+          job_id: string
+          message?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          estimated_duration?: string | null
+          id?: string
+          job_id?: string
+          message?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rewards: {
         Row: {
           cashback_rate: number | null
