@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob, Offer } from '@/types/stack';
 import { 
@@ -6,31 +6,37 @@ import {
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
 } from '@/data/stack-data';
 
-import LoginScreen from './screens/LoginScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
-import ConsumerHomeScreen from './screens/ConsumerHomeScreen';
-import VendorHomeScreen from './screens/VendorHomeScreen';
-import VendorProfileScreen from './screens/VendorProfileScreen';
-import VendorScheduleScreen from './screens/VendorScheduleScreen';
-import RewardsScreen from './screens/RewardsScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import JobsScreen from './screens/JobsScreen';
-import JobDetailScreen from './screens/JobDetailScreen';
-import MessagesScreen from './screens/MessagesScreen';
-import ChatScreen from './screens/ChatScreen';
-import CompanyProfileScreen from './screens/CompanyProfileScreen';
-import PostJobScreen from './screens/PostJobScreen';
-import JobConfigurationScreen from './screens/JobConfigurationScreen';
-import ReviewScreen from './screens/ReviewScreen';
-import NotificationsScreen from './screens/NotificationsScreen';
-import RequestDetailScreen from './screens/RequestDetailScreen';
-import VendorWorkScreen from './screens/VendorWorkScreen';
-import PaymentScreen from './screens/PaymentScreen';
-import TransactionsScreen from './screens/TransactionsScreen';
-import QuoteManagementScreen from './screens/QuoteManagementScreen';
-import MarketBenchmarkScreen from './screens/MarketBenchmarkScreen';
-import HelpScreen from './screens/HelpScreen';
-import ServicesScreen from './screens/ServicesScreen';
+import { LazyScreens, preloadScreens, getPreloadTargets, preloadCriticalScreens } from './screenPreloader';
+import ScreenFallback from './ScreenFallback';
+
+// Aliases for cleaner JSX
+const {
+  LoginScreen,
+  WelcomeScreen,
+  ConsumerHomeScreen,
+  VendorHomeScreen,
+  VendorProfileScreen,
+  VendorScheduleScreen,
+  RewardsScreen,
+  ProfileScreen,
+  JobsScreen,
+  JobDetailScreen,
+  MessagesScreen,
+  ChatScreen,
+  CompanyProfileScreen,
+  PostJobScreen,
+  JobConfigurationScreen,
+  ReviewScreen,
+  NotificationsScreen,
+  RequestDetailScreen,
+  VendorWorkScreen,
+  PaymentScreen,
+  TransactionsScreen,
+  QuoteManagementScreen,
+  MarketBenchmarkScreen,
+  HelpScreen,
+  ServicesScreen,
+} = LazyScreens;
 
 const StackApp = () => {
   // Auth state
@@ -40,6 +46,23 @@ const StackApp = () => {
   const [userType, setUserType] = useState<UserType>(null);
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('welcome');
   const [navigationHistory, setNavigationHistory] = useState<ScreenType[]>([]);
+
+  // Preload critical screens on mount
+  useEffect(() => {
+    preloadCriticalScreens();
+  }, []);
+
+  // Preload likely next screens when current screen changes
+  useEffect(() => {
+    const targets = getPreloadTargets(currentScreen, userType);
+    if (targets.length > 0) {
+      // Small delay to not block current render
+      const timer = setTimeout(() => {
+        preloadScreens(targets);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [currentScreen, userType]);
 
   // Data state
   const [userProfile] = useState(initialUserProfile);
@@ -598,21 +621,23 @@ const StackApp = () => {
 
   return (
     <div className="screen-container shadow-2xl overflow-hidden">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.div
-          key={currentScreen}
-          custom={directionRef.current}
-          variants={screenVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={transitionConfig}
-          className="w-full h-full absolute inset-0"
-          style={{ willChange: 'transform, opacity' }}
-        >
-          {renderScreen()}
-        </motion.div>
-      </AnimatePresence>
+      <Suspense fallback={<ScreenFallback />}>
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.div
+            key={currentScreen}
+            custom={directionRef.current}
+            variants={screenVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={transitionConfig}
+            className="w-full h-full absolute inset-0"
+            style={{ willChange: 'transform, opacity' }}
+          >
+            {renderScreen()}
+          </motion.div>
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 };
