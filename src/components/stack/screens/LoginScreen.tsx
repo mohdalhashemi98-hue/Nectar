@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle } from 'lucide-react';
+import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { UserType } from '@/types/stack';
 import StackLogo from '@/components/StackLogo';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,12 +13,12 @@ interface LoginScreenProps {
   userType?: UserType;
 }
 
-type AuthScreen = 'login' | 'signup';
+type AuthScreen = 'login' | 'signup' | 'forgot-password' | 'reset-sent';
 
 // Validation schemas
-const emailSchema = z.string().email('Please enter a valid email address');
+const emailSchema = z.string().trim().email('Please enter a valid email address').max(255, 'Email must be less than 255 characters');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
-const nameSchema = z.string().min(2, 'Name must be at least 2 characters');
+const nameSchema = z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name must be less than 100 characters');
 
 const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: LoginScreenProps) => {
   const [authScreen, setAuthScreen] = useState<AuthScreen>('login');
@@ -26,6 +26,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [resetEmail, setResetEmail] = useState('');
 
   const validateLogin = (): string | null => {
     const emailResult = emailSchema.safeParse(authData.email);
@@ -73,7 +74,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
     
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: authData.email,
+        email: authData.email.trim(),
         password: authData.password,
       });
 
@@ -113,13 +114,13 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
       const redirectUrl = `${window.location.origin}/`;
       
       const { data, error: authError } = await supabase.auth.signUp({
-        email: authData.email,
+        email: authData.email.trim(),
         password: authData.password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            name: authData.name,
-            phone: authData.phone,
+            name: authData.name.trim(),
+            phone: authData.phone.trim(),
           },
         },
       });
@@ -142,7 +143,179 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
     }
   };
 
+  const handleForgotPassword = async () => {
+    setError(null);
+    
+    const emailResult = emailSchema.safeParse(resetEmail);
+    if (!emailResult.success) {
+      setError(emailResult.error.errors[0].message);
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+        resetEmail.trim(),
+        {
+          redirectTo: `${window.location.origin}/login`,
+        }
+      );
+
+      if (resetError) {
+        setError(resetError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      setAuthScreen('reset-sent');
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const clearError = () => setError(null);
+
+  // Forgot Password Screen
+  if (authScreen === 'forgot-password') {
+    return (
+      <div className="flex flex-col h-screen bg-gradient-golden">
+        <div className="flex-1 flex flex-col justify-center px-4">
+          <motion.button 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
+            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+          </motion.button>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-6"
+          >
+            <h1 className="font-display text-3xl font-bold text-primary-foreground">Reset Password</h1>
+            <p className="text-primary-foreground/70 mt-1">
+              Enter your email to receive a reset link
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-card rounded-3xl p-6"
+            style={{ boxShadow: 'var(--shadow-xl)' }}
+          >
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
+              >
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{error}</span>
+              </motion.div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={resetEmail}
+                    onChange={(e) => { setResetEmail(e.target.value); clearError(); }}
+                    className="input-modern pl-12"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleForgotPassword}
+                disabled={isLoading}
+                className="btn-primary w-full disabled:opacity-50"
+              >
+                {isLoading ? 'Sending...' : 'Send Reset Link'}
+              </button>
+            </div>
+
+            <div className="mt-6 text-center">
+              <button 
+                onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
+                className="text-muted-foreground font-medium hover:text-primary transition-colors flex items-center justify-center gap-2 w-full"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Login
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  // Reset Link Sent Confirmation Screen
+  if (authScreen === 'reset-sent') {
+    return (
+      <div className="flex flex-col h-screen bg-gradient-golden">
+        <div className="flex-1 flex flex-col justify-center px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-6"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="w-20 h-20 bg-primary-foreground/20 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <CheckCircle2 className="w-10 h-10 text-primary-foreground" />
+            </motion.div>
+            <h1 className="font-display text-3xl font-bold text-primary-foreground">Check Your Email</h1>
+            <p className="text-primary-foreground/70 mt-2 max-w-xs mx-auto">
+              We've sent a password reset link to <strong className="text-primary-foreground">{resetEmail}</strong>
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-card rounded-3xl p-6"
+            style={{ boxShadow: 'var(--shadow-xl)' }}
+          >
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground text-center">
+                Didn't receive the email? Check your spam folder or try again.
+              </p>
+
+              <button
+                onClick={() => { setAuthScreen('forgot-password'); clearError(); }}
+                className="btn-primary w-full"
+              >
+                Try Again
+              </button>
+
+              <button 
+                onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
+                className="w-full py-3 text-muted-foreground font-medium hover:text-primary transition-colors flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Login
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   if (authScreen === 'signup') {
     return (
@@ -349,7 +522,10 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
               </div>
             </div>
 
-            <button className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors">
+            <button 
+              onClick={() => { setAuthScreen('forgot-password'); clearError(); }}
+              className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors"
+            >
               Forgot password?
             </button>
 
