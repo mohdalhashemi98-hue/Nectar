@@ -631,7 +631,33 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      vendor_stats_public: {
+        Row: {
+          completion_rate: number | null
+          rating: number | null
+          response_time: string | null
+          reviews: number | null
+          total_jobs: number | null
+          user_id: string | null
+        }
+        Insert: {
+          completion_rate?: number | null
+          rating?: number | null
+          response_time?: string | null
+          reviews?: number | null
+          total_jobs?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          completion_rate?: number | null
+          rating?: number | null
+          response_time?: string | null
+          reviews?: number | null
+          total_jobs?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       is_user_verified: { Args: { user_uuid: string }; Returns: boolean }

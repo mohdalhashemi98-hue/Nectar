@@ -23,13 +23,40 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
 
-    if (!supabaseUrl || !serviceRoleKey) {
-      console.error('Missing environment variables: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !serviceRoleKey || !anonKey) {
+      console.error('Missing environment variables');
       throw new Error('Server configuration error');
     }
 
-    // Create Supabase client with service role (bypasses RLS)
+    // First, verify the authenticated user
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error('No authorization header provided');
+      return new Response(
+        JSON.stringify({ error: 'Authorization header required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create client with anon key to verify user token
+    const supabaseAuth = createClient(supabaseUrl, anonKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: userError } = await supabaseAuth.auth.getUser();
+    
+    if (userError || !user) {
+      console.error('User authentication failed:', userError?.message);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create Supabase client with service role (bypasses RLS) for inserting
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
       auth: {
         autoRefreshToken: false,
@@ -39,6 +66,16 @@ serve(async (req) => {
 
     const payload: NotificationPayload = await req.json();
     console.log('Received notification payload:', JSON.stringify(payload));
+    console.log('Authenticated user:', user.id);
+
+    // SECURITY: Users can only send notifications to themselves
+    if (payload.user_id !== user.id) {
+      console.error('User attempted to send notification to another user:', { sender: user.id, target: payload.user_id });
+      return new Response(
+        JSON.stringify({ error: 'Cannot send notifications to other users' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Validate required fields
     if (!payload.user_id || !payload.title || !payload.type) {
