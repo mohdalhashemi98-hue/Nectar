@@ -4,6 +4,7 @@ import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
 import StackLogo from '@/components/StackLogo';
 import { triggerFeedback } from '@/hooks/use-feedback';
+import StackPattern from '../StackPattern';
 
 interface WelcomeScreenProps {
   onSelectUserType: (type: UserType) => void;
@@ -22,10 +23,8 @@ const WelcomeScreen = ({
       <ThemeToggle />
     </div>
     
-    {/* Stack pattern background */}
-    <div className="absolute inset-0 opacity-[0.04]" style={{
-      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewBox='0 0 40 48'%3E%3Cg fill='%233b82f6' fill-rule='evenodd'%3E%3Cpath d='M20 4L4 14v8l16 10 16-10v-8L20 4zm0 4l12 7.5v5L20 28 8 20.5v-5L20 8z'/%3E%3Cpath d='M20 20L4 30v8l16 10 16-10v-8L20 20zm0 4l12 7.5v5L20 44 8 36.5v-5L20 24z' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E")`,
-    }} />
+    {/* Stack pattern background - auto theme-aware */}
+    <StackPattern opacity="0.05" color="auto" className="absolute inset-0" />
     {/* Decorative elements - cool blue tones */}
     <div className="absolute top-0 right-0 w-96 h-96 bg-primary/[0.08] rounded-full blur-3xl" />
     <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/[0.05] rounded-full blur-3xl" />

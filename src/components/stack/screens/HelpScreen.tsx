@@ -90,7 +90,7 @@ const HelpScreen = ({ onNavigate }: HelpScreenProps) => {
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="bg-card border-b border-border px-4 py-4 relative overflow-hidden">
-        <StackPattern opacity="0.02" className="absolute inset-0" />
+        <StackPattern opacity="0.03" color="auto" className="absolute inset-0" />
         <div className="flex items-center gap-4 mb-4">
           <button
             onClick={() => onNavigate('consumer-home')}
