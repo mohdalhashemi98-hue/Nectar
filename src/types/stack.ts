@@ -248,4 +248,5 @@ export type ScreenType =
   | 'market-benchmark'
   | 'help'
   | 'services'
-  | 'vendor-onboarding';
+  | 'vendor-onboarding'
+  | 'user-verification';
