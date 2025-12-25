@@ -48,7 +48,7 @@ const VendorSignupFlow: React.FC = () => {
   };
 
   const handleTradeToggle = (trade: string) => {
-    const currentTrades = data.primaryTrades;
+    const currentTrades = data.primaryTrades || [];
     if (currentTrades.includes(trade)) {
       updateData({ primaryTrades: currentTrades.filter(t => t !== trade) });
     } else {
@@ -166,7 +166,7 @@ const VendorSignupFlow: React.FC = () => {
         >
           {currentStep === 1 && (
             <HookStep
-              selectedTrades={data.primaryTrades}
+              selectedTrades={data.primaryTrades || []}
               onTradeToggle={handleTradeToggle}
               onNext={() => goToStep(2)}
             />
