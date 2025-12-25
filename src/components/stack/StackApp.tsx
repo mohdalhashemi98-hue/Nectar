@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { ChevronLeft } from 'lucide-react';
 import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob, Offer } from '@/types/stack';
 import { 
   initialUserProfile, initialRewards, initialJobs, initialVendors, 
@@ -625,6 +626,13 @@ const StackApp = () => {
     return !homeScreens.includes(currentScreen) && navigationHistory.length > 0;
   }, [currentScreen, navigationHistory.length]);
 
+  // Swipe progress tracking
+  const dragX = useMotionValue(0);
+  const swipeProgress = useTransform(dragX, [0, 150], [0, 1]);
+  const indicatorOpacity = useTransform(dragX, [0, 50, 150], [0, 0.8, 1]);
+  const indicatorScale = useTransform(dragX, [0, 100, 150], [0.5, 0.9, 1]);
+  const shadowOpacity = useTransform(dragX, [0, 150], [0, 0.3]);
+
   // Handle swipe gesture
   const handleDragEnd = useCallback((event: any, info: any) => {
     const threshold = 100; // minimum swipe distance
@@ -637,6 +645,60 @@ const StackApp = () => {
 
   return (
     <div className="screen-container shadow-2xl overflow-hidden relative">
+      {/* Swipe back indicator */}
+      {canSwipeBack && (
+        <>
+          {/* Left edge shadow during swipe */}
+          <motion.div
+            className="absolute inset-y-0 left-0 w-16 pointer-events-none z-50"
+            style={{
+              background: 'linear-gradient(to right, hsl(var(--foreground) / 0.15), transparent)',
+              opacity: shadowOpacity,
+            }}
+          />
+          
+          {/* Back arrow indicator */}
+          <motion.div
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-50 pointer-events-none"
+            style={{
+              opacity: indicatorOpacity,
+              scale: indicatorScale,
+            }}
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+              <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+            </div>
+          </motion.div>
+          
+          {/* Progress arc around indicator */}
+          <motion.svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-50 pointer-events-none w-10 h-10"
+            style={{
+              opacity: indicatorOpacity,
+              scale: indicatorScale,
+            }}
+            viewBox="0 0 40 40"
+          >
+            <motion.circle
+              cx="20"
+              cy="20"
+              r="18"
+              fill="none"
+              stroke="hsl(var(--primary-foreground))"
+              strokeWidth="2"
+              strokeLinecap="round"
+              style={{
+                pathLength: swipeProgress,
+                rotate: -90,
+                transformOrigin: 'center',
+              }}
+              strokeDasharray="1"
+              strokeDashoffset="0"
+            />
+          </motion.svg>
+        </>
+      )}
+      
       <Suspense fallback={<ScreenFallback />}>
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
@@ -651,8 +713,8 @@ const StackApp = () => {
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={{ left: 0, right: 0.5 }}
             onDragEnd={handleDragEnd}
-            className="w-full h-full touch-pan-y"
             style={{ 
+              x: dragX,
               willChange: 'transform, opacity',
               position: 'absolute',
               top: 0,
@@ -660,6 +722,7 @@ const StackApp = () => {
               right: 0,
               bottom: 0
             }}
+            className="w-full h-full touch-pan-y"
           >
             {renderScreen()}
           </motion.div>
