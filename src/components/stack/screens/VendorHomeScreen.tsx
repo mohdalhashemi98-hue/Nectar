@@ -11,7 +11,7 @@ import { VendorHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon } from '../utils/categoryIcons';
 import AvailabilityToggle from '../AvailabilityToggle';
 import { ThemeToggle } from '@/components/theme-toggle';
-import stackLogo from '@/assets/stack-logo.png';
+
 
 // Mock priority action data
 const priorityActions = {

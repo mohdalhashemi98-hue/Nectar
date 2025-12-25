@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, Smartphone } from 'lucide-react';
 import { UserType } from '@/types/stack';
-import stackLogo from '@/assets/stack-logo.png';
+import StackLogo from '@/components/StackLogo';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -239,7 +239,7 @@ const LoginScreen = ({ onLogin, onSignup, onBack, userType }: LoginScreenProps) 
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <img src={stackLogo} alt="Stack" className="w-20 h-20 mx-auto mb-4 object-contain" />
+          <StackLogo size={80} className="mx-auto mb-4" />
           <h1 className="font-display text-3xl font-bold text-primary-foreground">Stack</h1>
           <p className="text-primary-foreground/70 mt-1">
             {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}

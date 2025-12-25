@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles } from 'lucide-react';
 import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
-import stackLogo from '@/assets/stack-logo.png';
+import StackLogo from '@/components/StackLogo';
 
 interface WelcomeScreenProps {
   onSelectUserType: (type: UserType) => void;
@@ -45,13 +45,15 @@ const WelcomeScreen = ({
         duration: 0.5
       }} className="mb-6 relative">
           <div className="absolute inset-0 w-28 h-28 mx-auto bg-primary/30 rounded-full blur-xl animate-pulse" />
-          <motion.img alt="Stack Logo" animate={{
+          <motion.div animate={{
           y: [0, -8, 0]
         }} transition={{
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
-        }} src={stackLogo} className="w-28 h-28 mx-auto bg-background rounded-none object-cover relative z-10" />
+        }} className="relative z-10">
+            <StackLogo size={112} />
+          </motion.div>
         </motion.div>
         <h1 className="font-display text-5xl font-bold text-foreground mb-3 tracking-tight">Stack</h1>
         <p className="text-lg text-muted-foreground">Verified Pros. Guaranteed Value.</p>

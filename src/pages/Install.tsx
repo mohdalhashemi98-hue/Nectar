@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, Smartphone, Share, Plus, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import stackLogo from "@/assets/stack-logo.png";
+import StackLogo from "@/components/StackLogo";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -68,7 +68,7 @@ const Install = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12">
         {/* Logo */}
         <div className="mb-8">
-          <img src={stackLogo} alt="Stack" className="h-24 w-24" />
+          <StackLogo size={96} />
         </div>
 
         <h1 className="text-2xl font-bold text-foreground mb-2 font-display text-center">
