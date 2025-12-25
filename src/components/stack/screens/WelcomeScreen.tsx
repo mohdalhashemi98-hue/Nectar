@@ -3,10 +3,17 @@ import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles } from 'lucide-r
 import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
 import StackLogo from '@/components/StackLogo';
+import { triggerFeedback } from '@/hooks/use-feedback';
 
 interface WelcomeScreenProps {
   onSelectUserType: (type: UserType) => void;
 }
+
+const handleSelectWithFeedback = (type: UserType, onSelect: (type: UserType) => void) => {
+  triggerFeedback('tap');
+  onSelect(type);
+};
+
 const WelcomeScreen = ({
   onSelectUserType
 }: WelcomeScreenProps) => <div className="flex flex-col h-screen bg-background relative overflow-hidden">
@@ -104,7 +111,7 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => onSelectUserType('consumer')} className="group w-full bg-card border-2 border-border hover:border-primary/30 py-5 px-5 rounded-3xl transition-all duration-300" style={{
+      }} onClick={() => handleSelectWithFeedback('consumer', onSelectUserType)} className="group w-full bg-card border-2 border-border hover:border-primary/30 py-5 px-5 rounded-3xl transition-all duration-300" style={{
         boxShadow: 'var(--shadow-md)'
       }}>
           <div className="flex items-center justify-between">
@@ -125,7 +132,7 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => onSelectUserType('vendor')} className="card-gradient-animated group w-full text-primary-foreground py-5 px-5 transition-all duration-300">
+      }} onClick={() => handleSelectWithFeedback('vendor', onSelectUserType)} className="card-gradient-animated group w-full text-primary-foreground py-5 px-5 transition-all duration-300">
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center">
