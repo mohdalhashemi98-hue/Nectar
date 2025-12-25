@@ -620,7 +620,7 @@ const StackApp = () => {
   }, [isModalScreen]);
 
   return (
-    <div className="screen-container shadow-2xl overflow-hidden">
+    <div className="screen-container shadow-2xl overflow-hidden relative">
       <Suspense fallback={<ScreenFallback />}>
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
@@ -631,8 +631,15 @@ const StackApp = () => {
             animate="center"
             exit="exit"
             transition={transitionConfig}
-            className="w-full h-full absolute inset-0"
-            style={{ willChange: 'transform, opacity' }}
+            className="w-full h-full"
+            style={{ 
+              willChange: 'transform, opacity',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0
+            }}
           >
             {renderScreen()}
           </motion.div>

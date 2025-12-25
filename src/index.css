@@ -480,14 +480,18 @@
   
   /* Main app container - constrains width for mobile-first design */
   .screen-container {
-    @apply min-h-screen w-full mx-auto relative;
+    @apply w-full mx-auto relative;
     max-width: 448px; /* max-w-md equivalent */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     background: hsl(var(--background));
+    overflow: hidden;
   }
 
   /* Content area within screens */
   .screen-content {
-    @apply flex flex-col min-h-screen w-full;
+    @apply flex flex-col w-full;
+    height: 100%;
   }
 
   /* Standard horizontal padding for content */

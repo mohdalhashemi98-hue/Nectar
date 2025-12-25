@@ -32,7 +32,7 @@ const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
   const showIndicator = pullDistance > 10 || isRefreshing;
   
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
       {/* Pull indicator */}
       <AnimatePresence>
         {showIndicator && (
@@ -71,10 +71,11 @@ const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
       <div
         ref={ref}
         {...handlers}
-        className="h-full overflow-y-auto"
+        className="h-full overflow-y-auto overscroll-contain"
         style={{
-          transform: isPulling || isRefreshing ? `translateY(${pullDistance}px)` : 'translateY(0)',
-          transition: isPulling ? 'none' : 'transform 0.3s ease-out'
+          transform: isPulling || isRefreshing ? `translateY(${pullDistance}px)` : undefined,
+          transition: isPulling ? 'none' : 'transform 0.3s ease-out',
+          WebkitOverflowScrolling: 'touch'
         }}
       >
         {/* Show skeleton during refresh if provided */}
