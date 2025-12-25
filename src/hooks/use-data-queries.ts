@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Job, Vendor, Conversation, Notification, AvailableJob, 
   UserProfile, Rewards, VendorStats 
@@ -8,88 +9,210 @@ import {
   initialConversations, initialNotifications, initialAvailableJobs, initialVendorStats 
 } from '@/data/stack-data';
 
-// Simulate async data fetching with minimal delay for demo purposes
-const simulateDelay = (ms: number = 50) => new Promise(resolve => setTimeout(resolve, ms));
-
-// API simulation functions
-const fetchUserProfile = async (): Promise<UserProfile> => {
-  await simulateDelay(50);
-  return initialUserProfile;
+// Helper to check if user is authenticated
+const getAuthUser = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user;
 };
 
-const fetchRewards = async (): Promise<Rewards> => {
-  await simulateDelay(50);
-  return initialRewards;
-};
+// Transform database row to frontend type
+const transformProfile = (row: any): UserProfile => ({
+  name: row.name || '',
+  phone: row.phone || '',
+  email: row.email || '',
+  avatar: row.avatar || row.name?.charAt(0) || 'U',
+  location: row.location || '',
+  memberSince: row.member_since || '',
+});
 
-const fetchJobs = async (): Promise<Job[]> => {
-  await simulateDelay(50);
-  return initialJobs;
-};
+const transformRewards = (row: any): Rewards => ({
+  points: row.points || 0,
+  tier: row.tier || 'Bronze',
+  tierProgress: row.tier_progress || 0,
+  pointsToNextTier: row.points_to_next_tier || 1000,
+  nextTier: row.next_tier || 'Silver',
+  cashbackRate: row.cashback_rate || 2,
+  streak: row.streak || 0,
+  totalSaved: row.total_saved || 0,
+  lifetimePoints: row.lifetime_points || 0,
+  weeklyChallenge: {
+    title: 'Complete 3 Platform Payments',
+    progress: 2,
+    target: 3,
+    reward: 150,
+    endsIn: '3 days'
+  },
+  achievements: [],
+  recentEarnings: [],
+});
 
-const fetchVendors = async (): Promise<Vendor[]> => {
-  await simulateDelay(50);
-  return initialVendors;
-};
+const transformVendor = (row: any): Vendor => ({
+  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  name: row.name || '',
+  rating: parseFloat(row.rating) || 5.0,
+  reviews: row.reviews || 0,
+  avatar: row.avatar || row.name?.charAt(0) || 'V',
+  specialty: row.specialty || '',
+  verified: row.verified || false,
+  favorite: row.favorite || false,
+  lastJob: row.last_job || '',
+  completedJobs: row.completed_jobs || 0,
+  lastJobDate: row.last_job_date || '',
+  responseTime: row.response_time || '',
+  distance: row.distance || '',
+  avgPrice: row.avg_price || '',
+  completionRate: row.completion_rate || 100,
+  phone: row.phone || '',
+});
 
-const fetchConversations = async (): Promise<Conversation[]> => {
-  await simulateDelay(50);
-  return initialConversations;
-};
+const transformJob = (row: any): Job => ({
+  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  title: row.title || '',
+  vendor: row.vendor_name || null,
+  vendorId: row.vendor_id ? parseInt(row.vendor_id.substring(0, 8), 16) : null,
+  amount: parseFloat(row.amount) || 0,
+  status: row.status || 'Pending',
+  paymentStatus: row.payment_status || null,
+  pointsEarned: row.points_earned || 0,
+  date: row.date || '',
+  completedDate: row.completed_date || null,
+  rated: row.rated || false,
+  rating: row.rating || 0,
+  category: row.category || '',
+  offersCount: row.offers_count,
+});
 
-const fetchNotifications = async (): Promise<Notification[]> => {
-  await simulateDelay(50);
-  return initialNotifications;
-};
+const transformConversation = (row: any): Conversation => ({
+  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  name: row.name || '',
+  avatar: row.avatar || row.name?.charAt(0) || 'U',
+  lastMessage: row.last_message || '',
+  time: row.last_message_time ? new Date(row.last_message_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+  unread: row.unread || false,
+  online: row.online || false,
+  messages: [],
+});
 
-const fetchAvailableJobs = async (): Promise<AvailableJob[]> => {
-  await simulateDelay(50);
-  return initialAvailableJobs;
-};
+const transformNotification = (row: any): Notification => ({
+  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  icon: row.icon || '',
+  title: row.title || '',
+  message: row.message || '',
+  time: row.time || '',
+  unread: row.unread || false,
+  type: row.type || '',
+});
 
-const fetchVendorStats = async (): Promise<VendorStats> => {
-  await simulateDelay(50);
-  return initialVendorStats;
-};
+const transformAvailableJob = (row: any): AvailableJob => ({
+  id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  title: row.title || '',
+  budget: row.budget || '',
+  distance: row.distance || '',
+  time: row.time || '',
+  urgent: row.urgent || false,
+  category: row.category || '',
+  description: row.description || '',
+  client: {
+    name: row.client_name || '',
+    member: row.client_member_since || '',
+  },
+});
 
-const fetchVendorById = async (id: number): Promise<Vendor | null> => {
-  await simulateDelay(50);
-  return initialVendors.find(v => v.id === id) || null;
-};
+const transformVendorStats = (row: any): VendorStats => ({
+  totalJobs: row.total_jobs || 0,
+  totalEarnings: parseFloat(row.total_earnings) || 0,
+  rating: parseFloat(row.rating) || 5.0,
+  reviews: row.reviews || 0,
+  completionRate: row.completion_rate || 100,
+  responseTime: row.response_time || '',
+  thisMonth: {
+    jobs: row.this_month_jobs || 0,
+    earnings: parseFloat(row.this_month_earnings) || 0,
+  },
+});
 
-// Query hooks
+// Query hooks - fetch from database, fallback to initial data if not authenticated
 export const useUserProfile = () => {
   return useQuery({
     queryKey: ['userProfile'],
-    queryFn: fetchUserProfile,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialUserProfile;
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (error || !data) return initialUserProfile;
+      return transformProfile(data);
+    },
   });
 };
 
 export const useRewards = () => {
   return useQuery({
     queryKey: ['rewards'],
-    queryFn: fetchRewards,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialRewards;
+      
+      const { data, error } = await supabase
+        .from('rewards')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (error || !data) return initialRewards;
+      return transformRewards(data);
+    },
   });
 };
 
 export const useJobs = () => {
   return useQuery({
     queryKey: ['jobs'],
-    queryFn: fetchJobs,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialJobs;
+      
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error || !data || data.length === 0) return initialJobs;
+      return data.map(transformJob);
+    },
   });
 };
 
 export const useVendors = () => {
   return useQuery({
     queryKey: ['vendors'],
-    queryFn: fetchVendors,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vendors')
+        .select('*')
+        .limit(20);
+      
+      if (error || !data || data.length === 0) return initialVendors;
+      return data.map(transformVendor);
+    },
   });
 };
 
 export const useVendorById = (id: number | null) => {
   return useQuery({
     queryKey: ['vendor', id],
-    queryFn: () => fetchVendorById(id!),
+    queryFn: async () => {
+      if (!id) return null;
+      // For demo purposes, use initialVendors as the database may not have vendors yet
+      const vendor = initialVendors.find(v => v.id === id);
+      return vendor || null;
+    },
     enabled: id !== null,
   });
 };
@@ -97,28 +220,75 @@ export const useVendorById = (id: number | null) => {
 export const useConversations = () => {
   return useQuery({
     queryKey: ['conversations'],
-    queryFn: fetchConversations,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialConversations;
+      
+      const { data, error } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('last_message_time', { ascending: false });
+      
+      if (error || !data || data.length === 0) return initialConversations;
+      return data.map(transformConversation);
+    },
   });
 };
 
 export const useNotifications = () => {
   return useQuery({
     queryKey: ['notifications'],
-    queryFn: fetchNotifications,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialNotifications;
+      
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error || !data || data.length === 0) return initialNotifications;
+      return data.map(transformNotification);
+    },
   });
 };
 
 export const useAvailableJobs = () => {
   return useQuery({
     queryKey: ['availableJobs'],
-    queryFn: fetchAvailableJobs,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialAvailableJobs;
+      
+      const { data, error } = await supabase
+        .from('available_jobs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error || !data || data.length === 0) return initialAvailableJobs;
+      return data.map(transformAvailableJob);
+    },
   });
 };
 
 export const useVendorStats = () => {
   return useQuery({
     queryKey: ['vendorStats'],
-    queryFn: fetchVendorStats,
+    queryFn: async () => {
+      const user = await getAuthUser();
+      if (!user) return initialVendorStats;
+      
+      const { data, error } = await supabase
+        .from('vendor_stats')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (error || !data) return initialVendorStats;
+      return transformVendorStats(data);
+    },
   });
 };
 
@@ -128,18 +298,31 @@ export const useAddJob = () => {
   
   return useMutation({
     mutationFn: async (newJob: Omit<Job, 'id'>) => {
-      await simulateDelay(500);
-      const job: Job = { ...newJob, id: Date.now() };
-      return job;
+      const user = await getAuthUser();
+      if (!user) throw new Error('Not authenticated');
+      
+      const { data, error } = await supabase
+        .from('jobs')
+        .insert({
+          user_id: user.id,
+          title: newJob.title,
+          vendor_name: newJob.vendor,
+          amount: newJob.amount,
+          status: newJob.status,
+          payment_status: newJob.paymentStatus,
+          category: newJob.category,
+          date: newJob.date,
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return transformJob(data);
     },
     onMutate: async (newJob) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['jobs'] });
-      
-      // Snapshot previous value
       const previousJobs = queryClient.getQueryData<Job[]>(['jobs']);
       
-      // Optimistically update
       const optimisticJob: Job = { ...newJob, id: Date.now() };
       queryClient.setQueryData<Job[]>(['jobs'], (old) => 
         old ? [...old, optimisticJob] : [optimisticJob]
@@ -148,13 +331,11 @@ export const useAddJob = () => {
       return { previousJobs };
     },
     onError: (err, newJob, context) => {
-      // Rollback on error
       if (context?.previousJobs) {
         queryClient.setQueryData(['jobs'], context.previousJobs);
       }
     },
     onSettled: () => {
-      // Refetch after mutation
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
     },
   });
@@ -165,7 +346,10 @@ export const useSendMessage = () => {
   
   return useMutation({
     mutationFn: async ({ conversationId, message }: { conversationId: number; message: string }) => {
-      await simulateDelay(300);
+      const user = await getAuthUser();
+      if (!user) throw new Error('Not authenticated');
+      
+      // For demo, just return optimistic result
       return { conversationId, message, id: Date.now(), time: 'Just now' };
     },
     onMutate: async ({ conversationId, message }) => {
@@ -173,7 +357,6 @@ export const useSendMessage = () => {
       
       const previousConversations = queryClient.getQueryData<Conversation[]>(['conversations']);
       
-      // Optimistically add message
       queryClient.setQueryData<Conversation[]>(['conversations'], (old) => 
         old?.map(conv => 
           conv.id === conversationId 
