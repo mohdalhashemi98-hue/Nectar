@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/stores/app-store';
 import { ScreenType } from '@/types/stack';
 
@@ -33,8 +33,15 @@ const screenToRoute: Record<ScreenType, string> = {
   'view-offers': '/offers',
 };
 
+// Map routes back to screen types
+const routeToScreen: Record<string, ScreenType> = Object.entries(screenToRoute).reduce(
+  (acc, [screen, route]) => ({ ...acc, [route]: screen as ScreenType }),
+  {}
+);
+
 export const useAppNavigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { 
     pushHistory, 
     popHistory, 
@@ -44,14 +51,12 @@ export const useAppNavigation = () => {
   } = useAppStore();
 
   const navigateTo = useCallback((screen: ScreenType) => {
-    const currentPath = window.location.pathname;
     const route = screenToRoute[screen] || '/';
+    const currentPath = location.pathname;
     
     if (currentPath !== route) {
       // Get current screen type from path
-      const currentScreen = Object.entries(screenToRoute).find(
-        ([, path]) => path === currentPath
-      )?.[0] as ScreenType | undefined;
+      const currentScreen = routeToScreen[currentPath] as ScreenType | undefined;
       
       if (currentScreen) {
         pushHistory(currentScreen);
@@ -59,20 +64,19 @@ export const useAppNavigation = () => {
       setNavigationDirection('forward');
       navigate(route);
     }
-  }, [navigate, pushHistory, setNavigationDirection]);
+  }, [navigate, location.pathname, pushHistory, setNavigationDirection]);
 
   const goBack = useCallback(() => {
     setNavigationDirection('back');
-    const lastScreen = popHistory();
+    popHistory();
     
-    if (lastScreen) {
-      const route = screenToRoute[lastScreen] || '/';
-      navigate(route);
+    if (navigationHistory.length > 0) {
+      navigate(-1);
     } else {
       // Go to appropriate home
       navigate(userType === 'consumer' ? '/consumer' : userType === 'vendor' ? '/vendor' : '/');
     }
-  }, [navigate, popHistory, setNavigationDirection, userType]);
+  }, [navigate, popHistory, setNavigationDirection, userType, navigationHistory.length]);
 
   const canGoBack = useCallback(() => {
     return navigationHistory.length > 0;
