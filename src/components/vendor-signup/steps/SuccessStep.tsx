@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import confetti from 'canvas-confetti';
 
 interface SuccessStepProps {
-  primaryTrade: string;
+  primaryTrades: string[];
   onGoToDashboard: () => void;
   onCompleteProfile: () => void;
 }
 
-const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrade, onGoToDashboard, onCompleteProfile }) => {
+const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrades, onGoToDashboard, onCompleteProfile }) => {
   const hasPlayedConfetti = useRef(false);
 
   useEffect(() => {
@@ -105,15 +105,19 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrade, onGoToDashboard
           You're now ready to receive job requests
         </motion.p>
 
-        {/* Trade Badge */}
+        {/* Trade Badges */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.7 }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-8"
+          className="flex flex-wrap justify-center gap-2 mb-8"
         >
-          <Briefcase className="w-4 h-4 text-primary" />
-          <span className="font-medium text-primary">{primaryTrade} Professional</span>
+          {primaryTrades.map((trade) => (
+            <div key={trade} className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
+              <Briefcase className="w-4 h-4 text-primary" />
+              <span className="font-medium text-primary text-sm">{trade}</span>
+            </div>
+          ))}
         </motion.div>
 
         {/* Stats Preview */}

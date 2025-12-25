@@ -47,8 +47,13 @@ const VendorSignupFlow: React.FC = () => {
     setCurrentStep(step);
   };
 
-  const handleTradeSelect = (trade: string) => {
-    updateData({ primaryTrade: trade });
+  const handleTradeToggle = (trade: string) => {
+    const currentTrades = data.primaryTrades;
+    if (currentTrades.includes(trade)) {
+      updateData({ primaryTrades: currentTrades.filter(t => t !== trade) });
+    } else {
+      updateData({ primaryTrades: [...currentTrades, trade] });
+    }
   };
 
   const handleAccountCreated = async (newUserId: string) => {
@@ -61,7 +66,7 @@ const VendorSignupFlow: React.FC = () => {
       await supabase.from('vendor_profiles').upsert({
         user_id: newUserId,
         business_name: data.name || 'My Business',
-        service_category: data.primaryTrade,
+        service_category: data.primaryTrades.join(', '),
         onboarding_step: 3,
         onboarding_completed: false,
       });
@@ -161,8 +166,8 @@ const VendorSignupFlow: React.FC = () => {
         >
           {currentStep === 1 && (
             <HookStep
-              selectedTrade={data.primaryTrade}
-              onTradeSelect={handleTradeSelect}
+              selectedTrades={data.primaryTrades}
+              onTradeToggle={handleTradeToggle}
               onNext={() => goToStep(2)}
             />
           )}
@@ -204,7 +209,7 @@ const VendorSignupFlow: React.FC = () => {
           
           {currentStep === 5 && (
             <SuccessStep
-              primaryTrade={data.primaryTrade}
+              primaryTrades={data.primaryTrades}
               onGoToDashboard={handleGoToDashboard}
               onCompleteProfile={handleCompleteProfile}
             />

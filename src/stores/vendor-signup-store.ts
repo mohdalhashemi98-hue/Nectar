@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 export interface VendorSignupData {
   // Step 1: Hook
-  primaryTrade: string;
+  primaryTrades: string[];
   
   // Step 2: Account
   name: string;
@@ -36,7 +36,7 @@ interface VendorSignupState {
 }
 
 const initialData: VendorSignupData = {
-  primaryTrade: '',
+  primaryTrades: [],
   name: '',
   email: '',
   phone: '',
