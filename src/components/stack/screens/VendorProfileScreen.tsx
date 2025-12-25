@@ -260,7 +260,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             className="bg-card rounded-3xl p-5 border border-border relative overflow-hidden"
             style={{ boxShadow: 'var(--shadow-lg)' }}
           >
-            <StackPattern opacity="0.03" className="absolute inset-0" />
+            <StackPattern opacity="0.03" color="auto" className="absolute inset-0" />
             <div className="flex items-start gap-4">
               <div className="w-18 h-18 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-3xl font-bold text-primary-foreground relative">
                 {vendor.avatar}
