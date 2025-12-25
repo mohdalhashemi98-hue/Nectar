@@ -27,6 +27,8 @@ interface ConsumerHomeScreenProps {
   onSelectVendor: (vendor: Vendor) => void;
   onSelectJob: (job: Job) => void;
   onResetRequestForm: () => void;
+  onToggleFavorite?: (vendor: Vendor) => void;
+  favoriteIds?: Set<string>;
 }
 
 const statusColors: Record<string, { bg: string; text: string }> = {
@@ -50,7 +52,9 @@ const ConsumerHomeScreen = ({
   onSelectCategory,
   onSelectVendor,
   onSelectJob,
-  onResetRequestForm
+  onResetRequestForm,
+  onToggleFavorite,
+  favoriteIds = new Set(),
 }: ConsumerHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showReviewBanner, setShowReviewBanner] = useState(true);
@@ -580,7 +584,28 @@ const ConsumerHomeScreen = ({
                           )}
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                      <div className="flex items-center gap-2">
+                        {onToggleFavorite && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onToggleFavorite(vendor);
+                            }}
+                            className={`p-2 rounded-full transition-all ${
+                              favoriteIds.has(String(vendor.id))
+                                ? 'text-red-500 bg-red-50 dark:bg-red-500/10'
+                                : 'text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
+                            }`}
+                          >
+                            <Heart 
+                              className={`w-5 h-5 transition-all ${
+                                favoriteIds.has(String(vendor.id)) ? 'fill-current' : ''
+                              }`} 
+                            />
+                          </button>
+                        )}
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                      </div>
                     </div>
                   </motion.button>
                 ))
