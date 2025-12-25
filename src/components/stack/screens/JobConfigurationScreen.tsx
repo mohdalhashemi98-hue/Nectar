@@ -45,6 +45,13 @@ interface JobConfigurationScreenProps {
   onBack: () => void;
   onNavigate: (screen: ScreenType) => void;
   onSubmit: () => void;
+  onPostJob: (jobData: {
+    title: string;
+    description: string;
+    category: string;
+    budget: string;
+    urgency: string;
+  }) => Promise<void>;
 }
 
 const urgencyOptions = [
@@ -80,7 +87,8 @@ const JobConfigurationScreen = ({
   selectedSubService,
   onBack,
   onNavigate,
-  onSubmit
+  onSubmit,
+  onPostJob
 }: JobConfigurationScreenProps) => {
   const [location, setLocation] = useState('Dubai Marina, Dubai');
   const [showMarketInsights, setShowMarketInsights] = useState(false);
@@ -123,7 +131,7 @@ const JobConfigurationScreen = ({
     setRequestDetails({ ...requestDetails, photos: newPhotos });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!requestDetails.description) {
       toast.error('Please add a description of your requirements');
       return;
@@ -134,17 +142,31 @@ const JobConfigurationScreen = ({
       return;
     }
     
-    if (requestDetails.bookingType === 'subscription') {
-      toast.success('Subscription booking created!', {
-        description: `${requestDetails.subscriptionFrequency} ${selectedSubService || selectedCategory} scheduled`
+    try {
+      // Post the job to database
+      await onPostJob({
+        title: selectedSubService || selectedCategory || 'Service Request',
+        description: requestDetails.description,
+        category: selectedCategory || '',
+        budget: requestDetails.budget || 'Flexible',
+        urgency: requestDetails.urgency,
       });
-    } else {
-      toast.success('Job request submitted!', {
-        description: 'Verified professionals will send you quotes shortly'
-      });
+      
+      if (requestDetails.bookingType === 'subscription') {
+        toast.success('Subscription booking created!', {
+          description: `${requestDetails.subscriptionFrequency} ${selectedSubService || selectedCategory} scheduled`
+        });
+      } else {
+        toast.success('Job posted successfully!', {
+          description: 'Vendors can now see your request and send quotes'
+        });
+      }
+      onSubmit();
+      onNavigate('consumer-home');
+    } catch (error) {
+      console.error('Failed to post job:', error);
+      toast.error('Failed to post job. Please try again.');
     }
-    onSubmit();
-    onNavigate('consumer-home');
   };
 
   return (
