@@ -5,6 +5,7 @@ import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
 import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon, getCategoryIcon } from '../utils/categoryIcons';
+import { ThemeToggle } from '@/components/theme-toggle';
 import stackLogo from '@/assets/stack-logo.png';
 import BottomNav from '../BottomNav';
 
@@ -88,6 +89,7 @@ const ConsumerHomeScreen = ({
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <button 
                 onClick={() => onNavigate('help')} 
                 className="p-3 bg-secondary rounded-3xl hover:bg-secondary/80 transition-colors"
