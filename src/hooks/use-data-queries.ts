@@ -347,6 +347,76 @@ export const useAddJob = () => {
   });
 };
 
+// Post a job and create an available_job entry for vendors to see
+export const usePostJob = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (jobData: {
+      title: string;
+      description: string;
+      category: string;
+      budget: string;
+      urgency: string;
+    }) => {
+      const user = await getAuthUser();
+      if (!user) throw new Error('Not authenticated');
+      
+      // Get user profile for client info
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name, member_since')
+        .eq('user_id', user.id)
+        .single();
+      
+      // Create the job
+      const { data: job, error: jobError } = await supabase
+        .from('jobs')
+        .insert({
+          user_id: user.id,
+          title: jobData.title,
+          description: jobData.description,
+          category: jobData.category,
+          budget: jobData.budget,
+          urgency: jobData.urgency,
+          status: 'Pending',
+        })
+        .select()
+        .single();
+      
+      if (jobError) throw jobError;
+      
+      // Create the available_job entry for vendors
+      const { error: availableError } = await supabase
+        .from('available_jobs')
+        .insert({
+          job_id: job.id,
+          title: jobData.title,
+          description: jobData.description,
+          category: jobData.category,
+          budget: jobData.budget,
+          urgent: jobData.urgency === 'urgent' || jobData.urgency === 'today',
+          client_name: profile?.name || 'Anonymous',
+          client_member_since: profile?.member_since || new Date().getFullYear().toString(),
+          time: 'Just now',
+          distance: '2.5 km', // Would be calculated from location in real app
+        });
+      
+      if (availableError) {
+        console.error('Failed to create available job:', availableError);
+        // Don't throw - the job was created, just the available_job failed
+      }
+      
+      return transformJob(job);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['availableJobs'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+};
+
 export const useUpdateJobStatus = () => {
   const queryClient = useQueryClient();
   
