@@ -89,20 +89,46 @@ const StackApp = () => {
   };
 
   // Animation variants for screen transitions
-  const screenVariants = {
+  const slideVariants = {
     enter: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '100%' : '-100%',
-      opacity: 0,
+      x: direction === 'forward' ? '100%' : '-30%',
+      opacity: direction === 'forward' ? 0 : 0.5,
+      scale: direction === 'forward' ? 1 : 0.95,
     }),
     center: {
       x: 0,
       opacity: 1,
+      scale: 1,
     },
     exit: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '-100%' : '100%',
-      opacity: 0,
+      x: direction === 'forward' ? '-30%' : '100%',
+      opacity: direction === 'forward' ? 0.5 : 0,
+      scale: direction === 'forward' ? 0.95 : 1,
     }),
   };
+
+  // Special fade-scale variant for modal-like screens
+  const isModalScreen = ['review', 'payment', 'notifications', 'help'].includes(currentScreen);
+  
+  const fadeScaleVariants = {
+    enter: {
+      opacity: 0,
+      scale: 0.95,
+      y: 20,
+    },
+    center: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      y: 20,
+    },
+  };
+
+  const screenVariants = isModalScreen ? fadeScaleVariants : slideVariants;
 
   const resetRequestForm = () => {
     setRequestDetails({
@@ -569,9 +595,15 @@ const StackApp = () => {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
+          transition={isModalScreen ? {
+            type: 'spring',
+            stiffness: 400,
+            damping: 35,
+            opacity: { duration: 0.25 },
+          } : {
+            x: { type: 'spring', stiffness: 350, damping: 32 },
+            opacity: { duration: 0.25 },
+            scale: { duration: 0.3 },
           }}
           className="w-full h-full"
         >
