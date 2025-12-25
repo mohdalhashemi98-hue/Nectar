@@ -469,3 +469,34 @@ export const useToggleFavorite = () => {
     },
   });
 };
+
+// ============= System Notifications =============
+
+export const useSendSystemNotification = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (payload: {
+      type: 'job_status' | 'quote_received' | 'message' | 'job_completed' | 'payment' | 'system';
+      title: string;
+      message: string;
+      icon?: string;
+    }) => {
+      const user = await getAuthUser();
+      if (!user) throw new Error('Not authenticated');
+      
+      const response = await supabase.functions.invoke('send-notification', {
+        body: {
+          user_id: user.id,
+          ...payload,
+        },
+      });
+      
+      if (response.error) throw response.error;
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+};
