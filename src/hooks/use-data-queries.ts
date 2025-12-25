@@ -204,16 +204,22 @@ export const useVendors = () => {
   });
 };
 
-export const useVendorById = (id: number | null) => {
+export const useVendorById = (id: string | null) => {
   return useQuery({
     queryKey: ['vendor', id],
     queryFn: async () => {
       if (!id) return null;
-      // For demo purposes, use initialVendors as the database may not have vendors yet
-      const vendor = initialVendors.find(v => v.id === id);
-      return vendor || null;
+      
+      const { data, error } = await supabase
+        .from('vendors')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      
+      if (error || !data) return null;
+      return transformVendor(data);
     },
-    enabled: id !== null,
+    enabled: !!id,
   });
 };
 
