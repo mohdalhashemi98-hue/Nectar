@@ -2,35 +2,37 @@ import { motion } from 'framer-motion';
 import { 
   ArrowLeft, Star, Clock, CheckCircle, MessageCircle, User, 
   Briefcase, Shield, TrendingUp, ChevronRight, Award, Zap,
-  DollarSign, ThumbsUp
+  DollarSign, ThumbsUp, Loader2, FileX
 } from 'lucide-react';
 import { Job, Offer, ScreenType } from '@/types/stack';
-import { initialOffers, initialVendors } from '@/data/stack-data';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface QuoteManagementScreenProps {
   job: Job;
+  offers?: Offer[];
+  isLoading?: boolean;
   onBack: () => void;
   onNavigate: (screen: ScreenType) => void;
   onSelectVendorId: (vendorId: number) => void;
   onStartChatWithVendor: (vendorId: number) => void;
   onAcceptOffer: (offer: Offer) => void;
+  onRejectOffer?: (offer: Offer) => void;
 }
 
 const QuoteManagementScreen = ({ 
   job, 
+  offers = [],
+  isLoading = false,
   onBack, 
   onNavigate, 
   onSelectVendorId,
   onStartChatWithVendor,
-  onAcceptOffer 
+  onAcceptOffer,
+  onRejectOffer
 }: QuoteManagementScreenProps) => {
   const [selectedOffers, setSelectedOffers] = useState<number[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'compare'>('list');
-  
-  // Get offers for this job (using mock data)
-  const offers = initialOffers;
   
   const toggleOfferSelection = (offerId: number) => {
     setSelectedOffers(prev => 
@@ -60,6 +62,68 @@ const QuoteManagementScreen = ({
     onStartChatWithVendor(vendorId);
     onNavigate('chat');
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-3" />
+          <p className="text-muted-foreground">Loading quotes...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (offers.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
+          
+          <div className="relative z-10">
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-4"
+            >
+              <button 
+                onClick={onBack} 
+                className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="flex-1">
+                <h1 className="font-display text-xl font-bold">Quotes</h1>
+                <p className="opacity-60 text-sm">{job.title}</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center py-20 px-6">
+          <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-4">
+            <FileX className="w-10 h-10 text-muted-foreground" />
+          </div>
+          <h3 className="font-semibold text-foreground text-lg mb-2">No Quotes Yet</h3>
+          <p className="text-muted-foreground text-center text-sm mb-6">
+            Vendors haven't submitted quotes for this job yet. Check back soon!
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onBack}
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-semibold"
+          >
+            Go Back
+          </motion.button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-6">
