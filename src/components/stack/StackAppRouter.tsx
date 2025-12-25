@@ -35,6 +35,7 @@ const CompanyProfileScreen = lazy(() => import('@/features/screens/CompanyProfil
 const HelpScreen = lazy(() => import('@/features/screens/HelpScreen'));
 const TransactionsScreen = lazy(() => import('@/features/screens/TransactionsScreen'));
 const VendorWorkScreen = lazy(() => import('@/features/vendor/VendorWorkScreen'));
+const VendorOnboarding = lazy(() => import('@/features/vendor/VendorOnboarding'));
 
 // Map routes to screen types for animation logic
 const routeToScreen: Record<string, ScreenType> = {
@@ -376,6 +377,11 @@ const StackAppRouter: React.FC = () => {
                 <Route path="/vendor-work" element={
                   <ProtectedRoute allowedUserTypes={['vendor']}>
                     <VendorWorkScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/vendor/onboarding" element={
+                  <ProtectedRoute allowedUserTypes={['vendor']}>
+                    <VendorOnboarding />
                   </ProtectedRoute>
                 } />
                 

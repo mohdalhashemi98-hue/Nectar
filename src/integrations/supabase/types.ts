@@ -378,6 +378,54 @@ export type Database = {
           },
         ]
       }
+      vendor_profiles: {
+        Row: {
+          bio: string | null
+          business_name: string
+          certifications: Json | null
+          created_at: string | null
+          id: string
+          onboarding_completed: boolean | null
+          onboarding_step: number | null
+          portfolio: Json | null
+          service_category: string | null
+          skills: Json | null
+          updated_at: string | null
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          business_name?: string
+          certifications?: Json | null
+          created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
+          portfolio?: Json | null
+          service_category?: string | null
+          skills?: Json | null
+          updated_at?: string | null
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          business_name?: string
+          certifications?: Json | null
+          created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
+          portfolio?: Json | null
+          service_category?: string | null
+          skills?: Json | null
+          updated_at?: string | null
+          user_id?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       vendor_stats: {
         Row: {
           completion_rate: number | null
