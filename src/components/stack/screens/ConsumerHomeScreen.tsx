@@ -6,7 +6,7 @@ import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon, getCategoryIcon } from '../utils/categoryIcons';
 import { ThemeToggle } from '@/components/theme-toggle';
-import stackLogo from '@/assets/stack-logo.png';
+import StackLogo from '@/components/StackLogo';
 import BottomNav from '../BottomNav';
 
 interface ConsumerHomeScreenProps {
@@ -80,7 +80,7 @@ const ConsumerHomeScreen = ({
             className="flex items-center justify-between mb-5"
           >
             <div className="flex items-center gap-3">
-              <img src={stackLogo} alt="Stack" className="w-10 h-10 object-contain" />
+              <StackLogo size={40} />
               <div>
                 <h1 className="font-display text-2xl font-bold text-foreground mb-0.5">
                   Hi, {userProfile.name.split(' ')[0]}
