@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MessageCircle, Phone, Mail, ChevronDown, Search, HelpCircle, FileText, Shield, CreditCard } from 'lucide-react';
 import { ScreenType } from '@/types/stack';
+import StackPattern from '../StackPattern';
 
 interface HelpScreenProps {
   onNavigate: (screen: ScreenType) => void;
@@ -88,7 +89,8 @@ const HelpScreen = ({ onNavigate }: HelpScreenProps) => {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-card border-b border-border px-4 py-4">
+      <div className="bg-card border-b border-border px-4 py-4 relative overflow-hidden">
+        <StackPattern opacity="0.02" className="absolute inset-0" />
         <div className="flex items-center gap-4 mb-4">
           <button
             onClick={() => onNavigate('consumer-home')}

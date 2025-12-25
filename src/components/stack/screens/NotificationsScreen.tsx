@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Briefcase, Gift, MessageCircle, Flame, CheckCircle, CreditCard, Bell, Clock } from 'lucide-react';
 import { ScreenType, Notification } from '@/types/stack';
 import BottomNav from '../BottomNav';
+import StackPattern from '../StackPattern';
 
 interface NotificationsScreenProps {
   notifications: Notification[];
@@ -68,6 +69,7 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSe
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground relative overflow-hidden">
+        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         
         <div className="px-4 py-5 relative z-10">

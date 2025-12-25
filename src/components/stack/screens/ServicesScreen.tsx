@@ -5,6 +5,7 @@ import { ScreenType, Category, SubService } from '@/types/stack';
 import { categories } from '@/data/stack-data';
 import { getCategoryIcon } from '../utils/categoryIcons';
 import BottomNav from '../BottomNav';
+import StackPattern from '../StackPattern';
 
 interface ServicesScreenProps {
   onNavigate: (screen: ScreenType) => void;
@@ -78,6 +79,7 @@ const ServicesScreen = ({
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
+        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
         
         <motion.div 

@@ -10,6 +10,7 @@ import {
 import { Vendor, ScreenType, Conversation } from '@/types/stack';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import StackPattern from '../StackPattern';
 
 interface VendorProfileScreenProps {
   vendor: Vendor;
@@ -256,9 +257,10 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-card rounded-3xl p-5 border border-border"
+            className="bg-card rounded-3xl p-5 border border-border relative overflow-hidden"
             style={{ boxShadow: 'var(--shadow-lg)' }}
           >
+            <StackPattern opacity="0.03" className="absolute inset-0" />
             <div className="flex items-start gap-4">
               <div className="w-18 h-18 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-3xl font-bold text-primary-foreground relative">
                 {vendor.avatar}
