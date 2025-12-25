@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Briefcase, ChevronRight } from 'lucide-react';
+import { Search, Briefcase, Check, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -117,14 +117,16 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrades, onTradeToggle, onNe
                         <p className="text-xs text-muted-foreground">{trade.jobs.toLocaleString()} jobs available</p>
                       </div>
                     </div>
-                    {selectedTrades.includes(trade.name) && (
+                    {selectedTrades.includes(trade.name) ? (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         className="w-6 h-6 rounded-full bg-primary flex items-center justify-center"
                       >
-                        <ChevronRight className="w-4 h-4 text-primary-foreground" />
+                        <Check className="w-4 h-4 text-primary-foreground" />
                       </motion.div>
+                    ) : (
+                      <div className="w-6 h-6 rounded-full border-2 border-muted-foreground/30" />
                     )}
                   </button>
                 ))
