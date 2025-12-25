@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
@@ -8,6 +8,8 @@ import { CategoryIcon, getCategoryIcon } from '../utils/categoryIcons';
 import { ThemeToggle } from '@/components/theme-toggle';
 import StackLogo from '@/components/StackLogo';
 import BottomNav from '../BottomNav';
+import PullToRefresh from '../PullToRefresh';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 
 interface ConsumerHomeScreenProps {
   userProfile: { name: string };
@@ -48,6 +50,15 @@ const ConsumerHomeScreen = ({
 }: ConsumerHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showReviewBanner, setShowReviewBanner] = useState(true);
+
+  const handleRefresh = useCallback(async () => {
+    // Simulate refresh - in a real app this would refetch data
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }, []);
+
+  const { pullDistance, isRefreshing, isPulling, handlers, containerRef } = usePullToRefresh({
+    onRefresh: handleRefresh
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -165,7 +176,15 @@ const ConsumerHomeScreen = ({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 pb-24 space-y-6">
+      <PullToRefresh
+        ref={containerRef}
+        pullDistance={pullDistance}
+        isRefreshing={isRefreshing}
+        isPulling={isPulling}
+        handlers={handlers}
+        className="flex-1"
+      >
+        <div className="px-4 py-5 pb-24 space-y-6">
         {/* Review Reminder Banner */}
         <AnimatePresence>
           {showReviewBanner && pendingReviewJobs.length > 0 && (
@@ -396,7 +415,8 @@ const ConsumerHomeScreen = ({
             </div>
           </motion.div>
         )}
-      </div>
+        </div>
+      </PullToRefresh>
 
       {/* Floating Action Button */}
       <motion.button
