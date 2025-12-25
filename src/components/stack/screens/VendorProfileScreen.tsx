@@ -277,7 +277,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
                 {vendor.verified && (
                   <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-verified/10 rounded-full mb-2">
                     <Shield className="w-3 h-3 text-verified" />
-                    <span className="text-[10px] font-bold text-verified">NECTAR VERIFIED</span>
+                    <span className="text-[10px] font-bold text-verified">STACK VERIFIED</span>
                   </div>
                 )}
                 
@@ -713,7 +713,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             {vendor.verified && (
               <div className="flex items-center gap-2 bg-verified/10 px-3 py-2 rounded-xl border border-verified/20">
                 <Shield className="w-4 h-4 text-verified" />
-                <span className="text-sm font-medium text-verified">Nectar Verified</span>
+                <span className="text-sm font-medium text-verified">Stack Verified</span>
               </div>
             )}
             <div className="flex items-center gap-2 bg-primary/10 px-3 py-2 rounded-xl border border-primary/20">

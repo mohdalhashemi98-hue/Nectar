@@ -107,7 +107,7 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
               <span className="text-xs text-muted-foreground">Points Earned</span>
             </div>
             <p className="text-2xl font-bold text-primary">{totalPointsEarned}</p>
-            <p className="text-xs text-muted-foreground">Nectar Points</p>
+            <p className="text-xs text-muted-foreground">Stack Points</p>
           </motion.div>
         </div>
 
