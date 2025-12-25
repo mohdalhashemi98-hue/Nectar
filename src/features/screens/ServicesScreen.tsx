@@ -5,9 +5,9 @@ import Original from '@/components/stack/screens/ServicesScreen';
 
 const ServicesScreen: React.FC = () => {
   const { setSelectedCategory, setSelectedSubService, resetRequestForm } = useAppStore();
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, goBack } = useAppNavigation();
 
-  return <Original onNavigate={navigateTo} onSelectCategory={setSelectedCategory} onSelectSubService={(cat, sub) => { setSelectedCategory(cat); setSelectedSubService(sub); }} onResetRequestForm={resetRequestForm} />;
+  return <Original onNavigate={navigateTo} onBack={goBack} onSelectCategory={setSelectedCategory} onSelectSubService={(cat, sub) => { setSelectedCategory(cat); setSelectedSubService(sub); }} onResetRequestForm={resetRequestForm} />;
 };
 
 export default ServicesScreen;

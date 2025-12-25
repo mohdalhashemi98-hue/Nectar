@@ -3,9 +3,9 @@ import { useAppNavigation } from '@/hooks/use-app-navigation';
 import OriginalVendorScheduleScreen from '@/components/stack/screens/VendorScheduleScreen';
 
 const VendorScheduleScreen: React.FC = () => {
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, goBack } = useAppNavigation();
 
-  return <OriginalVendorScheduleScreen onNavigate={navigateTo} />;
+  return <OriginalVendorScheduleScreen onNavigate={navigateTo} onBack={goBack} />;
 };
 
 export default VendorScheduleScreen;
