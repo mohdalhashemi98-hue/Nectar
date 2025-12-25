@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles, Rocket, LogIn } from 'lucide-react';
+import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles, Rocket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -145,7 +145,7 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => handleSelectWithFeedback('vendor', onSelectUserType)} className="card-gradient-animated group w-full text-primary-foreground py-5 px-5 transition-all duration-300">
+      }} onClick={handleLogin} className="card-gradient-animated group w-full text-primary-foreground py-5 px-5 transition-all duration-300">
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center">
@@ -153,37 +153,24 @@ const WelcomeScreen = ({
               </div>
               <div className="text-left">
                 <div className="font-display text-xl font-bold">I'm a Pro</div>
-                <div className="text-sm opacity-80">Find jobs & earn money</div>
+                <div className="text-sm opacity-80">Sign in to find jobs</div>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 opacity-80 group-hover:translate-x-1 transition-all duration-300" />
           </div>
         </motion.button>
         
-        {/* Become a Pro & Login Links */}
-        <div className="flex flex-col gap-2 mt-4">
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            onClick={handleBecomeAPro}
-            className="w-full py-3 text-center text-primary font-medium hover:underline flex items-center justify-center gap-2"
-          >
-            <Rocket className="w-4 h-4" />
-            New here? Become a Pro today
-          </motion.button>
-          
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            onClick={handleLogin}
-            className="w-full py-2 text-center text-muted-foreground hover:text-foreground font-medium flex items-center justify-center gap-2 transition-colors"
-          >
-            <LogIn className="w-4 h-4" />
-            Already have an account? Sign in
-          </motion.button>
-        </div>
+        {/* Become a Pro Link */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          onClick={handleBecomeAPro}
+          className="w-full py-3 text-center text-primary font-medium hover:underline flex items-center justify-center gap-2"
+        >
+          <Rocket className="w-4 h-4" />
+          New here? Become a Pro today
+        </motion.button>
       </motion.div>
 
       <motion.div initial={{
