@@ -539,78 +539,67 @@ const ConsumerHomeScreen = ({
               )}
             </AnimatePresence>
 
-            {/* Vendor List */}
-            <div className="space-y-3">
+            {/* Vendor Carousel */}
+            <div className="-mx-4">
               {sortedVendors.length > 0 ? (
-                sortedVendors.slice(0, 6).map((vendor) => (
-                  <motion.button
-                    key={vendor.id}
-                    whileHover={{ y: -2 }}
-                    onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
-                    className="card-interactive w-full p-4 text-left"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="avatar-primary w-14 h-14 text-lg">
-                          {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                        </div>
-                        {vendor.verified && (
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                            <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
+                <div className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide snap-x snap-mandatory">
+                  {sortedVendors.slice(0, 8).map((vendor) => (
+                    <motion.button
+                      key={vendor.id}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
+                      className="flex-shrink-0 w-44 bg-card border border-border rounded-2xl p-4 text-left snap-start hover:border-primary/30 transition-all"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <div className="relative mb-3">
+                          <div className="avatar-primary w-16 h-16 text-lg">
+                            {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                           </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-foreground truncate">{vendor.name}</h4>
                           {vendor.verified && (
-                            <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full whitespace-nowrap">
-                              Verified
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">{vendor.specialty}</p>
-                        <div className="flex items-center gap-3 text-sm">
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 text-primary fill-primary" />
-                            <span className="font-semibold">{vendor.rating}</span>
-                            <span className="text-muted-foreground">({vendor.reviews})</span>
-                          </div>
-                          {vendor.distance && (
-                            <div className="flex items-center gap-1 text-muted-foreground">
-                              <MapPin className="w-3.5 h-3.5" />
-                              <span>{vendor.distance}</span>
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                              <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
                             </div>
                           )}
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
+                        <h4 className="font-semibold text-foreground text-sm truncate w-full">{vendor.name}</h4>
+                        <p className="text-xs text-muted-foreground mb-2 truncate w-full">{vendor.specialty}</p>
+                        <div className="flex items-center gap-1 text-sm mb-2">
+                          <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+                          <span className="font-semibold text-foreground">{vendor.rating}</span>
+                          <span className="text-muted-foreground text-xs">({vendor.reviews})</span>
+                        </div>
+                        {vendor.distance && (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <MapPin className="w-3 h-3" />
+                            <span>{vendor.distance}</span>
+                          </div>
+                        )}
                         {onToggleFavorite && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               onToggleFavorite(vendor);
                             }}
-                            className={`p-2 rounded-full transition-all ${
+                            className={`mt-2 p-1.5 rounded-full transition-all ${
                               favoriteIds.has(String(vendor.id))
                                 ? 'text-red-500 bg-red-50 dark:bg-red-500/10'
                                 : 'text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
                             }`}
                           >
                             <Heart 
-                              className={`w-5 h-5 transition-all ${
+                              className={`w-4 h-4 transition-all ${
                                 favoriteIds.has(String(vendor.id)) ? 'fill-current' : ''
                               }`} 
                             />
                           </button>
                         )}
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </div>
-                    </div>
-                  </motion.button>
-                ))
+                    </motion.button>
+                  ))}
+                </div>
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-muted-foreground px-4">
                   <p className="text-sm">No pros match your filters</p>
                   <button 
                     onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
