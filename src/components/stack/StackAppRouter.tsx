@@ -157,10 +157,19 @@ const StackAppRouter: React.FC = () => {
 
   // Swipe progress tracking
   const dragX = useMotionValue(0);
-  const swipeProgress = useTransform(dragX, [0, 150], [0, 1]);
-  const indicatorOpacity = useTransform(dragX, [0, 50, 150], [0, 0.8, 1]);
-  const indicatorScale = useTransform(dragX, [0, 100, 150], [0.5, 0.9, 1]);
-  const shadowOpacity = useTransform(dragX, [0, 150], [0, 0.3]);
+  const swipeProgress = useTransform(dragX, [0, 150], [0, 1], { clamp: true });
+  const indicatorOpacity = useTransform(dragX, (x) => {
+    const val = Math.min(1, Math.max(0, x / 150));
+    return isNaN(val) ? 0 : val;
+  });
+  const indicatorScale = useTransform(dragX, (x) => {
+    const val = 0.5 + (Math.min(150, Math.max(0, x)) / 150) * 0.5;
+    return isNaN(val) ? 0.5 : val;
+  });
+  const shadowOpacity = useTransform(dragX, (x) => {
+    const val = Math.min(0.3, Math.max(0, (x / 150) * 0.3));
+    return isNaN(val) ? 0 : val;
+  });
 
   const handleDragEnd = useCallback((event: any, info: any) => {
     const threshold = 100;
