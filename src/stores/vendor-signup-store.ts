@@ -75,6 +75,22 @@ export const useVendorSignupStore = create<VendorSignupState>()(
     }),
     {
       name: 'vendor-signup-storage',
+      // Merge persisted state with initial data to handle schema changes
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as Partial<VendorSignupState>;
+        return {
+          ...currentState,
+          ...persisted,
+          data: {
+            ...initialData,
+            ...(persisted.data || {}),
+            // Ensure arrays are always arrays
+            primaryTrades: Array.isArray(persisted.data?.primaryTrades) 
+              ? persisted.data.primaryTrades 
+              : [],
+          },
+        };
+      },
     }
   )
 );
