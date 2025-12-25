@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles, Rocket } from 'lucide-react';
+import { ChevronRight, Home, Briefcase, Shield, Award, Sparkles, Rocket, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types/stack';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -24,6 +24,11 @@ const WelcomeScreen = ({
   const handleBecomeAPro = () => {
     triggerFeedback('tap');
     navigate('/vendor/signup');
+  };
+
+  const handleLogin = () => {
+    triggerFeedback('tap');
+    navigate('/login');
   };
 
   return <div className="flex flex-col h-screen bg-background relative overflow-hidden">
@@ -155,17 +160,30 @@ const WelcomeScreen = ({
           </div>
         </motion.button>
         
-        {/* Become a Pro Link */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          onClick={handleBecomeAPro}
-          className="w-full mt-4 py-3 text-center text-primary font-medium hover:underline flex items-center justify-center gap-2"
-        >
-          <Rocket className="w-4 h-4" />
-          New here? Become a Pro today
-        </motion.button>
+        {/* Become a Pro & Login Links */}
+        <div className="flex flex-col gap-2 mt-4">
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            onClick={handleBecomeAPro}
+            className="w-full py-3 text-center text-primary font-medium hover:underline flex items-center justify-center gap-2"
+          >
+            <Rocket className="w-4 h-4" />
+            New here? Become a Pro today
+          </motion.button>
+          
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            onClick={handleLogin}
+            className="w-full py-2 text-center text-muted-foreground hover:text-foreground font-medium flex items-center justify-center gap-2 transition-colors"
+          >
+            <LogIn className="w-4 h-4" />
+            Already have an account? Sign in
+          </motion.button>
+        </div>
       </motion.div>
 
       <motion.div initial={{
