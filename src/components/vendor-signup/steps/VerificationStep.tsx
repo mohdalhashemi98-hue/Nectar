@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Camera, Shield, Upload, ChevronLeft, ChevronRight, X, FileCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import SignedImage from '@/components/shared/SignedImage';
 
 interface VerificationStepProps {
   businessLicenseUrl: string | null;
@@ -45,14 +46,11 @@ const VerificationStep: React.FC<VerificationStepProps> = ({
 
       if (error) throw error;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('vendor-uploads')
-        .getPublicUrl(data.path);
-
+      // Store the file path for signed URL generation (not public URL)
       if (type === 'license') {
-        onUpdate({ businessLicenseUrl: publicUrl });
+        onUpdate({ businessLicenseUrl: data.path });
       } else {
-        onUpdate({ idPhotoUrl: publicUrl });
+        onUpdate({ idPhotoUrl: data.path });
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -138,8 +136,9 @@ const VerificationStep: React.FC<VerificationStepProps> = ({
             
             {businessLicenseUrl ? (
               <div className="relative">
-                <img 
-                  src={businessLicenseUrl} 
+                <SignedImage 
+                  bucket="vendor-uploads"
+                  path={businessLicenseUrl} 
                   alt="Business License" 
                   className="w-full h-48 object-cover"
                 />
@@ -191,8 +190,9 @@ const VerificationStep: React.FC<VerificationStepProps> = ({
             
             {idPhotoUrl ? (
               <div className="relative">
-                <img 
-                  src={idPhotoUrl} 
+                <SignedImage 
+                  bucket="vendor-uploads"
+                  path={idPhotoUrl} 
                   alt="ID Document" 
                   className="w-full h-48 object-cover"
                 />

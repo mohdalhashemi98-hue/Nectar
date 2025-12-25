@@ -21,7 +21,9 @@ interface SubmitQuoteModalProps {
 }
 
 const quoteSchema = z.object({
-  amount: z.number().min(1, 'Amount must be at least 1 AED'),
+  amount: z.number()
+    .min(1, 'Amount must be at least 1 AED')
+    .max(1000000, 'Amount cannot exceed 1,000,000 AED'),
   message: z.string().trim().min(10, 'Please provide a brief description (min 10 characters)').max(500, 'Message too long'),
   estimatedDuration: z.string().trim().min(1, 'Please provide an estimated duration'),
 });
