@@ -26,11 +26,16 @@ const ConsumerHomeScreen: React.FC = () => {
     return <ConsumerHomeSkeleton />;
   }
 
+  // Filter vendors for recommended (non-favorite) vs previous (favorite)
+  const recommendedVendors = previousVendors.filter(v => !v.favorite);
+  const favoriteVendors = previousVendors.filter(v => v.favorite);
+
   return (
     <OriginalConsumerHomeScreen
       userProfile={userProfile}
       rewards={rewards}
-      previousVendors={previousVendors}
+      previousVendors={favoriteVendors}
+      recommendedVendors={recommendedVendors}
       jobs={jobs}
       notifications={notifications}
       searchQuery={searchQuery}
