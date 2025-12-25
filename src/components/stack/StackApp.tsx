@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserType, ScreenType, Vendor, Job, RequestDetails, Conversation, ReviewData, AvailableJob, Offer } from '@/types/stack';
 import { 
@@ -88,12 +88,12 @@ const StackApp = () => {
     }
   };
 
-  // Animation variants for screen transitions
-  const slideVariants = {
+  // Optimized animation variants for smooth screen transitions
+  const slideVariants = useMemo(() => ({
     enter: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '100%' : '-30%',
-      opacity: direction === 'forward' ? 0 : 0.5,
-      scale: direction === 'forward' ? 1 : 0.95,
+      x: direction === 'forward' ? '40%' : '-20%',
+      opacity: 0,
+      scale: 0.98,
     }),
     center: {
       x: 0,
@@ -101,20 +101,20 @@ const StackApp = () => {
       scale: 1,
     },
     exit: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '-30%' : '100%',
-      opacity: direction === 'forward' ? 0.5 : 0,
-      scale: direction === 'forward' ? 0.95 : 1,
+      x: direction === 'forward' ? '-20%' : '40%',
+      opacity: 0,
+      scale: 0.98,
     }),
-  };
+  }), []);
 
   // Special fade-scale variant for modal-like screens
   const isModalScreen = ['review', 'payment', 'notifications', 'help'].includes(currentScreen);
   
-  const fadeScaleVariants = {
+  const fadeScaleVariants = useMemo(() => ({
     enter: {
       opacity: 0,
-      scale: 0.95,
-      y: 20,
+      scale: 0.96,
+      y: 12,
     },
     center: {
       opacity: 1,
@@ -123,10 +123,10 @@ const StackApp = () => {
     },
     exit: {
       opacity: 0,
-      scale: 0.95,
-      y: 20,
+      scale: 0.96,
+      y: 12,
     },
-  };
+  }), []);
 
   const screenVariants = isModalScreen ? fadeScaleVariants : slideVariants;
 
@@ -585,9 +585,20 @@ const StackApp = () => {
     }
   };
 
+  // Optimized transition config
+  const transitionConfig = useMemo(() => isModalScreen ? {
+    type: 'tween' as const,
+    duration: 0.2,
+    ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+  } : {
+    type: 'tween' as const,
+    duration: 0.2,
+    ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+  }, [isModalScreen]);
+
   return (
     <div className="screen-container shadow-2xl overflow-hidden">
-      <AnimatePresence mode="wait" custom={directionRef.current}>
+      <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={currentScreen}
           custom={directionRef.current}
@@ -595,17 +606,9 @@ const StackApp = () => {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={isModalScreen ? {
-            type: 'spring',
-            stiffness: 400,
-            damping: 35,
-            opacity: { duration: 0.25 },
-          } : {
-            x: { type: 'spring', stiffness: 350, damping: 32 },
-            opacity: { duration: 0.25 },
-            scale: { duration: 0.3 },
-          }}
-          className="w-full h-full"
+          transition={transitionConfig}
+          className="w-full h-full absolute inset-0"
+          style={{ willChange: 'transform, opacity' }}
         >
           {renderScreen()}
         </motion.div>
