@@ -66,6 +66,7 @@ export interface Category {
 
 export interface Job {
   id: number;
+  uuid?: string; // Original database UUID for mutations
   title: string;
   vendor: string | null;
   vendorId: number | null;

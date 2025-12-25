@@ -67,6 +67,7 @@ const transformVendor = (row: any, isFavorite: boolean = false): Vendor => ({
 
 const transformJob = (row: any): Job => ({
   id: row.id ? parseInt(row.id.substring(0, 8), 16) : 0,
+  uuid: row.id, // Keep original UUID for mutations
   title: row.title || '',
   vendor: row.vendor_name || null,
   vendorId: row.vendor_id ? parseInt(row.vendor_id.substring(0, 8), 16) : null,
@@ -341,6 +342,41 @@ export const useAddJob = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+};
+
+export const useUpdateJobStatus = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ jobId, status, paymentStatus }: { 
+      jobId: string; 
+      status?: string; 
+      paymentStatus?: string;
+    }) => {
+      const user = await getAuthUser();
+      if (!user) throw new Error('Not authenticated');
+      
+      const updateData: Record<string, string> = {};
+      if (status) updateData.status = status;
+      if (paymentStatus) updateData.payment_status = paymentStatus;
+      
+      const { data, error } = await supabase
+        .from('jobs')
+        .update(updateData)
+        .eq('id', jobId)
+        .eq('user_id', user.id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return transformJob(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
   });
 };

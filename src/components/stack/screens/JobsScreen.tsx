@@ -1,9 +1,17 @@
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users, RefreshCw } from 'lucide-react';
 import { Job, ScreenType, UserType } from '@/types/stack';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
 import { CategoryIcon } from '../utils/categoryIcons';
+import { useUpdateJobStatus } from '@/hooks/use-data-queries';
+import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface JobsScreenProps {
   jobs: Job[];
@@ -69,6 +77,27 @@ const marketJobs = [
 
 const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScreenProps) => {
   const [activeTab, setActiveTab] = useState<'market' | 'active' | 'previous'>('market');
+  const updateJobStatus = useUpdateJobStatus();
+
+  const statusOptions = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+
+  const handleStatusChange = async (job: Job, newStatus: string) => {
+    if (!job.uuid) {
+      toast.error('Cannot update job: missing job ID');
+      return;
+    }
+
+    try {
+      await updateJobStatus.mutateAsync({ 
+        jobId: job.uuid,
+        status: newStatus 
+      });
+      toast.success(`Job status updated to ${newStatus}`);
+    } catch (error) {
+      console.error('Failed to update job status:', error);
+      toast.error('Failed to update job status. Make sure you are logged in.');
+    }
+  };
 
   const tabs = [
     { key: 'market', label: 'Browse Market' },
@@ -274,10 +303,28 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
                         <p className="text-sm text-muted-foreground">{job.category}</p>
                       </div>
                     </div>
-                    <div className={`px-3 py-1.5 rounded-full ${statusConfig.bg} flex items-center gap-1.5`}>
-                      <StatusIcon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
-                      <span className={`text-xs font-medium ${statusConfig.color}`}>{job.status}</span>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger 
+                        onClick={(e) => e.stopPropagation()}
+                        className={`px-3 py-1.5 rounded-full ${statusConfig.bg} flex items-center gap-1.5 hover:ring-2 hover:ring-primary/20 transition-all`}
+                      >
+                        <StatusIcon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
+                        <span className={`text-xs font-medium ${statusConfig.color}`}>{job.status}</span>
+                        <RefreshCw className={`w-3 h-3 ${statusConfig.color} ${updateJobStatus.isPending ? 'animate-spin' : ''}`} />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                        {statusOptions.map((status) => (
+                          <DropdownMenuItem
+                            key={status}
+                            onClick={() => handleStatusChange(job, status)}
+                            disabled={job.status === status}
+                            className={job.status === status ? 'bg-primary/10' : ''}
+                          >
+                            {status}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   <div className="flex items-center justify-between">
