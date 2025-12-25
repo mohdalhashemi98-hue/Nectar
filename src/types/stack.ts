@@ -99,7 +99,7 @@ export interface Offer {
 }
 
 export interface Vendor {
-  id: number;
+  id: number | string;
   name: string;
   rating: number;
   reviews: number;

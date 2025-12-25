@@ -12,14 +12,13 @@ const VendorProfileScreen: React.FC = () => {
   const { selectedVendor, userType, addConversation, setSelectedConversation } = useAppStore();
   const { navigateTo, goBack } = useAppNavigation();
 
-  // If there's an ID in params, fetch that vendor
-  const vendorId = id ? parseInt(id, 10) : null;
-  const { data: fetchedVendor, isLoading } = useVendorById(vendorId);
+  // If there's an ID in params, fetch that vendor (UUID string)
+  const { data: fetchedVendor, isLoading } = useVendorById(id || null);
 
   // Determine which vendor to show
   let vendor: Vendor | null = null;
   
-  if (vendorId && fetchedVendor) {
+  if (id && fetchedVendor) {
     vendor = fetchedVendor;
   } else if (selectedVendor) {
     vendor = selectedVendor;
