@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Briefcase, Gift, MessageCircle, Flame, CheckCircle, CreditCard, Bell, Clock } from 'lucide-react';
+import { ArrowLeft, Briefcase, Gift, MessageCircle, Flame, CheckCircle, CreditCard, Bell, Clock, Send } from 'lucide-react';
 import { ScreenType, Notification } from '@/types/stack';
 import BottomNav from '../BottomNav';
 import StackPattern from '../StackPattern';
-
+import { Button } from '@/components/ui/button';
+import { useSendSystemNotification } from '@/hooks/use-data-queries';
+import { toast } from 'sonner';
 interface NotificationsScreenProps {
   notifications: Notification[];
   userType: 'consumer' | 'vendor' | null;
@@ -47,6 +49,28 @@ const getNotificationColor = (type: string) => {
 
 const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSelectJobForQuotes }: NotificationsScreenProps & { onSelectJobForQuotes?: (jobId: number) => void }) => {
   const unreadCount = notifications.filter(n => n.unread).length;
+  const sendNotification = useSendSystemNotification();
+
+  const handleTestNotification = async () => {
+    const testTypes = [
+      { type: 'job_status' as const, title: 'Job Status Updated', message: 'Your plumbing job has been marked as in progress' },
+      { type: 'quote_received' as const, title: 'New Quote Received', message: 'A vendor has submitted a quote for your job' },
+      { type: 'message' as const, title: 'New Message', message: 'You have a new message from your vendor' },
+      { type: 'job_completed' as const, title: 'Job Completed', message: 'Your job has been marked as complete!' },
+      { type: 'payment' as const, title: 'Payment Confirmed', message: 'Your payment of $150 has been processed' },
+      { type: 'system' as const, title: 'System Update', message: 'Welcome to Stack! Check out our new features.' },
+    ];
+    
+    const randomTest = testTypes[Math.floor(Math.random() * testTypes.length)];
+    
+    try {
+      await sendNotification.mutateAsync(randomTest);
+      toast.success('Test notification sent!');
+    } catch (error) {
+      console.error('Failed to send notification:', error);
+      toast.error('Failed to send notification. Make sure you are logged in.');
+    }
+  };
 
   const handleNotificationTap = (notification: Notification) => {
     // Handle navigation based on notification type
@@ -92,6 +116,16 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSe
                 <span className="text-sm font-bold">{unreadCount}</span>
               </div>
             )}
+            <Button
+              size="sm"
+              variant="secondary"
+              className="bg-white/20 hover:bg-white/30 text-primary-foreground border-0"
+              onClick={handleTestNotification}
+              disabled={sendNotification.isPending}
+            >
+              <Send className="w-4 h-4 mr-1" />
+              {sendNotification.isPending ? 'Sending...' : 'Test'}
+            </Button>
           </motion.div>
         </div>
       </div>
