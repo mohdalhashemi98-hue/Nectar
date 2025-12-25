@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
 import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
@@ -54,6 +54,19 @@ const ConsumerHomeScreen = ({
 }: ConsumerHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showReviewBanner, setShowReviewBanner] = useState(true);
+  const [specialtyFilter, setSpecialtyFilter] = useState<string>('all');
+  const [ratingFilter, setRatingFilter] = useState<number>(0);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Get unique specialties from vendors
+  const specialties = Array.from(new Set(recommendedVendors.map(v => v.specialty).filter(Boolean)));
+
+  // Filter vendors based on selected filters
+  const filteredVendors = recommendedVendors.filter(vendor => {
+    const matchesSpecialty = specialtyFilter === 'all' || vendor.specialty === specialtyFilter;
+    const matchesRating = vendor.rating >= ratingFilter;
+    return matchesSpecialty && matchesRating;
+  });
 
   const handleRefresh = useCallback(async () => {
     // Simulate refresh - in a real app this would refetch data
@@ -386,57 +399,159 @@ const ConsumerHomeScreen = ({
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-lg font-bold text-foreground">Recommended Pros</h3>
-              <button onClick={() => onNavigate('services')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                View All
+              <button 
+                onClick={() => setShowFilters(!showFilters)} 
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${showFilters ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                <Filter className="w-4 h-4" />
+                Filter
               </button>
             </div>
-            <div className="space-y-3">
-              {recommendedVendors.slice(0, 4).map((vendor) => (
-                <motion.button
-                  key={vendor.id}
-                  whileHover={{ y: -2 }}
-                  onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
-                  className="card-interactive w-full p-4 text-left"
+
+            {/* Filter Controls */}
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden mb-4"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="avatar-primary w-14 h-14 text-lg">
-                        {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  <div className="bg-secondary/50 rounded-2xl p-4 space-y-4">
+                    {/* Specialty Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">Specialty</label>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => setSpecialtyFilter('all')}
+                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                            specialtyFilter === 'all' 
+                              ? 'bg-primary text-primary-foreground' 
+                              : 'bg-card border border-border text-foreground hover:border-primary/50'
+                          }`}
+                        >
+                          All
+                        </button>
+                        {specialties.map((specialty) => (
+                          <button
+                            key={specialty}
+                            onClick={() => setSpecialtyFilter(specialty)}
+                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                              specialtyFilter === specialty 
+                                ? 'bg-primary text-primary-foreground' 
+                                : 'bg-card border border-border text-foreground hover:border-primary/50'
+                            }`}
+                          >
+                            {specialty}
+                          </button>
+                        ))}
                       </div>
-                      {vendor.verified && (
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                          <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
-                        </div>
-                      )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-foreground truncate">{vendor.name}</h4>
-                        {vendor.verified && (
-                          <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full whitespace-nowrap">
-                            Verified
-                          </span>
-                        )}
+
+                    {/* Rating Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">Minimum Rating</label>
+                      <div className="flex gap-2">
+                        {[0, 4, 4.5, 4.8].map((rating) => (
+                          <button
+                            key={rating}
+                            onClick={() => setRatingFilter(rating)}
+                            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                              ratingFilter === rating 
+                                ? 'bg-primary text-primary-foreground' 
+                                : 'bg-card border border-border text-foreground hover:border-primary/50'
+                            }`}
+                          >
+                            {rating === 0 ? 'Any' : (
+                              <>
+                                <Star className="w-3 h-3 fill-current" />
+                                {rating}+
+                              </>
+                            )}
+                          </button>
+                        ))}
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{vendor.specialty}</p>
-                      <div className="flex items-center gap-3 text-sm">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-primary fill-primary" />
-                          <span className="font-semibold">{vendor.rating}</span>
-                          <span className="text-muted-foreground">({vendor.reviews})</span>
+                    </div>
+
+                    {/* Active Filters Summary */}
+                    {(specialtyFilter !== 'all' || ratingFilter > 0) && (
+                      <div className="flex items-center justify-between pt-2 border-t border-border">
+                        <span className="text-sm text-muted-foreground">
+                          {filteredVendors.length} {filteredVendors.length === 1 ? 'pro' : 'pros'} found
+                        </span>
+                        <button 
+                          onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
+                          className="text-sm font-medium text-primary hover:text-primary/80"
+                        >
+                          Clear Filters
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Vendor List */}
+            <div className="space-y-3">
+              {filteredVendors.length > 0 ? (
+                filteredVendors.slice(0, 6).map((vendor) => (
+                  <motion.button
+                    key={vendor.id}
+                    whileHover={{ y: -2 }}
+                    onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
+                    className="card-interactive w-full p-4 text-left"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="avatar-primary w-14 h-14 text-lg">
+                          {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </div>
-                        {vendor.distance && (
-                          <div className="flex items-center gap-1 text-muted-foreground">
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span>{vendor.distance}</span>
+                        {vendor.verified && (
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                            <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
                           </div>
                         )}
                       </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold text-foreground truncate">{vendor.name}</h4>
+                          {vendor.verified && (
+                            <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full whitespace-nowrap">
+                              Verified
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">{vendor.specialty}</p>
+                        <div className="flex items-center gap-3 text-sm">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 text-primary fill-primary" />
+                            <span className="font-semibold">{vendor.rating}</span>
+                            <span className="text-muted-foreground">({vendor.reviews})</span>
+                          </div>
+                          {vendor.distance && (
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                              <MapPin className="w-3.5 h-3.5" />
+                              <span>{vendor.distance}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </div>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </motion.button>
-              ))}
+                  </motion.button>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p className="text-sm">No pros match your filters</p>
+                  <button 
+                    onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
+                    className="text-sm font-medium text-primary hover:text-primary/80 mt-2"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
