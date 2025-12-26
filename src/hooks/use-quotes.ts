@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { haptic } from '@/hooks/use-haptic';
 
 export interface Quote {
   id: string;
@@ -156,6 +157,7 @@ export const useAcceptQuote = () => {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['quotes', 'job', variables.jobId] });
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      haptic('success');
       toast.success('Quote accepted! The vendor has been notified.');
     },
     onError: (error) => {
