@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase, LucideIcon } from 'lucide-react';
+import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/stack';
 import { triggerFeedback } from '@/hooks/use-feedback';
 import { usePreloadOnIntent } from '@/hooks/use-preload-on-intent';
