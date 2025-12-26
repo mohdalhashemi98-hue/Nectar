@@ -318,7 +318,11 @@ const StackAppRouter: React.FC = () => {
                 x: isDragging ? dragX : 0,
                 willChange: 'transform',
                 position: 'absolute',
-                inset: 0,
+                top: 0,
+                left: 0,
+                right: 0,
+                // Space for fixed bottom nav; set by ScreenWrapper via CSS variable.
+                bottom: 'var(--app-bottom-offset, 0px)',
               }}
               className="w-full h-full bg-background overflow-y-auto overflow-x-hidden overscroll-contain touch-pan-y"
             >
