@@ -127,7 +127,7 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
   const previousJobs = jobs.filter(job => job.status === 'Completed');
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="w-full bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
