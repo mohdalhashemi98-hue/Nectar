@@ -64,7 +64,7 @@ const WelcomeScreen = ({
         delay: 0.2,
         duration: 0.5
       }} className="mb-6 relative flex items-center justify-center">
-          <div className="absolute w-28 h-28 bg-primary/30 rounded-full blur-xl animate-pulse" />
+          <div className="absolute w-28 h-28 bg-primary/30 rounded-full blur-xl" />
           <motion.div animate={{
           y: [0, -8, 0]
         }} transition={{
