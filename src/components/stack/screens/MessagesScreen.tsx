@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MessageCircle, CheckCheck, Circle } from 'lucide-react';
+import { Search, MessageCircle, CheckCheck, Circle, ArrowLeft } from 'lucide-react';
 import { Conversation, ScreenType, UserType } from '@/types/stack';
 import BottomNav from '../BottomNav';
 
@@ -15,6 +15,7 @@ interface MessagesScreenProps {
 const MessagesScreen = ({
   conversations,
   userType,
+  onBack,
   onNavigate,
   onSelectConversation
 }: MessagesScreenProps) => {
@@ -37,11 +38,16 @@ const MessagesScreen = ({
         
         <div className="relative">
           <div className="flex items-center justify-between mb-5">
-            <div>
-              <h1 className="text-2xl font-bold text-white">Messages</h1>
-              <p className="text-white/70 text-sm mt-0.5">
-                {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
-              </p>
+            <div className="flex items-center gap-3">
+              <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-white" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Messages</h1>
+                <p className="text-white/70 text-sm mt-0.5">
+                  {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
+                </p>
+              </div>
             </div>
             <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
               <MessageCircle className="w-6 h-6 text-white" />
