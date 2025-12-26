@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users, RefreshCw } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users, RefreshCw, ArrowLeft } from 'lucide-react';
 import { Job, ScreenType, UserType } from '@/types/stack';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
@@ -139,6 +139,9 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4"
           >
+            <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">Jobs</h1>
               <p className="opacity-60 text-sm">Find services or track your requests</p>
