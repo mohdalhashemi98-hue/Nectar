@@ -249,4 +249,5 @@ export type ScreenType =
   | 'help'
   | 'services'
   | 'vendor-onboarding'
-  | 'user-verification';
+  | 'user-verification'
+  | 'settings';
