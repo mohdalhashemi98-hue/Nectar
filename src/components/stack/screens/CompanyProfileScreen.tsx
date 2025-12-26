@@ -351,7 +351,7 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
       </div>
 
       {/* SCROLLABLE CONTENT */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 pb-24 space-y-6">
+      <div className="px-4 py-6 pb-24 space-y-6">
         
         {/* PERFORMANCE METRICS */}
         <motion.section

@@ -180,7 +180,7 @@ const ServicesScreen = ({
       </div>
 
       {/* Categories List */}
-      <div className="flex-1 overflow-y-auto px-4 pb-24 space-y-3">
+      <div className="px-4 pb-24 space-y-3">
         {filteredCategories.map((category, index) => {
           const IconComponent = getCategoryIcon(category.name);
           const isExpanded = expandedCategory === category.name;

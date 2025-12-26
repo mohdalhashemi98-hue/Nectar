@@ -290,7 +290,7 @@ const VendorScheduleScreen = ({ onNavigate, onBack }: VendorScheduleScreenProps)
       </div>
 
       {/* Jobs List */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-3">
+      <div className="px-4 py-4 pb-24 space-y-3">
         {jobsForSelectedDate.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}

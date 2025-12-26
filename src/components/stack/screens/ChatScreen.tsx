@@ -193,7 +193,7 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="px-4 py-4 pb-32">
         {/* Date Badge */}
         <div className="flex justify-center mb-4">
           <span className="px-3 py-1 rounded-full bg-black/5 text-xs text-muted-foreground font-medium">

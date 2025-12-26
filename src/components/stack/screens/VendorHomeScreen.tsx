@@ -108,7 +108,7 @@ const VendorHomeScreen = ({
   }
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
+    <div className="w-full bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
         <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />

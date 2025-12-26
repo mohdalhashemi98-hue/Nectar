@@ -67,15 +67,13 @@ const PullToRefresh = forwardRef<HTMLDivElement, PullToRefreshProps>(({
         )}
       </AnimatePresence>
 
-      {/* Scrollable content */}
+      {/* Content wrapper - no longer scrollable, parent handles scroll */}
       <div
         ref={ref}
         {...handlers}
-        className="h-full overflow-y-auto overscroll-contain"
         style={{
           transform: isPulling || isRefreshing ? `translateY(${pullDistance}px)` : undefined,
           transition: isPulling ? 'none' : 'transform 0.3s ease-out',
-          WebkitOverflowScrolling: 'touch'
         }}
       >
         {/* Show skeleton during refresh if provided */}

@@ -120,7 +120,7 @@ const ConsumerHomeScreen = ({
   }
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
+    <div className="w-full bg-background pb-24">
       {/* Header */}
       <div className="bg-card border-b border-border">
         <div className="px-4 py-5">

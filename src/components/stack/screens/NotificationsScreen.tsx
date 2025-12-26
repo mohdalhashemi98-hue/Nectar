@@ -131,7 +131,7 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSe
       </div>
 
       {/* Timeline */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 pb-24">
+      <div className="px-4 py-5 pb-24">
         <div className="relative">
           {/* Timeline line */}
           <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-border" />
