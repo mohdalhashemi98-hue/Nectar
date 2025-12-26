@@ -3,7 +3,7 @@ import RealtimeProvider from '@/components/realtime/RealtimeProvider';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-muted flex items-center justify-center p-4">
+    <div className="min-h-[100dvh] bg-muted flex justify-center p-4">
       <RealtimeProvider>
         <StackAppRouter />
       </RealtimeProvider>

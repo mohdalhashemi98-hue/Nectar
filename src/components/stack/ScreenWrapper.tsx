@@ -48,9 +48,9 @@ const ScreenWrapper = ({
   unreadMessages = 2
 }: ScreenWrapperProps) => {
   return (
-    <div className="screen-container w-full">
+    <div className="w-full">
       {/* Main content area */}
-      <div 
+      <div
         className={`
           screen-content w-full
           ${safeAreaTop ? 'safe-area-pt' : ''}

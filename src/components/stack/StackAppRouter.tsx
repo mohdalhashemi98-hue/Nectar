@@ -243,11 +243,11 @@ const StackAppRouter: React.FC = () => {
   const shouldEnableDrag = canSwipeBack && isDragging;
 
   return (
-    <div className="screen-container shadow-2xl overflow-hidden relative">
+    <div className="screen-container-fixed relative w-full max-w-[430px] overflow-hidden shadow-2xl">
       {/* Scroll restoration and dynamic titles */}
       <ScrollToTop />
       <DocumentTitle />
-      
+
       {/* Swipe back indicator */}
       {canSwipeBack && (
         <>
@@ -258,7 +258,7 @@ const StackAppRouter: React.FC = () => {
               opacity: shadowOpacity,
             }}
           />
-          
+
           <motion.div
             className="absolute left-3 top-1/2 -translate-y-1/2 z-50 pointer-events-none"
             style={{ opacity: indicatorOpacity, scale: indicatorScale }}
@@ -267,14 +267,16 @@ const StackAppRouter: React.FC = () => {
               <ChevronLeft className="w-6 h-6 text-primary-foreground" />
             </div>
           </motion.div>
-          
+
           <motion.svg
             className="absolute left-3 top-1/2 -translate-y-1/2 z-50 pointer-events-none w-10 h-10"
             style={{ opacity: indicatorOpacity, scale: indicatorScale }}
             viewBox="0 0 40 40"
           >
             <motion.circle
-              cx="20" cy="20" r="18"
+              cx="20"
+              cy="20"
+              r="18"
               fill="none"
               stroke="hsl(var(--primary-foreground))"
               strokeWidth="2"
@@ -286,17 +288,17 @@ const StackAppRouter: React.FC = () => {
           </motion.svg>
         </>
       )}
-      
+
       {/* Edge swipe detection zone - invisible touch area */}
       {canSwipeBack && (
-        <div 
+        <div
           className="absolute inset-y-0 left-0 z-40"
           style={{ width: EDGE_SWIPE_ZONE }}
           onTouchStart={(e) => handleDragStart(e.nativeEvent)}
           onMouseDown={(e) => handleDragStart(e.nativeEvent)}
         />
       )}
-      
+
       <LazyLoadErrorBoundary>
         <Suspense fallback={currentSkeleton || <DefaultSkeleton />}>
           <AnimatePresence mode="sync" initial={false}>
@@ -308,17 +310,17 @@ const StackAppRouter: React.FC = () => {
               animate="center"
               exit="exit"
               transition={transitionConfig}
-              drag={shouldEnableDrag ? "x" : false}
+              drag={shouldEnableDrag ? 'x' : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={{ left: 0, right: 0.3 }}
               onDragEnd={handleDragEnd}
-              style={{ 
+              style={{
                 x: isDragging ? dragX : 0,
                 willChange: 'transform',
                 position: 'absolute',
                 inset: 0,
               }}
-              className="w-full h-full touch-pan-y bg-background"
+              className="w-full h-full bg-background overflow-y-auto overflow-x-hidden overscroll-contain touch-pan-y"
             >
               <Routes location={location}>
               {/* Public routes */}
