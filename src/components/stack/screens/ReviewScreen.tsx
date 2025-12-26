@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { CategoryIcon } from '../utils/categoryIcons';
+import { haptic } from '@/hooks/use-haptic';
 
 interface ReviewScreenProps {
   job: Job;
@@ -45,6 +46,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
     
     onSubmitReview({ rating, comment, tags: selectedTags });
     setSubmitted(true);
+    haptic('success');
     toast.success('Review submitted successfully!');
   };
 

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { haptic } from '@/hooks/use-haptic';
 
 // Generate AI market benchmark data
 const generateMarketData = (category: string, subService: string | null, location: string) => {
@@ -152,6 +153,7 @@ const JobConfigurationScreen = ({
         urgency: requestDetails.urgency,
       });
       
+      haptic('success');
       if (requestDetails.bookingType === 'subscription') {
         toast.success('Subscription booking created!', {
           description: `${requestDetails.subscriptionFrequency} ${selectedSubService || selectedCategory} scheduled`

@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { CategoryIcon } from '../utils/categoryIcons';
 import { supabase } from '@/integrations/supabase/client';
 import { useHasSubmittedQuote } from '@/hooks/use-quotes';
+import { haptic } from '@/hooks/use-haptic';
 
 interface RequestDetailScreenProps {
   job: AvailableJob;
@@ -73,6 +74,7 @@ const RequestDetailScreen = ({ job, onBack, onNavigate }: RequestDetailScreenPro
 
       setOfferSent(true);
       refetchHasSubmitted();
+      haptic('success');
       toast.success('Offer sent successfully!');
     } catch (err) {
       toast.error('An unexpected error occurred');

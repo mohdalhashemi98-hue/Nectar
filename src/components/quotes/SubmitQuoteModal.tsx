@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { haptic } from '@/hooks/use-haptic';
 
 interface SubmitQuoteModalProps {
   isOpen: boolean;
@@ -80,6 +81,7 @@ const SubmitQuoteModal = ({ isOpen, onClose, job, onSuccess }: SubmitQuoteModalP
         return;
       }
 
+      haptic('success');
       toast.success('Quote submitted successfully!');
       onSuccess?.();
       onClose();

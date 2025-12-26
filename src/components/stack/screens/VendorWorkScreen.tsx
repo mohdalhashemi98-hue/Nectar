@@ -11,6 +11,7 @@ import BottomNav from '../BottomNav';
 import { CategoryIcon } from '../utils/categoryIcons';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { haptic } from '@/hooks/use-haptic';
 
 // Vendor job types with different statuses
 interface VendorJob {
@@ -232,6 +233,7 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
       toast.error('Please enter your quote amount');
       return;
     }
+    haptic('success');
     toast.success(`Quote of ${quoteAmount} AED sent to ${job.client.name}!`);
     setShowQuotingPanel(null);
     setQuoteAmount('');
