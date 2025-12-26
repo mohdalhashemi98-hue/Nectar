@@ -120,43 +120,49 @@ const WelcomeScreen = ({
       delay: 0.6,
       duration: 0.5
     }} className="w-full max-w-sm space-y-4">
+        {/* Primary CTA - I need help */}
         <motion.button whileHover={{
-        scale: 1.02
+        scale: 1.02,
+        y: -2
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => handleSelectWithFeedback('consumer', onSelectUserType)} className="group w-full bg-primary-foreground/20 backdrop-blur-sm border border-primary-foreground/20 hover:bg-primary-foreground/30 py-5 px-5 rounded-3xl transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center group-hover:bg-primary-foreground group-hover:text-primary transition-all duration-300">
-                <Home className="w-6 h-6 text-primary-foreground group-hover:text-primary" />
-              </div>
-              <div className="text-left">
-                <div className="font-display text-xl font-bold text-primary-foreground">I need help</div>
-                <div className="text-sm text-primary-foreground/70">Post a job & get offers</div>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-primary-foreground/70 group-hover:text-primary-foreground group-hover:translate-x-1 transition-all duration-300" />
-          </div>
-        </motion.button>
-
-        <motion.button whileHover={{
-        scale: 1.02
-      }} whileTap={{
-        scale: 0.98
-      }} onClick={handleLogin} className="group w-full bg-primary-foreground text-primary py-5 px-5 rounded-3xl transition-all duration-300 hover:bg-primary-foreground/90" style={{
-        boxShadow: 'var(--shadow-lg)'
+      }} onClick={() => handleSelectWithFeedback('consumer', onSelectUserType)} className="group w-full bg-primary-foreground text-primary py-5 px-5 rounded-3xl transition-all duration-300 hover:bg-white" style={{
+        boxShadow: '0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)'
       }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-primary/10 rounded-3xl flex items-center justify-center">
-                <Briefcase className="w-6 h-6 text-primary" />
+              <div className="w-14 h-14 bg-gradient-golden rounded-3xl flex items-center justify-center shadow-md">
+                <Home className="w-6 h-6 text-primary-foreground" />
               </div>
               <div className="text-left">
-                <div className="font-display text-xl font-bold text-primary">I'm a Pro</div>
-                <div className="text-sm text-primary/70">Sign in to find jobs</div>
+                <div className="font-display text-xl font-bold text-foreground">I need help</div>
+                <div className="text-sm text-muted-foreground">Post a job & get offers</div>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-primary/70 group-hover:translate-x-1 transition-all duration-300" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded-full">Popular</span>
+              <ChevronRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-all duration-300" />
+            </div>
+          </div>
+        </motion.button>
+
+        {/* Secondary CTA - I'm a Pro */}
+        <motion.button whileHover={{
+        scale: 1.02
+      }} whileTap={{
+        scale: 0.98
+      }} onClick={handleLogin} className="group w-full bg-primary-foreground/15 backdrop-blur-sm border-2 border-primary-foreground/30 hover:border-primary-foreground/50 hover:bg-primary-foreground/25 py-5 px-5 rounded-3xl transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center group-hover:bg-primary-foreground/30 transition-all duration-300">
+                <Briefcase className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div className="text-left">
+                <div className="font-display text-xl font-bold text-primary-foreground">I'm a Pro</div>
+                <div className="text-sm text-primary-foreground/70">Sign in to find jobs</div>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-primary-foreground/70 group-hover:text-primary-foreground group-hover:translate-x-1 transition-all duration-300" />
           </div>
         </motion.button>
         
