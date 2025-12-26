@@ -87,9 +87,12 @@ export const useAppNavigation = () => {
 
   const goBack = useCallback(() => {
     setNavigationDirection('back');
+    
+    // Check history length BEFORE popping
+    const hasHistory = navigationHistory.length > 0;
     popHistory();
     
-    if (navigationHistory.length > 0) {
+    if (hasHistory) {
       navigate(-1);
     } else {
       // Go to appropriate home
