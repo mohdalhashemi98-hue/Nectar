@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Vibrate, Volume2, Bell, Moon, Lock, Smartphone, Eye, Trash2 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useSettingsStore } from '@/stores/settings-store';
 import StackPattern from '@/components/stack/StackPattern';
+import { useAppNavigation } from '@/hooks/use-app-navigation';
 
 const SettingsScreen = () => {
-  const navigate = useNavigate();
+  const { goBack } = useAppNavigation();
   const { 
     hapticEnabled, 
     soundEnabled,
@@ -109,7 +109,7 @@ const SettingsScreen = () => {
             className="flex items-center gap-3"
           >
             <button 
-              onClick={() => navigate(-1)}
+              onClick={goBack}
               className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
