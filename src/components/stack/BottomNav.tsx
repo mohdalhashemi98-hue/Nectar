@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
+import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase, LucideIcon } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/stack';
 import { triggerFeedback } from '@/hooks/use-feedback';
 import { usePreloadOnIntent } from '@/hooks/use-preload-on-intent';
@@ -84,7 +84,13 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                 />
               )}
               <div className="relative">
-                <item.icon className="w-5 h-5 relative z-10" />
+                <motion.div
+                  whileTap={{ scale: 0.75, rotate: -8 }}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                >
+                  <item.icon className="w-5 h-5 relative z-10" />
+                </motion.div>
                 <AnimatePresence>
                   {item.badge > 0 && (
                     <motion.span
