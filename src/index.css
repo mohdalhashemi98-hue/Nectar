@@ -478,9 +478,9 @@
      UNIFIED SCREEN LAYOUT SYSTEM - Mobile Optimized
      ====================================== */
   
-  /* Main app container - full width on mobile, constrained on larger screens */
+  /* Main app container - always full width */
   .screen-container {
-    @apply w-full mx-auto relative;
+    @apply w-full relative;
     min-height: 100vh;
     min-height: 100dvh;
     min-height: -webkit-fill-available;
@@ -490,33 +490,14 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Constrain width on tablets and up for readability */
-  @media (min-width: 640px) {
-    .screen-container {
-      max-width: 430px; /* iPhone Pro Max width */
-      box-shadow: var(--shadow-lg);
-      border-left: 1px solid hsl(var(--border));
-      border-right: 1px solid hsl(var(--border));
-    }
-  }
-
   /* Full height screen (no scroll) */
   .screen-container-fixed {
-    @apply w-full mx-auto relative;
+    @apply w-full relative;
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
     background: hsl(var(--background));
     overflow: hidden;
-  }
-
-  @media (min-width: 640px) {
-    .screen-container-fixed {
-      max-width: 430px;
-      box-shadow: var(--shadow-lg);
-      border-left: 1px solid hsl(var(--border));
-      border-right: 1px solid hsl(var(--border));
-    }
   }
 
   /* Content area within screens */
@@ -525,9 +506,9 @@
     min-height: 100%;
   }
 
-  /* Standard horizontal padding for content */
+  /* Responsive horizontal padding for content */
   .screen-padded {
-    @apply px-4;
+    @apply px-4 sm:px-6 md:px-8;
   }
 
   /* When bottom nav is present, add padding to prevent content overlap */

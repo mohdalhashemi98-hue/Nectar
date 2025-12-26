@@ -48,11 +48,11 @@ const ScreenWrapper = ({
   unreadMessages = 2
 }: ScreenWrapperProps) => {
   return (
-    <div className="screen-container">
+    <div className="screen-container w-full">
       {/* Main content area */}
       <div 
         className={`
-          screen-content
+          screen-content w-full
           ${safeAreaTop ? 'safe-area-pt' : ''}
           ${showNav ? 'has-bottom-nav' : ''}
           ${fullBleed ? '' : 'screen-padded'}
