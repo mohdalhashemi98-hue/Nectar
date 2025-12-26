@@ -141,35 +141,36 @@ const StackAppRouter: React.FC = () => {
     }
   }, [currentScreen, userType]);
 
-  // Animation variants
+  // Animation variants - optimized for performance
   const isModalScreen = ['review', 'payment', 'notifications', 'help'].includes(currentScreen);
 
+  // Simpler, faster slide animation - only use translateX, no scale/opacity for better perf
   const slideVariants = useMemo(() => ({
     enter: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '40%' : '-20%',
-      opacity: 0,
-      scale: 0.98,
+      x: direction === 'forward' ? '100%' : '-30%',
+      opacity: direction === 'forward' ? 1 : 0.5,
     }),
-    center: { x: 0, opacity: 1, scale: 1 },
+    center: { x: 0, opacity: 1 },
     exit: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '-20%' : '40%',
-      opacity: 0,
-      scale: 0.98,
+      x: direction === 'forward' ? '-30%' : '100%',
+      opacity: direction === 'forward' ? 0.5 : 1,
     }),
   }), []);
 
-  const fadeScaleVariants = useMemo(() => ({
-    enter: { opacity: 0, scale: 0.96, y: 12 },
-    center: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0.96, y: 12 },
+  // Simple fade for modals
+  const fadeVariants = useMemo(() => ({
+    enter: { opacity: 0 },
+    center: { opacity: 1 },
+    exit: { opacity: 0 },
   }), []);
 
-  const screenVariants = isModalScreen ? fadeScaleVariants : slideVariants;
+  const screenVariants = isModalScreen ? fadeVariants : slideVariants;
 
+  // Faster, hardware-accelerated transition
   const transitionConfig = useMemo(() => ({
     type: 'tween' as const,
-    duration: 0.2,
-    ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+    duration: 0.15,
+    ease: [0.32, 0.72, 0, 1] as [number, number, number, number], // iOS-like ease
   }), []);
 
   // Swipe back logic - only from edge
@@ -296,7 +297,7 @@ const StackAppRouter: React.FC = () => {
       
       <LazyLoadErrorBoundary>
         <Suspense fallback={currentSkeleton || <DefaultSkeleton />}>
-          <AnimatePresence mode="popLayout" initial={false}>
+          <AnimatePresence mode="sync" initial={false}>
             <motion.div
               key={location.pathname}
               custom={directionRef.current}
@@ -307,18 +308,15 @@ const StackAppRouter: React.FC = () => {
               transition={transitionConfig}
               drag={shouldEnableDrag ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={{ left: 0, right: 0.5 }}
+              dragElastic={{ left: 0, right: 0.3 }}
               onDragEnd={handleDragEnd}
               style={{ 
                 x: isDragging ? dragX : 0,
-                willChange: 'transform, opacity',
+                willChange: 'transform',
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
+                inset: 0,
               }}
-              className="w-full h-full touch-pan-y"
+              className="w-full h-full touch-pan-y bg-background"
             >
               <Routes location={location}>
               {/* Public routes */}
