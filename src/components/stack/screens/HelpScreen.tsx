@@ -116,7 +116,7 @@ const HelpScreen = ({ onNavigate, onBack }: HelpScreenProps) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
+      <div className="px-4 py-5 pb-24 space-y-4">
         {/* Contact Options */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}

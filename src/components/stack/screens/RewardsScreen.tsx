@@ -18,7 +18,7 @@ interface RewardsScreenProps {
 
 const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenProps) => {
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="w-full bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
         <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
