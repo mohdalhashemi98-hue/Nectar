@@ -478,9 +478,9 @@
      UNIFIED SCREEN LAYOUT SYSTEM - Mobile Optimized
      ====================================== */
   
-  /* Main app container - fills available width */
+  /* Main app container - full width on mobile, constrained on larger screens */
   .screen-container {
-    @apply w-full relative;
+    @apply w-full mx-auto relative;
     min-height: 100vh;
     min-height: 100dvh;
     min-height: -webkit-fill-available;
@@ -490,14 +490,33 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Constrain width on tablets and up for readability */
+  @media (min-width: 640px) {
+    .screen-container {
+      max-width: 430px; /* iPhone Pro Max width */
+      box-shadow: var(--shadow-lg);
+      border-left: 1px solid hsl(var(--border));
+      border-right: 1px solid hsl(var(--border));
+    }
+  }
+
   /* Full height screen (no scroll) */
   .screen-container-fixed {
-    @apply w-full relative;
+    @apply w-full mx-auto relative;
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
     background: hsl(var(--background));
     overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .screen-container-fixed {
+      max-width: 430px;
+      box-shadow: var(--shadow-lg);
+      border-left: 1px solid hsl(var(--border));
+      border-right: 1px solid hsl(var(--border));
+    }
   }
 
   /* Content area within screens */
@@ -553,6 +572,14 @@
   .bottom-nav {
     @apply fixed bottom-0 left-0 right-0 z-50;
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (min-width: 640px) {
+    .bottom-nav {
+      max-width: 430px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 
   /* iOS-specific touch optimizations */
