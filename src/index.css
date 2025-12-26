@@ -475,26 +475,24 @@
   }
 
   /* ======================================
-     UNIFIED SCREEN LAYOUT SYSTEM - iPhone Optimized
+     UNIFIED SCREEN LAYOUT SYSTEM - Mobile Optimized
      ====================================== */
   
-  /* Main app container - optimized for iPhone dimensions */
+  /* Main app container - fills available width */
   .screen-container {
-    @apply w-full mx-auto relative;
-    max-width: 390px; /* iPhone 14/15 Pro width */
+    @apply w-full relative;
     min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for iOS */
-    min-height: -webkit-fill-available; /* iOS Safari fallback */
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
     background: hsl(var(--background));
     overflow-x: hidden;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Full height screen (no scroll) */
   .screen-container-fixed {
-    @apply w-full mx-auto relative;
-    max-width: 390px;
+    @apply w-full relative;
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
@@ -551,12 +549,9 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Bottom navigation specific styling - iPhone optimized */
+  /* Bottom navigation specific styling */
   .bottom-nav {
     @apply fixed bottom-0 left-0 right-0 z-50;
-    max-width: 390px;
-    margin-left: auto;
-    margin-right: auto;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
