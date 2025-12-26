@@ -302,8 +302,8 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
         </motion.div>
       </div>
 
-      {/* Fixed Bottom Payment Button */}
-      <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto p-4 bg-background border-t border-border">
+      {/* Sticky Bottom Payment Button */}
+      <div className="sticky bottom-20 left-0 right-0 p-4 bg-background border-t border-border">
         <Button 
           onClick={handlePayment}
           disabled={isProcessing}

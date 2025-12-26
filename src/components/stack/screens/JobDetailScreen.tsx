@@ -300,7 +300,7 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
 
       {/* Bottom Action */}
       {canReview && (
-        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
+        <div className="sticky bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent">
           <Button
             onClick={() => onNavigate('review')}
             className="w-full bg-gradient-golden text-primary-foreground hover:opacity-90 h-12 text-base font-semibold"
@@ -313,7 +313,7 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
 
       {/* Payment Button - Show when job needs payment */}
       {userType === 'consumer' && job.paymentStatus !== 'Paid' && job.vendor && (job.status === 'In Progress' || job.status === 'Awaiting Completion') && (
-        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
+        <div className="sticky bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent">
           <Button
             onClick={() => onNavigate('payment')}
             className="w-full bg-gradient-golden text-primary-foreground hover:opacity-90 h-12 text-base font-semibold"

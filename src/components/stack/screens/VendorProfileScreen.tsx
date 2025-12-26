@@ -735,7 +735,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
       </div>
 
       {/* STICKY BOTTOM CTA WITH WARRANTY TRANSPARENCY */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-background/80 backdrop-blur-sm border-t border-border z-30">
+      <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-background/80 backdrop-blur-sm border-t border-border z-30">
         {/* Warranty Toggle */}
         <AnimatePresence>
           {showWarrantyDetails && (
@@ -778,7 +778,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
             {showWarrantyDetails ? 'Hide warranty details' : 'Click here to see our 30-Day Service Guarantee and Warranty details'}
           </button>
           
-          <div className="flex gap-3 max-w-lg mx-auto">
+          <div className="flex gap-3">
             <Button 
               variant="outline" 
               size="lg"
