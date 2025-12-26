@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { motion } from 'framer-motion';
 import BottomNav from './BottomNav';
 import { ScreenType, UserType } from '@/types/stack';
 
@@ -48,13 +47,21 @@ const ScreenWrapper = ({
   unreadMessages = 2
 }: ScreenWrapperProps) => {
   return (
-    <div className="w-full">
+    <div
+      className="w-full"
+      style={{
+        // Reserve space for the fixed BottomNav by shrinking the route scroll container,
+        // so we don't need extra padding (which can create unnecessary scrolling).
+        ['--app-bottom-offset' as any]: showNav
+          ? 'calc(80px + env(safe-area-inset-bottom, 0px))'
+          : '0px',
+      }}
+    >
       {/* Main content area */}
       <div
         className={`
           screen-content w-full
           ${safeAreaTop ? 'safe-area-pt' : ''}
-          ${showNav ? 'has-bottom-nav' : ''}
           ${fullBleed ? '' : 'screen-padded'}
           ${className}
         `}
