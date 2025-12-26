@@ -569,7 +569,7 @@ const JobConfigurationScreen = ({
       </div>
 
       {/* Submit Button */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background border-t border-border p-4">
+      <div className="sticky bottom-0 left-0 right-0 bg-background border-t border-border p-4">
         <Button
           onClick={handleSubmit}
           className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg rounded-2xl flex items-center justify-center gap-2"

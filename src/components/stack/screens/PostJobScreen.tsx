@@ -617,7 +617,7 @@ const PostJobScreen = ({
       </div>
 
       {/* Bottom Action */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent max-w-md mx-auto">
+      <div className="sticky bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent">
         <div className="flex gap-3">
           {step > 1 && (
             <Button
