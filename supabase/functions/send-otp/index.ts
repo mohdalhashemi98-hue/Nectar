@@ -66,13 +66,57 @@ serve(async (req) => {
     }
 
     if (action === "send") {
+      const adminClient = createClient(supabaseUrl, supabaseServiceKey);
+      
+      // Rate limiting: Check if user has sent OTP in the last 60 seconds
+      const { data: lastOtp } = await adminClient
+        .from("phone_otp")
+        .select("created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (lastOtp) {
+        const timeSinceLastOtp = Date.now() - new Date(lastOtp.created_at).getTime();
+        const cooldownMs = 60000; // 60 seconds cooldown
+        
+        if (timeSinceLastOtp < cooldownMs) {
+          const remainingSeconds = Math.ceil((cooldownMs - timeSinceLastOtp) / 1000);
+          return new Response(
+            JSON.stringify({ 
+              error: `Please wait ${remainingSeconds} seconds before requesting another code`,
+              retryAfter: remainingSeconds
+            }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+
+      // Count OTPs sent in the last hour for this user (rate limit: max 5 per hour)
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+      const { count: hourlyCount } = await adminClient
+        .from("phone_otp")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .gte("created_at", oneHourAgo);
+
+      if (hourlyCount && hourlyCount >= 5) {
+        return new Response(
+          JSON.stringify({ 
+            error: "Too many OTP requests. Please try again in an hour.",
+            retryAfter: 3600
+          }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       // Generate 6-digit OTP
       const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
       
       console.log(`Sending OTP to ${phone} for user ${user.id}`);
 
       // Delete any existing OTP for this user
-      const adminClient = createClient(supabaseUrl, supabaseServiceKey);
       await adminClient.from("phone_otp").delete().eq("user_id", user.id);
 
       // Store OTP in database
@@ -123,7 +167,7 @@ serve(async (req) => {
         JSON.stringify({ success: true, message: "OTP sent successfully" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-    } 
+    }
     
     if (action === "verify") {
       const { otp } = await req.json();
