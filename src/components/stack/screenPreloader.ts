@@ -167,7 +167,29 @@ export const preloadCriticalScreens = (): void => {
   preloadScreens(['WelcomeScreen', 'LoginScreen']);
   
   // Preload home screens after a short delay
-  setTimeout(() => {
+  requestIdleCallback(() => {
     preloadScreens(['ConsumerHomeScreen', 'VendorHomeScreen']);
-  }, 100);
+  }, { timeout: 200 });
+  
+  // Preload common screens when browser is idle
+  requestIdleCallback(() => {
+    preloadScreens([
+      'ProfileScreen',
+      'MessagesScreen',
+      'NotificationsScreen',
+      'ServicesScreen',
+    ]);
+  }, { timeout: 1000 });
+};
+
+// Helper for requestIdleCallback with fallback
+const requestIdleCallback = (
+  callback: () => void, 
+  options?: { timeout: number }
+): void => {
+  if ('requestIdleCallback' in window) {
+    (window as any).requestIdleCallback(callback, options);
+  } else {
+    setTimeout(callback, options?.timeout || 100);
+  }
 };

@@ -136,26 +136,80 @@ export const useDataPrefetch = () => {
     });
   }, [queryClient]);
 
+  // Prefetch profile data
+  const prefetchProfile = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    queryClient.prefetchQuery({
+      queryKey: ['profile'],
+      queryFn: async () => {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        return data;
+      },
+      staleTime: 1000 * 60 * 10, // 10 minutes for profile
+    });
+  }, [queryClient]);
+
+  // Prefetch vendor stats (for vendor users)
+  const prefetchVendorStats = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    queryClient.prefetchQuery({
+      queryKey: ['vendorStats'],
+      queryFn: async () => {
+        const { data } = await supabase
+          .from('vendor_stats')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        return data;
+      },
+      staleTime: 1000 * 60 * 5,
+    });
+  }, [queryClient]);
+
   // Determine what to prefetch based on current route
   useEffect(() => {
     const path = location.pathname;
     
-    // Delay prefetch slightly to prioritize current page render
+    // Use requestIdleCallback for non-critical prefetching
+    const scheduleIdlePrefetch = (callback: () => void) => {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(callback, { timeout: 300 });
+      } else {
+        setTimeout(callback, 50);
+      }
+    };
+    
+    // Immediate prefetch for likely next screens
     const timer = setTimeout(() => {
       // From consumer home - prefetch jobs, vendors, rewards, messages
       if (path === '/consumer') {
         prefetchJobs();
         prefetchVendors();
-        prefetchRewards();
-        prefetchConversations();
-        prefetchFavorites();
+        scheduleIdlePrefetch(() => {
+          prefetchRewards();
+          prefetchConversations();
+          prefetchFavorites();
+          prefetchProfile();
+        });
       }
       
       // From vendor home - prefetch available jobs, messages, stats
       if (path === '/vendor') {
         prefetchAvailableJobs();
-        prefetchConversations();
-        prefetchNotifications();
+        prefetchVendorStats();
+        scheduleIdlePrefetch(() => {
+          prefetchConversations();
+          prefetchNotifications();
+          prefetchProfile();
+        });
       }
       
       // From jobs list - prefetch vendors for potential navigation
@@ -170,7 +224,13 @@ export const useDataPrefetch = () => {
       
       // From login/welcome - prefetch vendors (public data)
       if (path === '/' || path === '/login') {
-        prefetchVendors();
+        scheduleIdlePrefetch(prefetchVendors);
+      }
+      
+      // From profile - prefetch rewards and notifications
+      if (path === '/profile') {
+        prefetchRewards();
+        prefetchNotifications();
       }
       
       // From rewards - prefetch jobs for transaction history
@@ -178,7 +238,7 @@ export const useDataPrefetch = () => {
         prefetchJobs();
       }
       
-    }, 100); // Small delay to let current page render first
+    }, 50); // Reduced delay for faster prefetching
 
     return () => clearTimeout(timer);
   }, [
@@ -190,7 +250,9 @@ export const useDataPrefetch = () => {
     prefetchConversations,
     prefetchNotifications,
     prefetchAvailableJobs,
-    prefetchFavorites
+    prefetchFavorites,
+    prefetchProfile,
+    prefetchVendorStats
   ]);
 
   return {
@@ -201,6 +263,8 @@ export const useDataPrefetch = () => {
     prefetchAvailableJobs,
     prefetchRewards,
     prefetchFavorites,
+    prefetchProfile,
+    prefetchVendorStats,
   };
 };
 

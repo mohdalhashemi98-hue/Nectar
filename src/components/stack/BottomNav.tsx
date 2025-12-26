@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { UserType, ScreenType } from '@/types/stack';
 import { triggerFeedback } from '@/hooks/use-feedback';
+import { usePreloadOnIntent } from '@/hooks/use-preload-on-intent';
 
 interface BottomNavProps {
   active: string;
@@ -11,7 +12,21 @@ interface BottomNavProps {
   unreadMessages?: number;
 }
 
+// Map screen types to routes for preloading
+const screenToRoute: Record<string, string> = {
+  'vendor-home': '/vendor',
+  'consumer-home': '/consumer',
+  'transactions': '/jobs',
+  'company-profile': '/company-profile',
+  'messages-list': '/messages',
+  'profile': '/profile',
+  'market-benchmark': '/market-benchmark',
+  'rewards': '/rewards',
+};
+
 const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMessages = 0 }: BottomNavProps) => {
+  const { preloadOnIntent } = usePreloadOnIntent();
+  
   const navItems = userType === 'vendor' 
     ? [
         { key: 'home', icon: Home, label: 'Home', screen: 'vendor-home' as ScreenType, badge: 0 },
@@ -33,6 +48,13 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
     onNavigate(screen);
   };
 
+  const handlePreload = (screen: ScreenType) => {
+    const route = screenToRoute[screen];
+    if (route) {
+      preloadOnIntent(route);
+    }
+  };
+
   return (
     <motion.div 
       initial={{ y: 100 }}
@@ -47,8 +69,10 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
             <motion.button
               key={item.key}
               onClick={() => handleNavClick(item.screen)}
-              whileTap={{ scale: 0.9 }}
-              className={`relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-200 ${
+              onMouseEnter={() => handlePreload(item.screen)}
+              onTouchStart={() => handlePreload(item.screen)}
+              whileTap={{ scale: 0.95 }}
+              className={`relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-150 ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary/70'
               }`}
             >
@@ -56,7 +80,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                 <motion.div
                   layoutId="activeTab"
                   className="absolute inset-0 bg-primary/10 rounded-xl"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                 />
               )}
               <div className="relative">
