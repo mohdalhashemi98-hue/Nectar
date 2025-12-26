@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, ChevronRight, User, CreditCard, Bell, Shield, HelpCircle, LogOut, Trophy, Sparkles, Receipt, Download, Calendar, CheckCircle2, XCircle, Clock, Wallet as WalletIcon, TrendingUp, Briefcase, FileText, Vibrate } from 'lucide-react';
+import { Settings, ChevronRight, User, CreditCard, Bell, Shield, HelpCircle, LogOut, Trophy, Sparkles, Receipt, Download, Calendar, CheckCircle2, XCircle, Clock, Wallet as WalletIcon, TrendingUp, Briefcase, FileText } from 'lucide-react';
 import { UserProfile, Rewards, ScreenType, UserType, Job } from '@/types/stack';
 import { initialTransactions, initialJobs } from '@/data/stack-data';
 import { Transaction } from '@/types/stack';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import BottomNav from '../BottomNav';
 import StackPattern from '../StackPattern';
-import { useSettingsStore } from '@/stores/settings-store';
 
 interface ProfileScreenProps {
   userProfile: UserProfile;
@@ -30,13 +28,13 @@ const ProfileScreen = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'activity'>('overview');
   const [transactions] = useState<Transaction[]>(initialTransactions);
   const [jobs] = useState<Job[]>(initialJobs);
-  const { hapticEnabled, setHapticEnabled } = useSettingsStore();
 
   const menuItems = [
     { icon: User, label: 'Personal Info', screen: null },
     { icon: CreditCard, label: 'Payment Methods', screen: null },
     { icon: Bell, label: 'Notifications', screen: 'notifications' as ScreenType },
     { icon: Shield, label: 'Privacy & Security', screen: null },
+    { icon: Settings, label: 'Settings', screen: 'settings' as ScreenType },
     { icon: HelpCircle, label: 'Help & Support', screen: 'help' as ScreenType }
   ];
 
@@ -80,7 +78,10 @@ const ProfileScreen = ({
             className="flex items-center justify-between mb-6"
           >
             <h1 className="font-display text-2xl font-bold">Profile</h1>
-            <button className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-all">
+            <button 
+              onClick={() => onNavigate('settings')}
+              className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-all"
+            >
               <Settings className="w-5 h-5" />
             </button>
           </motion.div>
@@ -164,29 +165,6 @@ const ProfileScreen = ({
               </motion.button>
             )}
 
-            {/* App Settings */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.18 }}
-              className="card-interactive p-4"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
-                    <Vibrate className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-foreground">Haptic Feedback</span>
-                    <p className="text-xs text-muted-foreground">Vibration on interactions</p>
-                  </div>
-                </div>
-                <Switch 
-                  checked={hapticEnabled} 
-                  onCheckedChange={setHapticEnabled}
-                />
-              </div>
-            </motion.div>
 
             {/* Menu Items */}
             {menuItems.map((item, i) => (

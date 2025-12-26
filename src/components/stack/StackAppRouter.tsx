@@ -39,6 +39,7 @@ const VendorOnboarding = lazy(() => import('@/features/vendor/VendorOnboarding')
 const VendorSignupScreen = lazy(() => import('@/features/vendor/VendorSignupScreen'));
 const ResetPasswordScreen = lazy(() => import('@/components/stack/screens/ResetPasswordScreen'));
 const UserVerificationScreen = lazy(() => import('@/components/verification/UserVerificationScreen'));
+const SettingsScreen = lazy(() => import('@/features/screens/SettingsScreen'));
 
 // Map routes to screen types for animation logic
 const routeToScreen: Record<string, ScreenType> = {
@@ -66,6 +67,7 @@ const routeToScreen: Record<string, ScreenType> = {
   '/company-profile': 'company-profile',
   '/help': 'help',
   '/verify': 'user-verification',
+  '/settings': 'settings',
 };
 
 // Edge swipe zone width in pixels
@@ -399,6 +401,11 @@ const StackAppRouter: React.FC = () => {
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <ProfileScreen />
+                  </ProtectedRoute>
+                } />
+                <Route path="/settings" element={
+                  <ProtectedRoute>
+                    <SettingsScreen />
                   </ProtectedRoute>
                 } />
                 <Route path="/rewards" element={
