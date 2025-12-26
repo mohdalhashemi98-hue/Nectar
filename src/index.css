@@ -530,16 +530,12 @@
 
   /* Bottom navigation specific styling */
   .bottom-nav {
-    @apply fixed bottom-0 left-0 right-0 z-50;
+    @apply fixed bottom-0 z-50;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  @media (min-width: 640px) {
-    .bottom-nav {
-      max-width: 430px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
   }
 
   /* iOS-specific touch optimizations */
