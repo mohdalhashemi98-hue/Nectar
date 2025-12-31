@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle, Timer, Star, ChevronRight, Briefcase, Plus, MapPin, Calendar, Users, RefreshCw } from 'lucide-react';
 import { Job, ScreenType, UserType } from '@/types/stack';
 import { useState } from 'react';
 import BottomNav from '../BottomNav';
 import { CategoryIcon } from '../utils/categoryIcons';
 import { useUpdateJobStatus } from '@/hooks/use-data-queries';
 import { toast } from 'sonner';
+import { ScreenHeader } from '@/components/shared';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,34 +130,22 @@ const JobsScreen = ({ jobs, userType, onBack, onNavigate, onSelectJob }: JobsScr
   return (
     <div className="w-full bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4"
+      <ScreenHeader
+        title="Jobs"
+        subtitle="Find services or track your requests"
+        onBack={onBack}
+        icon={Briefcase}
+        rightAction={
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate('post-request')}
+            className="w-12 h-12 rounded-2xl bg-primary-foreground/20 flex items-center justify-center"
           >
-            <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <h1 className="font-display text-2xl font-bold">Jobs</h1>
-              <p className="opacity-60 text-sm">Find services or track your requests</p>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onNavigate('post-request')}
-              className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center"
-            >
-              <Plus className="w-6 h-6" />
-            </motion.button>
-          </motion.div>
-        </div>
-      </div>
+            <Plus className="w-6 h-6" />
+          </motion.button>
+        }
+      />
 
       {/* Tabs */}
       <div className="px-4 py-4">

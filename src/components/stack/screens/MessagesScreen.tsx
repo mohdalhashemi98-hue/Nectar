@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MessageCircle, CheckCheck, Circle, ArrowLeft } from 'lucide-react';
+import { Search, MessageCircle, CheckCheck, Circle } from 'lucide-react';
 import { Conversation, ScreenType, UserType } from '@/types/stack';
 import BottomNav from '../BottomNav';
+import { ScreenHeader } from '@/components/shared';
 
 interface MessagesScreenProps {
   conversations: Conversation[];
@@ -33,40 +34,24 @@ const MessagesScreen = ({
   return (
     <div className="w-full bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-golden px-4 pt-6 pb-5 relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-        
+      <ScreenHeader
+        title="Messages"
+        subtitle={unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
+        onBack={onBack}
+        icon={MessageCircle}
+      >
+        {/* Search */}
         <div className="relative">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
-              <button onClick={onBack} className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-white" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Messages</h1>
-                <p className="text-white/70 text-sm mt-0.5">
-                  {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
-                </p>
-              </div>
-            </div>
-            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <MessageCircle className="w-6 h-6 text-white" />
-            </div>
-          </div>
-
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search messages..."
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/20 backdrop-blur-sm placeholder:text-white/60 text-white border border-white/20 focus:outline-none focus:border-white/40 transition-colors"
-            />
-          </div>
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-foreground/60" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search messages..."
+            className="w-full pl-12 pr-4 py-3 rounded-xl bg-primary-foreground/20 backdrop-blur-sm placeholder:text-primary-foreground/60 text-primary-foreground border border-primary-foreground/20 focus:outline-none focus:border-primary-foreground/40 transition-colors"
+          />
         </div>
-      </div>
+      </ScreenHeader>
 
       {/* Filter Tabs */}
       <div className="px-5 py-3 flex gap-2">

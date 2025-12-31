@@ -3,3 +3,4 @@ export { default as AnimatedIcon } from './AnimatedIcon';
 export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as HapticButton } from './HapticButton';
 export { default as PreloadLink } from './PreloadLink';
+export { default as ScreenHeader } from './ScreenHeader';
