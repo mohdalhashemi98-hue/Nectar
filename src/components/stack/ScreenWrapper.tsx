@@ -47,29 +47,24 @@ const ScreenWrapper = ({
   unreadMessages = 2
 }: ScreenWrapperProps) => {
   return (
-    <div
-      className="w-full"
-      style={{
-        // Reserve space for the fixed BottomNav by shrinking the route scroll container,
-        // so we don't need extra padding (which can create unnecessary scrolling).
-        ['--app-bottom-offset' as any]: showNav
-          ? 'calc(80px + env(safe-area-inset-bottom, 0px))'
-          : '0px',
-      }}
-    >
+    <>
       {/* Main content area */}
       <div
         className={`
           screen-content w-full
           ${safeAreaTop ? 'safe-area-pt' : ''}
           ${fullBleed ? '' : 'screen-padded'}
+          ${showNav ? 'pb-24' : ''}
           ${className}
         `}
+        style={{
+          paddingBottom: showNav ? 'calc(80px + env(safe-area-inset-bottom, 0px))' : undefined,
+        }}
       >
         {children}
       </div>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation - Fixed position */}
       {showNav && userType && onNavigate && (
         <BottomNav
           active={activeNav}
@@ -79,7 +74,7 @@ const ScreenWrapper = ({
           unreadMessages={unreadMessages}
         />
       )}
-    </div>
+    </>
   );
 };
 
