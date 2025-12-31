@@ -143,19 +143,19 @@ const StackAppRouter: React.FC = () => {
     }
   }, [currentScreen, userType]);
 
-  // Animation variants - optimized for performance
+  // Animation variants - heavily simplified for performance
   const isModalScreen = ['review', 'payment', 'notifications', 'help'].includes(currentScreen);
 
-  // Simpler, faster slide animation - only use translateX, no scale/opacity for better perf
+  // Minimal slide animation - only use translateX for better perf
   const slideVariants = useMemo(() => ({
     enter: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '100%' : '-30%',
-      opacity: direction === 'forward' ? 1 : 0.5,
+      x: direction === 'forward' ? '100%' : '-20%',
+      opacity: direction === 'forward' ? 1 : 0.8,
     }),
     center: { x: 0, opacity: 1 },
     exit: (direction: 'forward' | 'back') => ({
-      x: direction === 'forward' ? '-30%' : '100%',
-      opacity: direction === 'forward' ? 0.5 : 1,
+      x: direction === 'forward' ? '-20%' : '100%',
+      opacity: direction === 'forward' ? 0.8 : 1,
     }),
   }), []);
 
@@ -168,11 +168,11 @@ const StackAppRouter: React.FC = () => {
 
   const screenVariants = isModalScreen ? fadeVariants : slideVariants;
 
-  // Faster, hardware-accelerated transition
+  // Ultra-fast transition
   const transitionConfig = useMemo(() => ({
     type: 'tween' as const,
-    duration: 0.15,
-    ease: [0.32, 0.72, 0, 1] as [number, number, number, number], // iOS-like ease
+    duration: 0.12,
+    ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
   }), []);
 
   // Swipe back logic - only from edge
