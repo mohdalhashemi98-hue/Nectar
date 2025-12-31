@@ -274,7 +274,7 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
       case 'active_arrived':
         return { label: 'Arrived', color: 'text-primary', bg: 'bg-primary/10', next: 'active_working', nextLabel: 'Start Work' };
       case 'active_working':
-        return { label: 'Working', color: 'text-orange-500', bg: 'bg-orange-500/10', next: 'active_payment', nextLabel: 'Ready for Payment' };
+        return { label: 'Working', color: 'text-sky-500', bg: 'bg-sky-500/10', next: 'active_payment', nextLabel: 'Ready for Payment' };
       case 'active_payment':
         return { label: 'Awaiting Payment', color: 'text-green-500', bg: 'bg-green-500/10', next: null, nextLabel: null };
       default:
@@ -419,12 +419,12 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
                       <span className="text-sm text-muted-foreground">Consumer Budget:</span>
                       <span className="font-bold text-primary">{job.budgetRange.min} - {job.budgetRange.max} AED</span>
                     </div>
-                    <div className="flex items-center justify-between px-3 py-2 bg-orange-500/5 rounded-xl border border-orange-500/10">
+                    <div className="flex items-center justify-between px-3 py-2 bg-sky-500/5 rounded-xl border border-sky-500/10">
                       <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Users className="w-3 h-3" />
                         Competition:
                       </span>
-                      <span className="font-semibold text-orange-600">You are 1 of {job.quotingPros} Pros quoting</span>
+                      <span className="font-semibold text-sky-600">You are 1 of {job.quotingPros} Pros quoting</span>
                     </div>
                   </div>
 
@@ -505,7 +505,7 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
                               getAIPriceRecommendation(job.budgetRange, parseFloat(quoteAmount)).type === 'optimal'
                                 ? 'bg-green-500/10 border-green-500/20'
                                 : getAIPriceRecommendation(job.budgetRange, parseFloat(quoteAmount)).type === 'high'
-                                ? 'bg-orange-500/10 border-orange-500/20'
+                                ? 'bg-sky-500/10 border-sky-500/20'
                                 : 'bg-blue-500/10 border-blue-500/20'
                             }`}
                           >

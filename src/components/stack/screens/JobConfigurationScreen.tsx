@@ -265,7 +265,7 @@ const JobConfigurationScreen = ({
                   {/* Price bar */}
                   <div className="relative h-8 rounded-lg bg-secondary overflow-hidden mb-2">
                     <div 
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500/20 via-primary/30 to-orange-500/20"
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500/20 via-primary/30 to-sky-500/20"
                       style={{ width: '100%' }}
                     />
                     {/* Markers */}
