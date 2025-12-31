@@ -433,7 +433,113 @@ const JobConfigurationScreen = ({
                 </button>
               );
             })}
+        </div>
+        </motion.div>
+
+        {/* Budget with AI Suggestions */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+            <DollarSign className="w-4 h-4" />
+            Your Budget (AED)
+          </label>
+          
+          {/* AI-Powered Budget Suggestions based on market data */}
+          {marketData && (
+            <div className="mb-3">
+              <div className="flex items-center gap-1.5 mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <span className="text-xs text-muted-foreground">AI-suggested based on market data</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => {
+                    setRequestDetails({ ...requestDetails, budget: `${marketData.minPrice}` });
+                    haptic('light');
+                  }}
+                  className={`p-3 rounded-xl text-center transition-all relative ${
+                    requestDetails.budget === `${marketData.minPrice}`
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card border border-border hover:border-primary/30'
+                  }`}
+                >
+                  <div className="text-[10px] opacity-70 mb-0.5">Budget</div>
+                  <div className="font-bold text-sm">{marketData.minPrice}</div>
+                  <div className="text-[10px] opacity-70">AED</div>
+                </button>
+                <button
+                  onClick={() => {
+                    setRequestDetails({ ...requestDetails, budget: `${marketData.avgPrice}` });
+                    haptic('light');
+                  }}
+                  className={`p-3 rounded-xl text-center transition-all relative ${
+                    requestDetails.budget === `${marketData.avgPrice}`
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 hover:border-primary/50'
+                  }`}
+                >
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full">
+                    RECOMMENDED
+                  </div>
+                  <div className="text-[10px] opacity-70 mb-0.5">Fair Price</div>
+                  <div className="font-bold text-sm">{marketData.avgPrice}</div>
+                  <div className="text-[10px] opacity-70">AED</div>
+                </button>
+                <button
+                  onClick={() => {
+                    setRequestDetails({ ...requestDetails, budget: `${marketData.maxPrice}` });
+                    haptic('light');
+                  }}
+                  className={`p-3 rounded-xl text-center transition-all relative ${
+                    requestDetails.budget === `${marketData.maxPrice}`
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card border border-border hover:border-primary/30'
+                  }`}
+                >
+                  <div className="text-[10px] opacity-70 mb-0.5">Premium</div>
+                  <div className="font-bold text-sm">{marketData.maxPrice}</div>
+                  <div className="text-[10px] opacity-70">AED</div>
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Custom budget input */}
+          <div className="relative">
+            <Input
+              placeholder="Or enter custom amount"
+              value={
+                requestDetails.budget && 
+                marketData && 
+                ![`${marketData.minPrice}`, `${marketData.avgPrice}`, `${marketData.maxPrice}`].includes(requestDetails.budget)
+                  ? requestDetails.budget 
+                  : ''
+              }
+              onChange={(e) => setRequestDetails({ ...requestDetails, budget: e.target.value })}
+              className="bg-secondary border-transparent focus:border-primary/30 pl-12"
+              type="number"
+            />
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">AED</span>
           </div>
+          
+          {/* Flexible budget option */}
+          <button
+            onClick={() => {
+              setRequestDetails({ ...requestDetails, budget: 'Flexible' });
+              haptic('light');
+            }}
+            className={`mt-2 w-full py-2 px-3 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+              requestDetails.budget === 'Flexible'
+                ? 'bg-primary/10 text-primary border border-primary/30'
+                : 'bg-secondary text-muted-foreground hover:bg-secondary/80'
+            }`}
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Flexible - Let vendors suggest pricing
+          </button>
         </motion.div>
 
         {/* Subscription Option */}
