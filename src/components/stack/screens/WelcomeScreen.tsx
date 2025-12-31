@@ -31,18 +31,18 @@ const WelcomeScreen = ({
     navigate('/login');
   };
 
-  return <div className="flex flex-col min-h-screen bg-gradient-golden relative overflow-hidden">
+  return <div className="flex flex-col min-h-screen bg-[#0f172a] relative overflow-hidden">
     {/* Theme Toggle */}
     <div className="absolute top-4 right-4 z-20">
       <ThemeToggle />
     </div>
     
     {/* Stack pattern background - covers entire screen */}
-    <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
+    <StackPattern opacity="0.06" color="3b82f6" className="absolute inset-0" />
     {/* Decorative elements */}
-    <div className="absolute top-0 right-0 w-96 h-96 bg-primary-foreground/10 rounded-full blur-3xl" />
-    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-foreground/5 rounded-full blur-3xl" />
-    <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-primary-foreground/8 rounded-full blur-2xl" />
+    <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl" />
+    <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-sky-500/8 rounded-full blur-2xl" />
     
     <div className="relative flex-1 flex flex-col justify-center items-center px-4 z-10">
       <motion.div initial={{
@@ -64,7 +64,7 @@ const WelcomeScreen = ({
         delay: 0.2,
         duration: 0.5
       }} className="mb-6 relative flex items-center justify-center">
-          <div className="absolute w-28 h-28 bg-primary-foreground/30 rounded-full blur-xl" />
+          <div className="absolute w-28 h-28 bg-blue-500/30 rounded-full blur-xl" />
           <motion.div animate={{
           y: [0, -8, 0]
         }} transition={{
@@ -75,8 +75,8 @@ const WelcomeScreen = ({
             <StackLogo size={112} />
           </motion.div>
         </motion.div>
-        <h1 className="font-display text-5xl font-bold text-primary-foreground mb-3 tracking-tight">Stack</h1>
-        <p className="text-lg text-primary-foreground/80">Verified Pros. Guaranteed Value.</p>
+        <h1 className="font-display text-5xl font-bold text-white mb-3 tracking-tight">Stack</h1>
+        <p className="text-lg text-blue-200/90">Verified Pros. Guaranteed Value.</p>
       </motion.div>
 
       <motion.div initial={{
@@ -105,8 +105,8 @@ const WelcomeScreen = ({
       }} transition={{
         delay: 0.5 + idx * 0.1
       }}>
-            <div className="font-display text-2xl font-bold text-primary-foreground">{stat.value}</div>
-            <div className="text-xs text-primary-foreground/70 font-medium mt-0.5">{stat.label}</div>
+            <div className="font-display text-2xl font-bold text-white">{stat.value}</div>
+            <div className="text-xs text-blue-200/80 font-medium mt-0.5">{stat.label}</div>
           </motion.div>)}
       </motion.div>
       
@@ -131,8 +131,8 @@ const WelcomeScreen = ({
       }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-golden rounded-3xl flex items-center justify-center shadow-md">
-                <Home className="w-6 h-6 text-primary-foreground" />
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-sky-400 rounded-3xl flex items-center justify-center shadow-md">
+                <Home className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
                 <div className="font-display text-xl font-bold text-slate-900">I need help</div>
@@ -151,18 +151,20 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={handleLogin} className="group w-full bg-primary-foreground/15 backdrop-blur-sm border-2 border-primary-foreground/30 hover:border-primary-foreground/50 hover:bg-primary-foreground/25 py-5 px-5 rounded-3xl transition-all duration-300">
+      }} onClick={handleLogin} className="group w-full bg-[#1e3a5f] hover:bg-[#254a75] border-2 border-blue-400/30 hover:border-blue-400/50 py-5 px-5 rounded-3xl transition-all duration-300" style={{
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+      }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-primary-foreground/20 rounded-3xl flex items-center justify-center group-hover:bg-primary-foreground/30 transition-all duration-300">
-                <Briefcase className="w-6 h-6 text-primary-foreground" />
+              <div className="w-14 h-14 bg-blue-500/20 rounded-3xl flex items-center justify-center group-hover:bg-blue-500/30 transition-all duration-300">
+                <Briefcase className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="font-display text-xl font-bold text-primary-foreground">I'm a Pro</div>
-                <div className="text-sm text-primary-foreground/70">Sign in to find jobs</div>
+                <div className="font-display text-xl font-bold text-white">I'm a Pro</div>
+                <div className="text-sm text-blue-200/80">Sign in to find jobs</div>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-primary-foreground/70 group-hover:text-primary-foreground group-hover:translate-x-1 transition-all duration-300" />
+            <ChevronRight className="w-5 h-5 text-blue-200/70 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
           </div>
         </motion.button>
         
@@ -172,7 +174,7 @@ const WelcomeScreen = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
           onClick={handleBecomeAPro}
-          className="w-full py-3 text-center text-primary-foreground font-medium hover:underline flex items-center justify-center gap-2"
+          className="w-full py-3 text-center text-blue-200 font-medium hover:text-white hover:underline flex items-center justify-center gap-2 transition-colors"
         >
           <Rocket className="w-4 h-4" />
           New here? Become a Pro today
@@ -189,17 +191,14 @@ const WelcomeScreen = ({
     }} className="mt-12 flex items-center gap-8 text-sm">
         {[{
         icon: Shield,
-        label: 'Verified',
-        color: 'text-primary-foreground'
+        label: 'Verified'
       }, {
         icon: Award,
-        label: 'Licensed',
-        color: 'text-primary-foreground'
+        label: 'Licensed'
       }, {
         icon: Sparkles,
-        label: 'Quality',
-        color: 'text-primary-foreground'
-      }].map((item, idx) => <div key={idx} className={`flex items-center gap-2 ${item.color}`}>
+        label: 'Quality'
+      }].map((item, idx) => <div key={idx} className="flex items-center gap-2 text-blue-200/90">
             <item.icon className="w-4 h-4" />
             <span className="font-medium">{item.label}</span>
           </div>)}
