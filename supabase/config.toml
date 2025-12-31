@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.send-otp]
 verify_jwt = true
+
+[functions.suggest-job-description]
+verify_jwt = false

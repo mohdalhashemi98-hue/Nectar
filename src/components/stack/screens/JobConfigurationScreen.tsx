@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Camera, X, Zap, Clock, Calendar, MapPin, CheckCircle, RefreshCw, CalendarDays, Repeat, Send, FileText, DollarSign, Info, TrendingUp, Sparkles, Users, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Camera, X, Zap, Clock, Calendar, MapPin, CheckCircle, RefreshCw, CalendarDays, Repeat, Send, FileText, DollarSign, Info, TrendingUp, Sparkles, Users, BarChart3, Wand2, Loader2 } from 'lucide-react';
 import { ScreenType, RequestDetails, SubscriptionFrequency } from '@/types/stack';
 import { categories } from '@/data/stack-data';
 import { getCategoryIcon } from '../utils/categoryIcons';
@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { haptic } from '@/hooks/use-haptic';
+import { supabase } from '@/integrations/supabase/client';
 
 // Generate AI market benchmark data
 const generateMarketData = (category: string, subService: string | null, location: string) => {
@@ -93,6 +94,41 @@ const JobConfigurationScreen = ({
 }: JobConfigurationScreenProps) => {
   const [location, setLocation] = useState('Dubai Marina, Dubai');
   const [showMarketInsights, setShowMarketInsights] = useState(false);
+  const [isGeneratingSuggestion, setIsGeneratingSuggestion] = useState(false);
+
+  const handleGenerateSuggestion = async () => {
+    setIsGeneratingSuggestion(true);
+    haptic('light');
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('suggest-job-description', {
+        body: {
+          category: selectedCategory,
+          subService: selectedSubService,
+          location: location,
+        },
+      });
+
+      if (error) {
+        console.error('Error generating suggestion:', error);
+        toast.error('Failed to generate suggestion. Please try again.');
+        return;
+      }
+
+      if (data?.suggestion) {
+        setRequestDetails({ ...requestDetails, description: data.suggestion });
+        haptic('success');
+        toast.success('AI suggestion generated!');
+      } else if (data?.error) {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      console.error('Error calling AI:', error);
+      toast.error('Failed to generate suggestion. Please try again.');
+    } finally {
+      setIsGeneratingSuggestion(false);
+    }
+  };
   
   // Get category details
   const categoryData = useMemo(() => {
@@ -314,10 +350,32 @@ const JobConfigurationScreen = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
         >
-          <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-            <FileText className="w-4 h-4" />
-            Describe Your Requirements *
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <FileText className="w-4 h-4" />
+              Describe Your Requirements *
+            </label>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleGenerateSuggestion}
+              disabled={isGeneratingSuggestion}
+              className="h-8 gap-1.5 text-xs text-primary hover:text-primary hover:bg-primary/10"
+            >
+              {isGeneratingSuggestion ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="w-3.5 h-3.5" />
+                  AI Suggest
+                </>
+              )}
+            </Button>
+          </div>
           <Textarea
             placeholder={`Describe what you need for your ${selectedSubService || selectedCategory} job...`}
             value={requestDetails.description}
