@@ -7,4 +7,4 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.suggest-job-description]
-verify_jwt = false
+verify_jwt = true
