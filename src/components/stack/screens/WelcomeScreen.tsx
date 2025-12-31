@@ -26,9 +26,9 @@ const WelcomeScreen = ({
     navigate('/vendor/signup');
   };
 
-  const handleLogin = () => {
+  const handleImAPro = () => {
     triggerFeedback('tap');
-    navigate('/login');
+    onSelectUserType('vendor');
   };
 
   return <div className="flex flex-col min-h-screen bg-[#0f172a] relative overflow-hidden">
@@ -151,7 +151,7 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={handleLogin} className="group w-full bg-[#1e3a5f] hover:bg-[#254a75] border-2 border-blue-400/30 hover:border-blue-400/50 py-5 px-5 rounded-3xl transition-all duration-300" style={{
+      }} onClick={handleImAPro} className="group w-full bg-[#1e3a5f] hover:bg-[#254a75] border-2 border-blue-400/30 hover:border-blue-400/50 py-5 px-5 rounded-3xl transition-all duration-300" style={{
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
       }}>
           <div className="flex items-center justify-between">
