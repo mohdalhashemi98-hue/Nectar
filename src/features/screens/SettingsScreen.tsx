@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { ChevronLeft, Vibrate, Volume2, Bell, Moon, Lock, Smartphone, Eye, Trash2 } from 'lucide-react';
+import { Vibrate, Volume2, Bell, Moon, Lock, Smartphone, Eye, Trash2, Settings } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useSettingsStore } from '@/stores/settings-store';
-import StackPattern from '@/components/stack/StackPattern';
 import { useAppNavigation } from '@/hooks/use-app-navigation';
+import { ScreenHeader } from '@/components/shared';
 
 const SettingsScreen = () => {
   const { goBack } = useAppNavigation();
@@ -98,26 +98,12 @@ const SettingsScreen = () => {
   return (
     <div className="w-full bg-background pb-8">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground px-4 py-6 relative overflow-hidden">
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3"
-          >
-            <button 
-              onClick={goBack}
-              className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-all"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <h1 className="font-display text-2xl font-bold">Settings</h1>
-          </motion.div>
-        </div>
-      </div>
+      <ScreenHeader
+        title="Settings"
+        subtitle="Manage your preferences"
+        onBack={goBack}
+        icon={Settings}
+      />
 
       {/* Settings Categories */}
       <div className="p-4 space-y-6">
