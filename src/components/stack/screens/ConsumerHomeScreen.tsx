@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown, ArrowUpDown } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
@@ -56,7 +56,6 @@ const ConsumerHomeScreen = ({
   onToggleFavorite,
   favoriteIds = new Set(),
 }: ConsumerHomeScreenProps) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [showReviewBanner, setShowReviewBanner] = useState(true);
   const [specialtyFilter, setSpecialtyFilter] = useState<string>('all');
   const [ratingFilter, setRatingFilter] = useState<number>(0);
@@ -99,10 +98,8 @@ const ConsumerHomeScreen = ({
     onRefresh: handleRefresh
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+  // Data is already loaded via React Query - no artificial delay needed
+  const isLoading = false;
 
   const pendingReviewJobs = jobs.filter(j => j.status === 'Completed' && !j.rated);
 
