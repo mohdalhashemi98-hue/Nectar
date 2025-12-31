@@ -1,9 +1,9 @@
 import { Category, Job, Offer, Vendor, Conversation, Notification, AvailableJob, Rewards, VendorStats, TierConfig, UserProfile, Transaction, SubService } from '@/types/stack';
 
 export const tierConfig: TierConfig = {
-  Bronze: { color: 'amber', cashback: 2, minPoints: 0, icon: '🥉', benefits: ['2% cashback', 'Basic support'] },
+  Bronze: { color: 'sky', cashback: 2, minPoints: 0, icon: '🥉', benefits: ['2% cashback', 'Basic support'] },
   Silver: { color: 'gray', cashback: 5, minPoints: 1000, icon: '🥈', benefits: ['5% cashback', 'Priority support', 'Free cancellation'] },
-  Gold: { color: 'yellow', cashback: 8, minPoints: 2500, icon: '🥇', benefits: ['8% cashback', 'VIP support', 'Free cancellation', 'Exclusive offers'] },
+  Gold: { color: 'blue', cashback: 8, minPoints: 2500, icon: '🥇', benefits: ['8% cashback', 'VIP support', 'Free cancellation', 'Exclusive offers'] },
   Platinum: { color: 'purple', cashback: 12, minPoints: 5000, icon: '👑', benefits: ['12% cashback', 'Dedicated support', 'Free cancellation', 'Exclusive offers', 'Early access'] }
 };
 
@@ -85,7 +85,7 @@ export const categories: Category[] = [
   { 
     name: 'Electrical Services', 
     icon: 'Zap', 
-    gradient: 'from-yellow-500 to-orange-400', 
+    gradient: 'from-sky-500 to-blue-400', 
     jobs: 1221, 
     avgPrice: '220 AED', 
     description: 'Safety, repairs & installations',
@@ -100,7 +100,7 @@ export const categories: Category[] = [
   { 
     name: 'General Handyman', 
     icon: 'Wrench', 
-    gradient: 'from-orange-500 to-red-400', 
+    gradient: 'from-blue-500 to-indigo-400', 
     jobs: 1892, 
     avgPrice: '150 AED', 
     description: 'Small fixes & installations',

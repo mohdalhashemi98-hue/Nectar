@@ -52,7 +52,7 @@ const Install = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white flex flex-col">
       {/* Header */}
       <div className="p-4">
         <Button

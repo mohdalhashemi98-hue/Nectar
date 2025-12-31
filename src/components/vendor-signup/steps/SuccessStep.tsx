@@ -27,14 +27,14 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrades, onGoToDashboar
           angle: 60,
           spread: 55,
           origin: { x: 0, y: 0.8 },
-          colors: ['#FFD700', '#FFA500', '#FF6347', '#32CD32', '#1E90FF'],
+          colors: ['#3B82F6', '#0EA5E9', '#22C55E', '#06B6D4', '#1E90FF'],
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1, y: 0.8 },
-          colors: ['#FFD700', '#FFA500', '#FF6347', '#32CD32', '#1E90FF'],
+          colors: ['#3B82F6', '#0EA5E9', '#22C55E', '#06B6D4', '#1E90FF'],
         });
 
         if (Date.now() < end) {
@@ -74,7 +74,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrades, onGoToDashboar
             transition={{ delay: 0.6 }}
             className="absolute -top-2 -right-2"
           >
-            <Sparkles className="w-8 h-8 text-yellow-500" />
+            <Sparkles className="w-8 h-8 text-sky-500" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, scale: 0 }}

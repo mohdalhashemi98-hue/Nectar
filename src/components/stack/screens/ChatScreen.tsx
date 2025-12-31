@@ -161,7 +161,7 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
                 {conversation.avatar}
               </div>
               {isOnline && (
-                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-amber-500" />
+                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-primary" />
               )}
             </div>
             <div className="flex-1 min-w-0">
