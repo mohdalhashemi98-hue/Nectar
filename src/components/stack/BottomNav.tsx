@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { UserType, ScreenType } from '@/types/stack';
 import { triggerFeedback } from '@/hooks/use-feedback';
 import { usePreloadOnIntent } from '@/hooks/use-preload-on-intent';
@@ -26,21 +27,21 @@ const screenToRoute: Record<string, string> = {
 
 const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMessages = 0 }: BottomNavProps) => {
   const { preloadOnIntent } = usePreloadOnIntent();
-  
-  const navItems = userType === 'vendor' 
+
+  const navItems = userType === 'vendor'
     ? [
         { key: 'home', icon: Home, label: 'Home', screen: 'vendor-home' as ScreenType, badge: 0 },
         { key: 'transactions', icon: Briefcase, label: 'Work', screen: 'transactions' as ScreenType, badge: 0 },
         { key: 'company', icon: Building2, label: 'Company', screen: 'company-profile' as ScreenType, badge: 0 },
         { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType, badge: unreadMessages },
-        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: 0 }
+        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: 0 },
       ]
     : [
         { key: 'home', icon: Home, label: 'Home', screen: 'consumer-home' as ScreenType, badge: 0 },
         { key: 'benchmark', icon: TrendingUp, label: 'Benchmark', screen: 'market-benchmark' as ScreenType, badge: 0 },
         { key: 'rewards', icon: Gift, label: 'Rewards', screen: 'rewards' as ScreenType, badge: 0 },
         { key: 'messages', icon: MessageCircle, label: 'Chat', screen: 'messages-list' as ScreenType, badge: unreadMessages },
-        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: pendingQuotes }
+        { key: 'profile', icon: User, label: 'Profile', screen: 'profile' as ScreenType, badge: pendingQuotes },
       ];
 
   const handleNavClick = (screen: ScreenType) => {
@@ -50,18 +51,15 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
 
   const handlePreload = (screen: ScreenType) => {
     const route = screenToRoute[screen];
-    if (route) {
-      preloadOnIntent(route);
-    }
+    if (route) preloadOnIntent(route);
   };
 
-  return (
-    <motion.div 
+  const nav = (
+    <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border/50 px-2 py-2 shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.1)]"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/50 px-2 py-2 shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.1)]"
     >
       <div className="flex justify-around items-center max-w-md mx-auto">
         {navItems.map((item) => {
@@ -83,15 +81,10 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                   layoutId="activeTabPill"
                   className="absolute inset-0 bg-primary/12 rounded-2xl"
                   initial={false}
-                  transition={{ 
-                    type: 'spring', 
-                    stiffness: 400, 
-                    damping: 30,
-                    mass: 0.8
-                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
                 />
               )}
-              
+
               {/* Active glow effect */}
               {isActive && (
                 <motion.div
@@ -99,17 +92,13 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                   className="absolute inset-0 rounded-2xl"
                   initial={false}
                   style={{
-                    background: 'radial-gradient(ellipse at center bottom, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
+                    background:
+                      'radial-gradient(ellipse at center bottom, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
                   }}
-                  transition={{ 
-                    type: 'spring', 
-                    stiffness: 400, 
-                    damping: 30,
-                    mass: 0.8
-                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
                 />
               )}
-              
+
               <div className="relative z-10">
                 <motion.div
                   animate={isActive ? { y: -2, scale: 1.1 } : { y: 0, scale: 1 }}
@@ -132,8 +121,8 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                   )}
                 </AnimatePresence>
               </div>
-              
-              <motion.span 
+
+              <motion.span
                 animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.8, y: 0 }}
                 className={`text-[10px] font-semibold relative z-10 ${isActive ? 'font-bold' : ''}`}
               >
@@ -145,6 +134,10 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
       </div>
     </motion.div>
   );
+
+  // Render outside of animated/transformed containers so `fixed` stays viewport-fixed.
+  if (typeof document === 'undefined') return null;
+  return createPortal(nav, document.body);
 };
 
 export default BottomNav;
