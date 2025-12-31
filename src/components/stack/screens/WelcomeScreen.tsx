@@ -135,8 +135,8 @@ const WelcomeScreen = ({
                 <Home className="w-6 h-6 text-primary-foreground" />
               </div>
               <div className="text-left">
-                <div className="font-display text-xl font-bold text-foreground">I need help</div>
-                <div className="text-sm text-muted-foreground">Post a job & get offers</div>
+                <div className="font-display text-xl font-bold text-slate-900">I need help</div>
+                <div className="text-sm text-slate-600">Post a job & get offers</div>
               </div>
             </div>
             <div className="flex items-center gap-2">
