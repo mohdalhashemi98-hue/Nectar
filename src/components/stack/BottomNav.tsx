@@ -60,7 +60,8 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border px-2 py-2"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border px-2 py-2"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       <div className="flex justify-around items-center">
         {navItems.map((item) => {
