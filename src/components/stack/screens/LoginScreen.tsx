@@ -1,10 +1,44 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle, CheckCircle2, ArrowLeft, Briefcase, Home } from 'lucide-react';
 import { UserType } from '@/types/stack';
 import StackLogo from '@/components/StackLogo';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
+
+// Theme configurations based on user type
+const getThemeConfig = (userType: UserType) => {
+  if (userType === 'vendor') {
+    return {
+      bgClass: 'bg-[#0f172a]',
+      gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e3a5f] to-[#0f172a]',
+      accentColor: 'bg-blue-500',
+      textPrimary: 'text-white',
+      textSecondary: 'text-blue-200/80',
+      backButtonBg: 'bg-blue-500/20 hover:bg-blue-500/30',
+      backButtonText: 'text-white',
+      icon: Briefcase,
+      title: 'Pro Login',
+      subtitle: 'Access your professional dashboard',
+      signupTitle: 'Join as a Pro',
+      signupSubtitle: 'Start earning with Stack today',
+    };
+  }
+  return {
+    bgClass: 'bg-gradient-to-br from-sky-500 via-blue-500 to-blue-600',
+    gradientClass: 'bg-gradient-to-br from-sky-500 via-blue-500 to-blue-600',
+    accentColor: 'bg-white',
+    textPrimary: 'text-white',
+    textSecondary: 'text-white/80',
+    backButtonBg: 'bg-white/20 hover:bg-white/30',
+    backButtonText: 'text-white',
+    icon: Home,
+    title: 'Welcome Back',
+    subtitle: 'Find trusted professionals',
+    signupTitle: 'Create Account',
+    signupSubtitle: 'Join Stack and get things done',
+  };
+};
 
 interface LoginScreenProps {
   onLoginSuccess: () => void;
@@ -21,6 +55,7 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 const nameSchema = z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name must be less than 100 characters');
 
 const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: LoginScreenProps) => {
+  const theme = getThemeConfig(userType || null);
   const [authScreen, setAuthScreen] = useState<AuthScreen>('login');
   const [authData, setAuthData] = useState({ email: '', password: '', name: '', phone: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -181,15 +216,19 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   // Forgot Password Screen
   if (authScreen === 'forgot-password') {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
-        <div className="flex-1 flex flex-col justify-center px-4">
+      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
+        {/* Background decorations */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        
+        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
           </motion.button>
           
           <motion.div 
@@ -197,8 +236,8 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <h1 className="font-display text-3xl font-bold text-primary-foreground">Reset Password</h1>
-            <p className="text-primary-foreground/70 mt-1">
+            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>Reset Password</h1>
+            <p className={theme.textSecondary + " mt-1"}>
               Enter your email to receive a reset link
             </p>
           </motion.div>
@@ -263,8 +302,11 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   // Reset Link Sent Confirmation Screen
   if (authScreen === 'reset-sent') {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
-        <div className="flex-1 flex flex-col justify-center px-4">
+      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        
+        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -274,13 +316,13 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-20 h-20 bg-primary-foreground/20 rounded-full flex items-center justify-center mx-auto mb-4"
+              className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <CheckCircle2 className="w-10 h-10 text-primary-foreground" />
+              <CheckCircle2 className="w-10 h-10 text-white" />
             </motion.div>
-            <h1 className="font-display text-3xl font-bold text-primary-foreground">Check Your Email</h1>
-            <p className="text-primary-foreground/70 mt-2 max-w-xs mx-auto">
-              We've sent a password reset link to <strong className="text-primary-foreground">{resetEmail}</strong>
+            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>Check Your Email</h1>
+            <p className={`${theme.textSecondary} mt-2 max-w-xs mx-auto`}>
+              We've sent a password reset link to <strong className="text-white">{resetEmail}</strong>
             </p>
           </motion.div>
 
@@ -319,15 +361,18 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
 
   if (authScreen === 'signup') {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
-        <div className="flex-1 flex flex-col justify-center px-4">
+      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        
+        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => { setAuthScreen('login'); clearError(); }} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
           </motion.button>
           
           <motion.div 
@@ -335,10 +380,11 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <h1 className="font-display text-3xl font-bold text-primary-foreground">Create Account</h1>
-            <p className="text-primary-foreground/70 mt-1">
-              {userType === 'vendor' ? 'Join as a Professional' : 'Join Stack today'}
-            </p>
+            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <theme.icon className="w-8 h-8 text-white" />
+            </div>
+            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.signupTitle}</h1>
+            <p className={`${theme.textSecondary} mt-1`}>{theme.signupSubtitle}</p>
           </motion.div>
 
           <motion.div 
@@ -443,16 +489,20 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-golden">
-      <div className="flex-1 flex flex-col justify-center px-4">
+    <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
+      {/* Background decorations */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+      
+      <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
         {onBack && (
           <motion.button 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={onBack} 
-            className="absolute top-6 left-6 p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
           >
-            <ChevronLeft className="w-6 h-6 text-primary-foreground" />
+            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
           </motion.button>
         )}
         
@@ -461,11 +511,11 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <StackLogo size={80} className="mx-auto mb-4" />
-          <h1 className="font-display text-3xl font-bold text-primary-foreground">Stack</h1>
-          <p className="text-primary-foreground/70 mt-1">
-            {userType === 'vendor' ? 'Welcome, Professional!' : 'Welcome back!'}
-          </p>
+          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <theme.icon className="w-10 h-10 text-white" />
+          </div>
+          <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.title}</h1>
+          <p className={`${theme.textSecondary} mt-1`}>{theme.subtitle}</p>
         </motion.div>
 
         <motion.div 
