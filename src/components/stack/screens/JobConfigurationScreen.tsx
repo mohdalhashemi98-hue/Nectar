@@ -210,24 +210,20 @@ const JobConfigurationScreen = ({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-primary-foreground/10 rounded-full blur-3xl" />
-        
-        <div className="px-4 py-5 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-4"
-          >
-            <button onClick={onBack} className="p-2 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <h1 className="font-display text-xl font-bold">Configure Your Job</h1>
-              <p className="text-primary-foreground/70 text-sm">Get quotes from verified pros</p>
-            </div>
-          </motion.div>
-        </div>
+      <div className="bg-background border-b border-border px-4 py-5">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <button onClick={onBack} className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+            <ArrowLeft className="w-5 h-5 text-foreground" />
+          </button>
+          <div className="flex-1">
+            <h1 className="font-display text-xl font-bold text-foreground">Configure Your Job</h1>
+            <p className="text-muted-foreground text-sm">Get quotes from verified pros</p>
+          </div>
+        </motion.div>
       </div>
 
       {/* Content */}
