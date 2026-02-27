@@ -119,17 +119,17 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   // Forgot Password
   if (authScreen === 'forgot-password') {
     return (
-      <div className="flex flex-col h-screen bg-[#0f172a]">
+      <div className="dark flex flex-col h-full bg-background">
         <div className="flex-1 flex flex-col justify-center px-6">
           <button
             onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }}
-            className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl"
+            className="absolute top-6 left-6 p-2 bg-foreground/10 rounded-xl"
           >
-            <ChevronLeft className="w-5 h-5 text-white" />
+            <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
           <div className="text-center mb-8">
-            <h1 className="font-display text-2xl font-bold text-white">Reset Password</h1>
-            <p className="text-slate-400 text-sm mt-1">Enter your email to receive a reset link</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Reset Password</h1>
+            <p className="text-muted-foreground text-sm mt-1">Enter your email to receive a reset link</p>
           </div>
           <div className="bg-card rounded-xl p-6">
             <ErrorBanner />
@@ -159,14 +159,14 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   // Reset Sent
   if (authScreen === 'reset-sent') {
     return (
-      <div className="flex flex-col h-screen bg-[#0f172a]">
+      <div className="dark flex flex-col h-full bg-background">
         <div className="flex-1 flex flex-col justify-center px-6">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-white">Check Your Email</h1>
-            <p className="text-slate-400 text-sm mt-2">We sent a reset link to <strong className="text-white">{resetEmail}</strong></p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Check Your Email</h1>
+            <p className="text-muted-foreground text-sm mt-2">We sent a reset link to <strong className="text-foreground">{resetEmail}</strong></p>
           </div>
           <div className="bg-card rounded-xl p-6 space-y-4">
             <p className="text-sm text-muted-foreground text-center">Didn't receive it? Check spam or try again.</p>
@@ -184,15 +184,15 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   // Signup
   if (authScreen === 'signup') {
     return (
-      <div className="flex flex-col h-screen bg-[#0f172a]">
-        <div className="flex-1 flex flex-col justify-center px-6">
+      <div className="dark flex flex-col h-full bg-background overflow-y-auto">
+        <div className="flex-1 flex flex-col justify-center px-6 py-8">
           <button onClick={() => { setAuthScreen('login'); clearError(); }}
-            className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl">
-            <ChevronLeft className="w-5 h-5 text-white" />
+            className="absolute top-6 left-6 p-2 bg-foreground/10 rounded-xl z-10">
+            <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
           <div className="text-center mb-8">
-            <h1 className="font-display text-2xl font-bold text-white">Create Account</h1>
-            <p className="text-slate-400 text-sm mt-1">Join Stack and get things done</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Create Account</h1>
+            <p className="text-muted-foreground text-sm mt-1">Join Stack and get things done</p>
           </div>
           <div className="bg-card rounded-xl p-6">
             <ErrorBanner />
@@ -243,19 +243,19 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
 
   // Login (default)
   return (
-    <div className="flex flex-col h-screen bg-[#0f172a]">
+    <div className="dark flex flex-col h-full bg-background">
       <div className="flex-1 flex flex-col justify-center px-6">
         {onBack && (
-          <button onClick={onBack} className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl">
-            <ChevronLeft className="w-5 h-5 text-white" />
+          <button onClick={onBack} className="absolute top-6 left-6 p-2 bg-foreground/10 rounded-xl">
+            <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
         )}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <StackLogo size={56} />
           </div>
-          <h1 className="font-display text-2xl font-bold text-white">Welcome Back</h1>
-          <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Welcome Back</h1>
+          <p className="text-muted-foreground text-sm mt-1">Sign in to your account</p>
         </div>
         <div className="bg-card rounded-xl p-6">
           <ErrorBanner />

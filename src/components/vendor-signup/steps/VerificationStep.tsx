@@ -82,7 +82,7 @@ const VerificationStep: React.FC<VerificationStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-full bg-background">
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0 }}

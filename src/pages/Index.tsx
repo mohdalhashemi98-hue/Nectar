@@ -15,7 +15,7 @@ const LoadingSpinner = () => (
 
 const Index = () => {
   return (
-    <div className="min-h-[100dvh] bg-muted flex justify-center p-4">
+    <div className="min-h-[100dvh] bg-muted flex justify-center sm:p-4">
       <RealtimeProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <StackAppRouter />

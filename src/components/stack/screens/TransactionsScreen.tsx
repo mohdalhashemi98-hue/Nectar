@@ -44,7 +44,7 @@ const TransactionsScreen = ({ onBack, onNavigate }: TransactionsScreenProps) => 
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-20">
+    <div className="min-h-full bg-background flex flex-col pb-20">
       <ScreenHeader title="Payment History" subtitle="All your transactions" onBack={onBack} />
 
       <div className="px-4 py-4 space-y-4">

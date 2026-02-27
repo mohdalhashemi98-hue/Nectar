@@ -17,13 +17,13 @@ export const getSkeletonForRoute = (path: string): React.ReactNode => {
 };
 
 export const DefaultSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background items-center justify-center">
+  <div className="flex flex-col h-full bg-background items-center justify-center">
     <div className="w-10 h-10 rounded-xl bg-muted animate-pulse" />
   </div>
 );
 
 export const ListSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background p-4 space-y-4">
+  <div className="flex flex-col h-full bg-background p-4 space-y-4">
     <div className="flex items-center gap-3 pt-12 pb-4">
       <Skel className="h-10 w-10 rounded-full" />
       <Skel className="h-5 w-28" />
@@ -47,7 +47,7 @@ export const ListSkeleton = () => (
 );
 
 export const DetailSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background p-4 space-y-5">
+  <div className="flex flex-col h-full bg-background p-4 space-y-5">
     <div className="flex items-center gap-3 pt-12">
       <Skel className="h-10 w-10 rounded-full" />
       <Skel className="h-5 w-20" />
@@ -73,7 +73,7 @@ export const DetailSkeleton = () => (
 );
 
 export const ConsumerHomeSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background">
+  <div className="flex flex-col h-full bg-background">
     <div className="border-b border-border px-4 py-4">
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -109,7 +109,7 @@ export const ConsumerHomeSkeleton = () => (
 );
 
 export const VendorHomeSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background">
+  <div className="flex flex-col h-full bg-background">
     <div className="border-b border-border px-4 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -153,7 +153,7 @@ export const VendorHomeSkeleton = () => (
 );
 
 export const MessagesSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background">
+  <div className="flex flex-col h-full bg-background">
     <div className="border-b border-border px-4 py-4">
       <Skel className="h-6 w-24 mb-3" />
       <Skel className="h-10 w-full rounded-xl" />
@@ -173,7 +173,7 @@ export const MessagesSkeleton = () => (
 );
 
 export const ProfileSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background">
+  <div className="flex flex-col h-full bg-background">
     <div className="border-b border-border px-4 py-5">
       <Skel className="h-6 w-16 mb-4" />
       <div className="bg-secondary/50 rounded-xl p-4">

@@ -182,7 +182,7 @@ const ConsumerHomeScreen = ({
         className="flex-1"
         refreshSkeleton={<ConsumerRefreshSkeleton />}
       >
-        <div className="px-4 py-5 pb-24 space-y-6">
+        <div className="px-4 py-5 space-y-6">
           {/* Review Banner */}
           <AnimatePresence>
             {showReviewBanner && pendingReviewJobs.length > 0 && (

@@ -28,7 +28,7 @@ const HookStep: React.FC<HookStepProps> = ({ selectedTrades, onTradeToggle, onNe
   );
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
+    <div className="flex flex-col min-h-full bg-gradient-to-br from-primary/10 via-background to-accent/10">
       {/* Back Button */}
       <motion.button
         initial={{ opacity: 0, x: -10 }}

@@ -91,7 +91,7 @@ const VendorHomeScreen = ({ vendorStats, availableJobs, onNavigate, onSelectJob 
 
       <PullToRefresh ref={containerRef} pullDistance={pullDistance} isRefreshing={isRefreshing} isPulling={isPulling}
         handlers={handlers} className="flex-1" refreshSkeleton={<VendorRefreshSkeleton />}>
-        <div className="px-4 py-4 pb-24 space-y-5">
+        <div className="px-4 py-4 space-y-5">
           {/* Availability */}
           <AvailabilityToggle initialAvailable={isAvailable} onToggle={setIsAvailable} />
 

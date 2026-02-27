@@ -62,7 +62,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Show loading while checking session
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
+      <div className="flex items-center justify-center h-full bg-background">
         <LoadingSpinner />
       </div>
     );

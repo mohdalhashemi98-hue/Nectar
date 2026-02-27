@@ -66,7 +66,7 @@ const QuoteManagementScreen = ({
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-full bg-background flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-3" />
           <p className="text-muted-foreground">Loading quotes...</p>
@@ -78,7 +78,7 @@ const QuoteManagementScreen = ({
   // Empty state
   if (offers.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-full bg-background">
         {/* Header */}
         <div className="bg-background border-b border-border px-4 py-4">
           <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ const QuoteManagementScreen = ({
   }
 
   return (
-    <div className="min-h-screen bg-background pb-6">
+    <div className="min-h-full bg-background pb-6">
       {/* Header */}
       <div className="bg-background border-b border-border px-4 py-4">
         <div className="flex items-center gap-4 mb-4">

@@ -69,7 +69,7 @@ const NotificationsScreen = ({ notifications, userType, onBack, onNavigate, onSe
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader
         title="Notifications"
         subtitle={unreadCount > 0 ? `${unreadCount} new updates` : 'All caught up!'}

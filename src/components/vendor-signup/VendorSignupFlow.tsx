@@ -139,7 +139,7 @@ const VendorSignupFlow: React.FC = () => {
   const progress = currentStep === 5 ? 100 : ((currentStep - 1) / 4) * 100;
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-full bg-background overflow-hidden">
       {/* Progress Bar */}
       {currentStep < 5 && (
         <motion.div 
@@ -166,7 +166,7 @@ const VendorSignupFlow: React.FC = () => {
           animate="center"
           exit="exit"
           transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-          className="min-h-screen"
+          className="min-h-full"
         >
           {currentStep === 1 && (
             <HookStep

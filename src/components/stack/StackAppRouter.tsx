@@ -243,7 +243,7 @@ const StackAppRouter: React.FC = () => {
   const shouldEnableDrag = canSwipeBack && isDragging;
 
   return (
-    <div className="screen-container-fixed relative w-full max-w-[430px] overflow-hidden shadow-2xl">
+    <div className="screen-container-fixed relative w-full max-w-[430px] overflow-hidden sm:shadow-2xl sm:rounded-2xl">
       {/* Scroll restoration and dynamic titles */}
       <ScrollToTop />
       <DocumentTitle />

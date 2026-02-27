@@ -54,7 +54,7 @@ const ServicesScreen = ({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader
         title="All Services"
         subtitle={`${categories.length} categories available`}

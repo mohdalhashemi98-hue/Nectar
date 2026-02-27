@@ -54,7 +54,7 @@ const HelpScreen = ({ onNavigate, onBack }: HelpScreenProps) => {
     : faqs;
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader title="Help & Support" onBack={onBack} />
 
       {/* Search */}

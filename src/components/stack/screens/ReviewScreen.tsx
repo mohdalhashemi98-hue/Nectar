@@ -52,7 +52,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
 
   if (submitted) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col h-full bg-background">
         <div className="flex-1 flex items-center justify-center p-6">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 bg-success/10 rounded-full flex items-center justify-center">
@@ -77,7 +77,7 @@ const ReviewScreen = ({ job, onBack, onNavigate, onSubmitReview }: ReviewScreenP
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader title="Leave a Review" subtitle="Share your experience" onBack={onBack} />
 
       {/* Job Info */}

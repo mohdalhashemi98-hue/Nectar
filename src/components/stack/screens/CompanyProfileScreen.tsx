@@ -241,7 +241,7 @@ const CompanyProfileScreen = ({ userType, onBack, onNavigate }: CompanyProfileSc
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden">
+    <div className="flex flex-col h-full bg-background overflow-hidden">
       {/* COVER IMAGE SECTION */}
       <div className="relative">
         <div className="relative h-48 overflow-hidden">

@@ -52,7 +52,7 @@ const JobDetailScreen = ({ job, vendor, userType, onBack, onNavigate, onStartCha
   const canReview = userType === 'consumer' && job.status === 'Completed' && !job.rated;
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader title="Job Details" subtitle={`#${job.id}`} onBack={onBack} />
 
       {/* Job Summary */}

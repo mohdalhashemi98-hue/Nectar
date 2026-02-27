@@ -187,7 +187,7 @@ const VendorProfileScreen = ({ vendor, onBack, onNavigate, onStartChat }: Vendor
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-full bg-background">
       {/* PART 1: Trust Header (Above the Fold) */}
       <div className="relative">
         {/* Cover Image/Video */}

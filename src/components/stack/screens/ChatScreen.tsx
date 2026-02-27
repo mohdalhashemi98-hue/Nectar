@@ -138,7 +138,7 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-full flex flex-col bg-background">
       {/* Header */}
       <div className="bg-background border-b border-border px-4 py-3">
         <div className="flex items-center gap-3">

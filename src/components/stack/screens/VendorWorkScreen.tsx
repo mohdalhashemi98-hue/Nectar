@@ -283,7 +283,7 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-full bg-background pb-24">
       {/* Header */}
       <div className="bg-background border-b border-border px-4 py-4 pb-16">
         <div className="flex items-center gap-4 mb-4">

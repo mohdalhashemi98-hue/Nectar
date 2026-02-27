@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 /** Consumer Home refresh skeleton */
 export const ConsumerRefreshSkeleton = () => (
-  <div className="px-4 py-5 pb-24 space-y-6">
+  <div className="px-4 py-5 space-y-6">
     {/* Rewards Card Skeleton */}
     <div className="rounded-3xl p-5 bg-gradient-to-br from-primary/20 to-primary/10">
       <div className="flex items-center justify-between mb-4">
@@ -81,7 +81,7 @@ export const ConsumerRefreshSkeleton = () => (
 
 /** Vendor Home refresh skeleton */
 export const VendorRefreshSkeleton = () => (
-  <div className="px-4 py-4 pb-24 space-y-4">
+  <div className="px-4 py-4 space-y-4">
     {/* Availability Toggle Skeleton */}
     <div className="rounded-2xl border border-border p-4 bg-card">
       <div className="flex items-center justify-between">

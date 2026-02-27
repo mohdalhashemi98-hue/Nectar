@@ -163,7 +163,7 @@ const VendorOnboardingScreen = ({ onComplete, onBack }: VendorOnboardingScreenPr
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       {/* Header */}
       <div className="bg-background border-b border-border px-4 py-5">
         <div className="flex items-center gap-4">

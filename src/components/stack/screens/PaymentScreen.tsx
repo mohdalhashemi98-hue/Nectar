@@ -48,7 +48,7 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
 
   if (paymentComplete) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-full bg-background flex flex-col">
         <div className="flex-1 flex items-center justify-center p-6">
           <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
             <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -67,7 +67,7 @@ const PaymentScreen = ({ job, onBack, onNavigate, onPaymentComplete }: PaymentSc
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-20">
+    <div className="min-h-full bg-background flex flex-col pb-20">
       <ScreenHeader title="Payment & Progress" subtitle="Track your job status" onBack={onBack} />
 
       <div className="flex-1 overflow-auto px-4 py-4 space-y-4">

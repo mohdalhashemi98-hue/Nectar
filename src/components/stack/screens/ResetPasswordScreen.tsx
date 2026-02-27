@@ -101,7 +101,7 @@ const ResetPasswordScreen = () => {
   // Loading state while checking session
   if (isValidSession === null) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col h-full bg-background">
         <div className="flex-1 flex flex-col justify-center items-center px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -119,7 +119,7 @@ const ResetPasswordScreen = () => {
   // Invalid or expired session
   if (isValidSession === false) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col h-full bg-background">
         <div className="flex-1 flex flex-col justify-center px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -165,7 +165,7 @@ const ResetPasswordScreen = () => {
   // Success state
   if (success) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col h-full bg-background">
         <div className="flex-1 flex flex-col justify-center px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -207,7 +207,7 @@ const ResetPasswordScreen = () => {
 
   // Password update form
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <div className="flex-1 flex flex-col justify-center px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

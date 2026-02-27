@@ -47,7 +47,7 @@ const MarketBenchmarkScreen = ({ onNavigate, onSelectCategory, onResetRequestFor
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       <ScreenHeader title="Market Benchmark" subtitle="AI-powered pricing insights" icon={TrendingUp} />
 
       <div className="flex-1 overflow-y-auto px-4 py-6 pb-24">

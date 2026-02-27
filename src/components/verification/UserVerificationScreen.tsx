@@ -498,7 +498,7 @@ const UserVerificationScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-full bg-background">
       {/* Header */}
       <div className="bg-card border-b border-border px-4 py-4">
         <div className="flex items-center gap-4">

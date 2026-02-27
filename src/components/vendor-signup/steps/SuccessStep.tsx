@@ -47,7 +47,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({ primaryTrades, onGoToDashboar
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
+    <div className="flex flex-col min-h-full bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
         {/* Success Animation */}
         <motion.div
