@@ -33,33 +33,34 @@ const MessagesScreen = ({
 
   return (
     <div className="w-full bg-background pb-24">
-      {/* Header */}
       <ScreenHeader
         title="Messages"
         subtitle={unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
         onBack={onBack}
         icon={MessageCircle}
-      >
-        {/* Search */}
+      />
+
+      {/* Search */}
+      <div className="px-4 pt-4">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-foreground/60" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search messages..."
-            className="w-full pl-12 pr-4 py-3 rounded-xl bg-primary-foreground/20 backdrop-blur-sm placeholder:text-primary-foreground/60 text-primary-foreground border border-primary-foreground/20 focus:outline-none focus:border-primary-foreground/40 transition-colors"
+            className="input-modern pl-12"
           />
         </div>
-      </ScreenHeader>
+      </div>
 
       {/* Filter Tabs */}
-      <div className="px-5 py-3 flex gap-2">
+      <div className="px-4 py-3 flex gap-2">
         <button
           onClick={() => setActiveFilter('all')}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
             activeFilter === 'all'
-              ? 'bg-primary text-white shadow-md shadow-primary/30'
+              ? 'bg-primary text-primary-foreground'
               : 'bg-secondary text-muted-foreground hover:bg-secondary/80'
           }`}
         >
@@ -67,16 +68,16 @@ const MessagesScreen = ({
         </button>
         <button
           onClick={() => setActiveFilter('unread')}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${
             activeFilter === 'unread'
-              ? 'bg-primary text-white shadow-md shadow-primary/30'
+              ? 'bg-primary text-primary-foreground'
               : 'bg-secondary text-muted-foreground hover:bg-secondary/80'
           }`}
         >
           Unread
           {unreadCount > 0 && (
             <span className={`w-5 h-5 rounded-full text-xs flex items-center justify-center ${
-              activeFilter === 'unread' ? 'bg-white/20' : 'bg-primary text-white'
+              activeFilter === 'unread' ? 'bg-white/20' : 'bg-primary text-primary-foreground'
             }`}>
               {unreadCount}
             </span>
@@ -111,7 +112,7 @@ const MessagesScreen = ({
                   exit={{ opacity: 0, x: -50 }}
                   transition={{ delay: index * 0.03 }}
                   onClick={() => onSelectConversation(conversation)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all active:scale-[0.98] ${
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all active:scale-[0.98] ${
                     conversation.unread 
                       ? 'bg-primary/5 hover:bg-primary/10' 
                       : 'hover:bg-secondary/50'
@@ -119,20 +120,20 @@ const MessagesScreen = ({
                 >
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
-                    <div className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg ${
-                      conversation.unread ? 'bg-gradient-golden' : 'bg-gradient-to-br from-gray-400 to-gray-500'
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-primary-foreground font-bold ${
+                      conversation.unread ? 'bg-primary' : 'bg-muted-foreground/30'
                     }`}>
                       {conversation.avatar}
                     </div>
                     {conversation.online && (
-                      <div className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-background" />
+                      <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-success rounded-full border-2 border-background" />
                     )}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0 text-left">
                     <div className="flex items-center justify-between mb-0.5">
-                      <h3 className={`font-semibold truncate ${
+                      <h3 className={`font-semibold truncate text-sm ${
                         conversation.unread ? 'text-foreground' : 'text-foreground/80'
                       }`}>
                         {conversation.name}

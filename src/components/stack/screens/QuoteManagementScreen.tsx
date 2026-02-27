@@ -80,27 +80,15 @@ const QuoteManagementScreen = ({
     return (
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-          
-          <div className="relative z-10">
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-4"
-            >
-              <button 
-                onClick={onBack} 
-                className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <div className="flex-1">
-                <h1 className="font-display text-xl font-bold">Quotes</h1>
-                <p className="opacity-60 text-sm">{job.title}</p>
-              </div>
-            </motion.div>
+        <div className="bg-background border-b border-border px-4 py-4">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+              <ArrowLeft className="w-5 h-5 text-foreground" />
+            </button>
+            <div className="flex-1">
+              <h1 className="font-display text-xl font-bold text-foreground">Quotes</h1>
+              <p className="text-sm text-muted-foreground">{job.title}</p>
+            </div>
           </div>
         </div>
 
@@ -128,48 +116,31 @@ const QuoteManagementScreen = ({
   return (
     <div className="min-h-screen bg-background pb-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-4"
-          >
-            <button 
-              onClick={onBack} 
-              className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <h1 className="font-display text-xl font-bold">Compare Quotes</h1>
-              <p className="opacity-60 text-sm">{job.title}</p>
-            </div>
-          </motion.div>
+      <div className="bg-background border-b border-border px-4 py-4">
+        <div className="flex items-center gap-4 mb-4">
+          <button onClick={onBack} className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+            <ArrowLeft className="w-5 h-5 text-foreground" />
+          </button>
+          <div className="flex-1">
+            <h1 className="font-display text-xl font-bold text-foreground">Compare Quotes</h1>
+            <p className="text-sm text-muted-foreground">{job.title}</p>
+          </div>
+        </div>
 
-          {/* Stats Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex gap-3"
-          >
-            <div className="flex-1 bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center">
-              <p className="text-2xl font-bold">{offers.length}</p>
-              <p className="text-xs opacity-80">Quotes Received</p>
-            </div>
-            <div className="flex-1 bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center">
-              <p className="text-2xl font-bold">{Math.min(...offers.map(o => o.price))} AED</p>
-              <p className="text-xs opacity-80">Lowest Price</p>
-            </div>
-            <div className="flex-1 bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center">
-              <p className="text-2xl font-bold">{Math.max(...offers.map(o => o.rating)).toFixed(1)}</p>
-              <p className="text-xs opacity-80">Top Rating</p>
-            </div>
-          </motion.div>
+        {/* Stats Summary */}
+        <div className="flex gap-3">
+          <div className="flex-1 card-elevated p-3 text-center">
+            <p className="text-2xl font-bold text-foreground">{offers.length}</p>
+            <p className="text-xs text-muted-foreground">Quotes</p>
+          </div>
+          <div className="flex-1 card-elevated p-3 text-center">
+            <p className="text-2xl font-bold text-primary">{Math.min(...offers.map(o => o.price))} AED</p>
+            <p className="text-xs text-muted-foreground">Lowest</p>
+          </div>
+          <div className="flex-1 card-elevated p-3 text-center">
+            <p className="text-2xl font-bold text-foreground">{Math.max(...offers.map(o => o.rating)).toFixed(1)}</p>
+            <p className="text-xs text-muted-foreground">Top Rating</p>
+          </div>
         </div>
       </div>
 

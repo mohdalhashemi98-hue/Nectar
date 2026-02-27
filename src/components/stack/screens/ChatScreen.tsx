@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Send, Phone, Video, MoreHorizontal, Image, Smile, CheckCheck, Check, Clock, BadgeCheck } from 'lucide-react';
+import { ArrowLeft, Send, Phone, Video, Image, Smile, CheckCheck, Check, Clock, BadgeCheck } from 'lucide-react';
 import { Conversation, ScreenType, Message } from '@/types/stack';
-import StackPattern from '../StackPattern';
 
 interface ExtendedMessage extends Message {
   status?: 'sending' | 'sent' | 'delivered' | 'read';
@@ -46,15 +45,15 @@ const TypingIndicator = () => (
 const MessageStatus = ({ status }: { status: ExtendedMessage['status'] }) => {
   switch (status) {
     case 'sending':
-      return <Clock className="w-3.5 h-3.5 text-white/50" />;
+      return <Clock className="w-3.5 h-3.5 text-primary-foreground/50" />;
     case 'sent':
-      return <Check className="w-3.5 h-3.5 text-white/70" />;
+      return <Check className="w-3.5 h-3.5 text-primary-foreground/70" />;
     case 'delivered':
-      return <CheckCheck className="w-3.5 h-3.5 text-white/70" />;
+      return <CheckCheck className="w-3.5 h-3.5 text-primary-foreground/70" />;
     case 'read':
-      return <CheckCheck className="w-3.5 h-3.5 text-white" />;
+      return <CheckCheck className="w-3.5 h-3.5 text-primary-foreground" />;
     default:
-      return <CheckCheck className="w-3.5 h-3.5 text-white/70" />;
+      return <CheckCheck className="w-3.5 h-3.5 text-primary-foreground/70" />;
   }
 };
 
@@ -139,64 +138,53 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#FAF9F6]">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
-      <div className="bg-gradient-golden px-4 pt-4 pb-6 relative overflow-hidden">
-        {/* Stack pattern background */}
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        
-        <div className="relative flex items-center gap-3">
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
+      <div className="bg-background border-b border-border px-4 py-3">
+        <div className="flex items-center gap-3">
+          <button 
             onClick={onBack}
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+            className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-white" />
-          </motion.button>
+            <ArrowLeft className="w-5 h-5 text-foreground" />
+          </button>
           
           <div className="flex items-center gap-3 flex-1">
             <div className="relative">
-              <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center text-white font-bold text-lg border-2 border-white/40">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold">
                 {conversation.avatar}
               </div>
               {isOnline && (
-                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-primary" />
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full border-2 border-background" />
               )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
-                <h2 className="font-semibold text-white truncate">{conversation.name}</h2>
-                <BadgeCheck className="w-4 h-4 text-white/90 flex-shrink-0" />
+                <h2 className="font-semibold text-foreground truncate">{conversation.name}</h2>
+                <BadgeCheck className="w-4 h-4 text-primary flex-shrink-0" />
               </div>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-muted-foreground">
                 {isTyping ? 'typing...' : isOnline ? 'Online' : 'Last seen recently'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <motion.button 
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
-            >
-              <Phone className="w-5 h-5 text-white" />
-            </motion.button>
-            <motion.button 
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
-            >
-              <Video className="w-5 h-5 text-white" />
-            </motion.button>
+          <div className="flex items-center gap-1">
+            <button className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+              <Phone className="w-5 h-5 text-foreground" />
+            </button>
+            <button className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
+              <Video className="w-5 h-5 text-foreground" />
+            </button>
           </div>
         </div>
       </div>
 
       {/* Messages Area */}
-      <div className="px-4 py-4 pb-32">
+      <div className="flex-1 overflow-y-auto px-4 py-4">
         {/* Date Badge */}
         <div className="flex justify-center mb-4">
-          <span className="px-3 py-1 rounded-full bg-black/5 text-xs text-muted-foreground font-medium">
+          <span className="px-3 py-1 rounded-full bg-secondary text-xs text-muted-foreground font-medium">
             Today
           </span>
         </div>
@@ -217,7 +205,7 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
               >
                 {/* Vendor Avatar */}
                 {!isUser && isLastInGroup && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-golden flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0 self-end">
+                  <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold mr-2 flex-shrink-0 self-end">
                     {conversation.avatar}
                   </div>
                 )}
@@ -227,8 +215,8 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
                   <div
                     className={`px-4 py-2.5 ${
                       isUser
-                        ? `bg-gradient-golden text-white ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-md' : 'rounded-b-lg'}`
-                        : `bg-white shadow-sm border border-gray-100 text-foreground ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-md' : 'rounded-b-lg'}`
+                        ? `bg-primary text-primary-foreground ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-md' : 'rounded-b-lg'}`
+                        : `bg-card border border-border text-foreground ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-md' : 'rounded-b-lg'}`
                     }`}
                   >
                     <p className="text-[15px] leading-relaxed">{msg.text}</p>
@@ -248,10 +236,10 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
           <AnimatePresence>
             {isTyping && (
               <motion.div className="flex items-end gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-golden flex items-center justify-center text-white text-xs font-bold">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
                   {conversation.avatar}
                 </div>
-                <div className="bg-white shadow-sm border border-gray-100 rounded-2xl rounded-bl-md">
+                <div className="bg-card border border-border rounded-2xl rounded-bl-md">
                   <TypingIndicator />
                 </div>
               </motion.div>
@@ -263,14 +251,11 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
       </div>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-gray-100 p-3 safe-area-pb">
+      <div className="bg-background border-t border-border p-3 safe-area-pb">
         <div className="flex items-center gap-2">
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
-          >
+          <button className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
             <Image className="w-5 h-5 text-muted-foreground" />
-          </motion.button>
+          </button>
           
           <div className="flex-1 relative">
             <input
@@ -279,24 +264,23 @@ const ChatScreen = ({ conversation, onBack }: ChatScreenProps) => {
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Message..."
-              className="w-full px-4 py-2.5 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all text-foreground placeholder:text-muted-foreground text-[15px]"
+              className="w-full px-4 py-2.5 rounded-xl bg-secondary border-none focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all text-foreground placeholder:text-muted-foreground text-[15px]"
             />
             <button className="absolute right-3 top-1/2 -translate-y-1/2">
               <Smile className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
             </button>
           </div>
 
-          <motion.button
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={message.trim() ? handleSend : undefined}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
               message.trim()
-                ? 'bg-gradient-golden text-white shadow-lg shadow-primary/30'
-                : 'bg-gray-100 text-muted-foreground'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary text-muted-foreground'
             }`}
           >
             <Send className={`w-5 h-5 ${message.trim() ? '' : 'opacity-50'}`} />
-          </motion.button>
+          </button>
         </div>
       </div>
     </div>
