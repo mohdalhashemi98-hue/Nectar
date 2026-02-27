@@ -1,17 +1,15 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Plus, Star, Heart, ChevronRight, Sparkles, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown, ArrowUpDown } from 'lucide-react';
+import { Bell, Search, Plus, Star, Heart, ChevronRight, X, HelpCircle, CheckCircle2, MapPin, Filter, ChevronDown } from 'lucide-react';
 import { Rewards, Vendor, Job, Notification, ScreenType } from '@/types/stack';
 import { tierConfig, categories } from '@/data/stack-data';
 import { ConsumerHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon, getCategoryIcon } from '../utils/categoryIcons';
 import { ThemeToggle } from '@/components/theme-toggle';
-import StackLogo from '@/components/StackLogo';
 import BottomNav from '../BottomNav';
 import PullToRefresh from '../PullToRefresh';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { ConsumerRefreshSkeleton } from '../RefreshSkeleton';
-import { StackPatternCorner } from '../StackPattern';
 
 interface ConsumerHomeScreenProps {
   userProfile: { name: string };
@@ -94,10 +92,10 @@ const ConsumerHomeScreen = ({
   const pendingReviewJobs = jobs.filter(j => j.status === 'Completed' && !j.rated);
 
   const searchResults = searchQuery.length > 0
-    ? categories.filter(c => 
+    ? categories.filter(c =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ) 
+      )
     : [];
 
   const activeJobs = jobs.filter(j => j.status === 'In Progress' || j.status === 'Awaiting Completion');
@@ -109,94 +107,67 @@ const ConsumerHomeScreen = ({
   return (
     <div className="w-full bg-background pb-24">
       {/* Header */}
-      <div className="bg-card border-b border-border">
-        <div className="px-4 py-5">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-5"
-          >
-            <div className="flex items-center gap-3">
-              <StackLogo size={40} />
-              <div>
-                <h1 className="font-display text-2xl font-bold text-foreground mb-0.5">
-                  Hi, {userProfile.name.split(' ')[0]}
-                </h1>
-                <p className="text-sm text-muted-foreground">What can we help with today?</p>
-              </div>
+      <div className="bg-background border-b border-border">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="font-display text-xl font-bold text-foreground">
+                Hi, {userProfile.name.split(' ')[0]}
+              </h1>
+              <p className="text-sm text-muted-foreground">What can we help with?</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <ThemeToggle />
-              <button 
-                onClick={() => onNavigate('help')} 
-                className="p-3 bg-secondary rounded-xl hover:bg-secondary/80 transition-colors"
-              >
-                <HelpCircle className="w-5 h-5 text-foreground" />
+              <button onClick={() => onNavigate('help')} className="p-2.5 rounded-xl hover:bg-secondary transition-colors">
+                <HelpCircle className="w-5 h-5 text-muted-foreground" />
               </button>
-              <button 
-                onClick={() => onNavigate('notifications')} 
-                className="relative p-3 bg-secondary rounded-xl hover:bg-secondary/80 transition-colors"
-              >
-                <Bell className="w-5 h-5 text-foreground" />
+              <button onClick={() => onNavigate('notifications')} className="relative p-2.5 rounded-xl hover:bg-secondary transition-colors">
+                <Bell className="w-5 h-5 text-muted-foreground" />
                 {notifications.filter(n => n.unread).length > 0 && (
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-amber rounded-full" />
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-destructive rounded-full" />
                 )}
               </button>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Search Bar */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="relative"
-          >
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-modern pl-12"
+              className="input-modern pl-10 py-2.5 text-sm"
             />
-          </motion.div>
+          </div>
 
           {/* Search Results */}
           {searchQuery.length > 0 && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="mt-3 bg-card rounded-xl border border-border overflow-hidden"
-              style={{ boxShadow: 'var(--shadow-lg)' }}
-            >
+            <div className="mt-2 bg-card rounded-xl border border-border overflow-hidden">
               {searchResults.length > 0 ? (
                 searchResults.map((cat) => {
                   const IconComponent = getCategoryIcon(cat.name);
                   return (
                     <button
                       key={cat.name}
-                      onClick={() => {
-                        onSelectCategory(cat.name);
-                        setSearchQuery('');
-                        onNavigate('services');
-                      }}
-                      className="w-full p-4 flex items-center gap-3 hover:bg-secondary/50 border-b border-border last:border-0 transition-colors"
+                      onClick={() => { onSelectCategory(cat.name); setSearchQuery(''); onNavigate('services'); }}
+                      className="w-full p-3 flex items-center gap-3 hover:bg-secondary/50 border-b border-border last:border-0 transition-colors"
                     >
-                      <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
-                        <IconComponent className="w-5 h-5 text-foreground" />
+                      <div className="w-9 h-9 bg-secondary rounded-xl flex items-center justify-center">
+                        <IconComponent className="w-4 h-4 text-foreground" />
                       </div>
                       <div className="text-left">
-                        <div className="font-semibold text-foreground">{cat.name}</div>
+                        <div className="font-medium text-foreground text-sm">{cat.name}</div>
                         <div className="text-xs text-muted-foreground">{cat.description}</div>
                       </div>
                     </button>
                   );
                 })
               ) : (
-                <div className="p-4 text-center text-muted-foreground">No services found</div>
+                <div className="p-4 text-center text-muted-foreground text-sm">No services found</div>
               )}
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
@@ -212,444 +183,262 @@ const ConsumerHomeScreen = ({
         refreshSkeleton={<ConsumerRefreshSkeleton />}
       >
         <div className="px-4 py-5 pb-24 space-y-6">
-        {/* Review Reminder Banner */}
-        <AnimatePresence>
-          {showReviewBanner && pendingReviewJobs.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: -10, height: 0 }}
-              className="relative"
-            >
-              <div className="bg-amber/5 border border-amber/20 rounded-xl p-4 relative overflow-hidden">
-                <button 
-                  onClick={() => setShowReviewBanner(false)}
-                  className="absolute top-2 right-2 p-1.5 rounded-full bg-background/50 hover:bg-background/80 transition-colors"
-                >
-                  <X className="w-3.5 h-3.5 text-muted-foreground" />
-                </button>
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-10 h-10 bg-amber rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Star className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground text-sm">
-                      {pendingReviewJobs.length === 1 
-                        ? `Review your ${pendingReviewJobs[0].title}` 
-                        : `${pendingReviewJobs.length} jobs need your review`}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Earn 50 points per review</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      onSelectJob(pendingReviewJobs[0]);
-                      onNavigate('review');
-                    }}
-                    className="px-4 py-2 bg-amber text-amber-foreground rounded-xl text-xs font-semibold hover:bg-amber/90 transition-colors flex-shrink-0"
-                  >
-                    Review
+          {/* Review Banner */}
+          <AnimatePresence>
+            {showReviewBanner && pendingReviewJobs.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <div className="bg-primary/5 border border-primary/15 rounded-xl p-3 relative">
+                  <button onClick={() => setShowReviewBanner(false)}
+                    className="absolute top-2 right-2 p-1 rounded-full hover:bg-secondary">
+                    <X className="w-3.5 h-3.5 text-muted-foreground" />
                   </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Amber Rewards Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="card-golden p-5 relative overflow-hidden"
-        >
-          <StackPatternCorner className="absolute top-0 right-0 w-32 h-32 opacity-15" />
-          
-          <div className="flex items-center justify-between mb-4 relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">{tierConfig[rewards.tier].icon}</span>
-              </div>
-              <div>
-                <div className="font-display font-bold text-lg">{rewards.tier} Member</div>
-                <div className="text-sm opacity-80">{rewards.cashbackRate}% cashback</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="font-display text-2xl font-bold">{rewards.points.toLocaleString()}</div>
-              <div className="text-xs opacity-80">points</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 bg-white/15 rounded-xl px-3 py-2 mb-4 relative z-10">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">12 jobs completed</span>
-            <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-auto">Top 10%</span>
-          </div>
-          <button 
-            onClick={() => onNavigate('rewards')} 
-            className="w-full bg-white/20 hover:bg-white/25 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors relative z-10"
-          >
-            <Sparkles className="w-4 h-4" />
-            View Rewards
-          </button>
-        </motion.div>
-
-        {/* Quick Action */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="card-elevated p-5"
-        >
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h3 className="font-display text-xl font-bold text-foreground mb-1">Need something done?</h3>
-              <p className="text-muted-foreground text-sm">Get instant quotes from verified pros</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { onResetRequestForm(); onNavigate('services'); }}
-            className="btn-gradient w-full flex items-center justify-center gap-2"
-          >
-            <Plus className="w-5 h-5" />
-            Post a Job
-          </button>
-        </motion.div>
-
-        {/* Quick Re-hire */}
-        {previousVendors.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display text-lg font-bold text-foreground">Quick Re-hire</h3>
-              <button onClick={() => onNavigate('previous-vendors')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                View All
-              </button>
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide">
-              {previousVendors.slice(0, 3).map((vendor) => (
-                <motion.button
-                  key={vendor.id}
-                  whileHover={{ y: -4 }}
-                  onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
-                  className="flex-shrink-0 w-32 bg-card p-4 rounded-xl border border-border transition-all duration-300 group"
-                  style={{ boxShadow: 'var(--shadow-sm)' }}
-                >
-                  <div className="relative mb-3">
-                    <div className="avatar-primary w-12 h-12 text-lg mx-auto">
-                      {vendor.avatar}
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Star className="w-4 h-4 text-primary-foreground" />
                     </div>
-                    {vendor.favorite && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber rounded-full flex items-center justify-center">
-                        <Heart className="w-3 h-3 text-white fill-current" />
-                      </div>
-                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground text-sm">
+                        {pendingReviewJobs.length === 1
+                          ? `Review your ${pendingReviewJobs[0].title}`
+                          : `${pendingReviewJobs.length} jobs need review`}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Earn 50 points per review</p>
+                    </div>
+                    <button
+                      onClick={() => { onSelectJob(pendingReviewJobs[0]); onNavigate('review'); }}
+                      className="px-3 py-1.5 bg-primary text-primary-foreground rounded-xl text-xs font-semibold flex-shrink-0"
+                    >
+                      Review
+                    </button>
                   </div>
-                  <h4 className="font-semibold text-foreground text-sm mb-1 truncate text-center">{vendor.name}</h4>
-                  <div className="flex items-center justify-center gap-1 mb-3">
-                    <Star className="w-3 h-3 text-amber fill-amber" />
-                    <span className="text-xs font-bold">{vendor.rating}</span>
-                  </div>
-                  <div className="w-full py-2 bg-secondary text-foreground rounded-lg text-xs font-semibold text-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    Re-hire
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* Categories */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display text-lg font-bold text-foreground">Popular Services</h3>
-            <button 
-              onClick={() => onNavigate('services')} 
-              className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+          {/* Post a Job */}
+          <div className="card-elevated p-4">
+            <h3 className="font-display text-lg font-bold text-foreground mb-1">Need something done?</h3>
+            <p className="text-muted-foreground text-sm mb-4">Get instant quotes from verified pros</p>
+            <button
+              onClick={() => { onResetRequestForm(); onNavigate('services'); }}
+              className="btn-primary w-full flex items-center justify-center gap-2"
             >
-              View All
+              <Plus className="w-5 h-5" />
+              Post a Job
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            {categories.slice(0, 6).map((cat) => {
-              const IconComponent = getCategoryIcon(cat.name);
-              return (
-                <motion.button
-                  key={cat.name}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('services'); }}
-                  className="bg-card p-4 rounded-xl border border-border hover:border-amber/30 transition-all duration-300 group"
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 mx-auto bg-gradient-to-br ${cat.gradient} text-white`}>
-                    <IconComponent className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs font-medium text-foreground text-center truncate">{cat.name}</div>
-                </motion.button>
-              );
-            })}
-          </div>
-        </motion.div>
 
-        {/* Recommended Pros */}
-        {recommendedVendors.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display text-lg font-bold text-foreground">Recommended Pros</h3>
-              <button 
-                onClick={() => setShowFilters(!showFilters)} 
-                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${showFilters ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                <Filter className="w-4 h-4" />
-                Filter
-              </button>
+          {/* Quick Re-hire */}
+          {previousVendors.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-display text-base font-bold text-foreground">Quick Re-hire</h3>
+                <button onClick={() => onNavigate('previous-vendors')} className="text-sm text-primary">View All</button>
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+                {previousVendors.slice(0, 3).map((vendor) => (
+                  <button
+                    key={vendor.id}
+                    onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
+                    className="flex-shrink-0 w-28 bg-card p-3 rounded-xl border border-border text-center"
+                  >
+                    <div className="avatar-primary w-11 h-11 text-sm mx-auto mb-2">{vendor.avatar}</div>
+                    <h4 className="font-medium text-foreground text-xs truncate">{vendor.name}</h4>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      <Star className="w-3 h-3 text-amber fill-amber" />
+                      <span className="text-xs font-medium">{vendor.rating}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
 
-            {/* Filter Controls */}
-            <AnimatePresence>
-              {showFilters && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden mb-4"
-                >
-                  <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Specialty</label>
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          onClick={() => setSpecialtyFilter('all')}
-                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                            specialtyFilter === 'all' 
-                              ? 'bg-primary text-primary-foreground' 
-                              : 'bg-card border border-border text-foreground hover:border-primary/50'
-                          }`}
-                        >
-                          All
-                        </button>
-                        {specialties.map((specialty) => (
-                          <button
-                            key={specialty}
-                            onClick={() => setSpecialtyFilter(specialty)}
-                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                              specialtyFilter === specialty 
-                                ? 'bg-primary text-primary-foreground' 
-                                : 'bg-card border border-border text-foreground hover:border-primary/50'
-                            }`}
-                          >
-                            {specialty}
-                          </button>
-                        ))}
-                      </div>
+          {/* Categories */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display text-base font-bold text-foreground">Services</h3>
+              <button onClick={() => onNavigate('services')} className="text-sm text-primary">View All</button>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {categories.slice(0, 6).map((cat) => {
+                const IconComponent = getCategoryIcon(cat.name);
+                return (
+                  <button
+                    key={cat.name}
+                    onClick={() => { onSelectCategory(cat.name); onResetRequestForm(); onNavigate('services'); }}
+                    className="bg-card p-3 rounded-xl border border-border hover:border-primary/20 transition-colors"
+                  >
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-2 mx-auto bg-secondary">
+                      <IconComponent className="w-4 h-4 text-foreground" />
                     </div>
+                    <div className="text-xs font-medium text-foreground text-center truncate">{cat.name}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Minimum Rating</label>
-                      <div className="flex gap-2">
-                        {[0, 4, 4.5, 4.8].map((rating) => (
-                          <button
-                            key={rating}
-                            onClick={() => setRatingFilter(rating)}
-                            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                              ratingFilter === rating 
-                                ? 'bg-primary text-primary-foreground' 
-                                : 'bg-card border border-border text-foreground hover:border-primary/50'
-                            }`}
-                          >
-                            {rating === 0 ? 'Any' : (
-                              <>
-                                <Star className="w-3 h-3 fill-current" />
-                                {rating}+
-                              </>
+          {/* Recommended Pros */}
+          {recommendedVendors.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-display text-base font-bold text-foreground">Recommended Pros</h3>
+                <button onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center gap-1 text-sm ${showFilters ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <Filter className="w-4 h-4" /> Filter
+                </button>
+              </div>
+
+              {/* Filter Controls */}
+              <AnimatePresence>
+                {showFilters && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden mb-3">
+                    <div className="bg-secondary/50 rounded-xl p-4 space-y-3">
+                      <div>
+                        <label className="text-xs font-medium text-foreground mb-1.5 block">Specialty</label>
+                        <div className="flex flex-wrap gap-1.5">
+                          <button onClick={() => setSpecialtyFilter('all')}
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium ${specialtyFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-card border border-border text-foreground'}`}>
+                            All
+                          </button>
+                          {specialties.map((s) => (
+                            <button key={s} onClick={() => setSpecialtyFilter(s)}
+                              className={`px-2.5 py-1 rounded-full text-xs font-medium ${specialtyFilter === s ? 'bg-primary text-primary-foreground' : 'bg-card border border-border text-foreground'}`}>
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-foreground mb-1.5 block">Min Rating</label>
+                        <div className="flex gap-1.5">
+                          {[0, 4, 4.5, 4.8].map((r) => (
+                            <button key={r} onClick={() => setRatingFilter(r)}
+                              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${ratingFilter === r ? 'bg-primary text-primary-foreground' : 'bg-card border border-border text-foreground'}`}>
+                              {r === 0 ? 'Any' : <><Star className="w-3 h-3 fill-current" />{r}+</>}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      {(specialtyFilter !== 'all' || ratingFilter > 0) && (
+                        <div className="flex items-center justify-between pt-2 border-t border-border">
+                          <span className="text-xs text-muted-foreground">{sortedVendors.length} found</span>
+                          <button onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }} className="text-xs text-primary">Clear</button>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Vendor Cards */}
+              <div className="-mx-4">
+                {sortedVendors.length > 0 ? (
+                  <div className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide">
+                    {sortedVendors.slice(0, 8).map((vendor) => (
+                      <button
+                        key={vendor.id}
+                        onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
+                        className="flex-shrink-0 w-40 bg-card border border-border rounded-xl p-3 text-left"
+                      >
+                        <div className="flex flex-col items-center text-center">
+                          <div className="relative mb-2">
+                            <div className="avatar-primary w-14 h-14 text-base">
+                              {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </div>
+                            {vendor.verified && (
+                              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle2 className="w-2.5 h-2.5 text-primary-foreground" />
+                              </div>
                             )}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Sort By</label>
-                      <div className="flex gap-2">
-                        {([
-                          { value: 'rating', label: 'Rating', icon: Star },
-                          { value: 'reviews', label: 'Reviews', icon: Star },
-                          { value: 'distance', label: 'Nearest', icon: MapPin },
-                        ] as const).map(({ value, label, icon: Icon }) => (
-                          <button
-                            key={value}
-                            onClick={() => setSortBy(value)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                              sortBy === value 
-                                ? 'bg-primary text-primary-foreground' 
-                                : 'bg-card border border-border text-foreground hover:border-primary/50'
-                            }`}
-                          >
-                            <Icon className="w-3 h-3" />
-                            {label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {(specialtyFilter !== 'all' || ratingFilter > 0) && (
-                      <div className="flex items-center justify-between pt-2 border-t border-border">
-                        <span className="text-sm text-muted-foreground">
-                          {sortedVendors.length} {sortedVendors.length === 1 ? 'pro' : 'pros'} found
-                        </span>
-                        <button 
-                          onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
-                          className="text-sm font-medium text-primary hover:text-primary/80"
-                        >
-                          Clear Filters
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Vendor Carousel */}
-            <div className="-mx-4">
-              {sortedVendors.length > 0 ? (
-                <div className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide snap-x snap-mandatory">
-                  {sortedVendors.slice(0, 8).map((vendor) => (
-                    <motion.button
-                      key={vendor.id}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => { onSelectVendor(vendor); onNavigate('vendor-profile', { id: vendor.id }); }}
-                      className="flex-shrink-0 w-44 bg-card border border-border rounded-xl p-4 text-left snap-start hover:border-amber/30 transition-all"
-                    >
-                      <div className="flex flex-col items-center text-center">
-                        <div className="relative mb-3">
-                          <div className="avatar-primary w-16 h-16 text-lg">
-                            {vendor.avatar || vendor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                           </div>
-                          {vendor.verified && (
-                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                              <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
+                          <h4 className="font-medium text-foreground text-sm truncate w-full">{vendor.name}</h4>
+                          <p className="text-xs text-muted-foreground mb-1.5 truncate w-full">{vendor.specialty}</p>
+                          <div className="flex items-center gap-1 text-sm mb-1">
+                            <Star className="w-3 h-3 text-amber fill-amber" />
+                            <span className="font-medium text-foreground text-xs">{vendor.rating}</span>
+                            <span className="text-muted-foreground text-xs">({vendor.reviews})</span>
+                          </div>
+                          {vendor.distance && (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <MapPin className="w-3 h-3" />{vendor.distance}
                             </div>
                           )}
+                          {onToggleFavorite && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); onToggleFavorite(vendor); }}
+                              className={`mt-1.5 p-1 rounded-full ${
+                                favoriteIds.has(String(vendor.id)) ? 'text-destructive' : 'text-muted-foreground'
+                              }`}
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${favoriteIds.has(String(vendor.id)) ? 'fill-current' : ''}`} />
+                            </button>
+                          )}
                         </div>
-                        <h4 className="font-semibold text-foreground text-sm truncate w-full">{vendor.name}</h4>
-                        <p className="text-xs text-muted-foreground mb-2 truncate w-full">{vendor.specialty}</p>
-                        <div className="flex items-center gap-1 text-sm mb-2">
-                          <Star className="w-3.5 h-3.5 text-amber fill-amber" />
-                          <span className="font-semibold text-foreground">{vendor.rating}</span>
-                          <span className="text-muted-foreground text-xs">({vendor.reviews})</span>
-                        </div>
-                        {vendor.distance && (
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <MapPin className="w-3 h-3" />
-                            <span>{vendor.distance}</span>
-                          </div>
-                        )}
-                        {onToggleFavorite && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onToggleFavorite(vendor);
-                            }}
-                            className={`mt-2 p-1.5 rounded-full transition-all ${
-                              favoriteIds.has(String(vendor.id))
-                                ? 'text-red-500 bg-red-50 dark:bg-red-500/10'
-                                : 'text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
-                            }`}
-                          >
-                            <Heart 
-                              className={`w-4 h-4 transition-all ${
-                                favoriteIds.has(String(vendor.id)) ? 'fill-current' : ''
-                              }`} 
-                            />
-                          </button>
-                        )}
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground px-4">
-                  <p className="text-sm">No pros match your filters</p>
-                  <button 
-                    onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }}
-                    className="text-sm font-medium text-primary hover:text-primary/80 mt-2"
-                  >
-                    Clear Filters
-                  </button>
-                </div>
-              )}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-muted-foreground px-4">
+                    <p className="text-sm">No pros match your filters</p>
+                    <button onClick={() => { setSpecialtyFilter('all'); setRatingFilter(0); }} className="text-sm text-primary mt-1">Clear Filters</button>
+                  </div>
+                )}
+              </div>
             </div>
-          </motion.div>
-        )}
+          )}
 
-        {activeJobs.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display text-lg font-bold text-foreground">Active Jobs</h3>
-              <button onClick={() => onNavigate('transactions')} className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                View All
-              </button>
+          {/* Active Jobs */}
+          {activeJobs.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-display text-base font-bold text-foreground">Active Jobs</h3>
+                <button onClick={() => onNavigate('transactions')} className="text-sm text-primary">View All</button>
+              </div>
+              <div className="space-y-2">
+                {activeJobs.slice(0, 2).map((job) => (
+                  <button
+                    key={job.id}
+                    onClick={() => { onSelectJob(job); onNavigate('job-detail'); }}
+                    className="card-interactive w-full p-3 text-left"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h4 className="font-medium text-foreground text-sm">{job.title}</h4>
+                      <span className={`px-2 py-0.5 ${statusColors[job.status].bg} ${statusColors[job.status].text} text-xs font-medium rounded-full`}>
+                        {job.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{job.vendor}</span>
+                      <span className="font-semibold text-primary text-sm">{job.amount} AED</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="space-y-3">
-              {activeJobs.slice(0, 2).map((job) => (
-                <motion.button
-                  key={job.id}
-                  whileHover={{ y: -2 }}
-                  onClick={() => { onSelectJob(job); onNavigate('job-detail'); }}
-                  className="card-interactive w-full p-4 text-left"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-foreground">{job.title}</h4>
-                    <span className={`px-2.5 py-1 ${statusColors[job.status].bg} ${statusColors[job.status].text} text-xs font-semibold rounded-full`}>
-                      {job.status}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">{job.vendor}</span>
-                    <span className="font-bold text-primary">{job.amount} AED</span>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+          )}
         </div>
       </PullToRefresh>
 
-      {/* Floating Action Button */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+      {/* FAB */}
+      <button
         onClick={() => { onResetRequestForm(); onNavigate('services'); }}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-amber text-amber-foreground rounded-xl flex items-center justify-center z-40"
-        style={{ boxShadow: 'var(--shadow-golden)' }}
+        className="fixed bottom-24 right-6 w-12 h-12 bg-primary text-primary-foreground rounded-xl flex items-center justify-center z-40 shadow-md"
       >
-        <Plus className="w-6 h-6" />
-      </motion.button>
+        <Plus className="w-5 h-5" />
+      </button>
 
-      <BottomNav 
-        active="home" 
-        userType="consumer" 
-        onNavigate={onNavigate} 
+      <BottomNav
+        active="home"
+        userType="consumer"
+        onNavigate={onNavigate}
         pendingQuotes={jobs.filter(j => j.status === 'Pending' && j.offersCount && j.offersCount > 0).length}
         unreadMessages={2}
       />
