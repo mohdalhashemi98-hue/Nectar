@@ -9,7 +9,13 @@ const RewardsScreen: React.FC = () => {
   const { navigateTo, goBack } = useAppNavigation();
   const { data: rewards } = useRewards();
 
-  if (!rewards) return null;
+  if (!rewards) return (
+    <div className="flex flex-col h-screen bg-background items-center justify-center">
+      <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center animate-pulse">
+        <div className="w-6 h-6 rounded-lg bg-primary/40" />
+      </div>
+    </div>
+  );
 
   return <Original rewards={rewards} userType={userType} onBack={goBack} onNavigate={navigateTo} />;
 };

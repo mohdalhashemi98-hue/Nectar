@@ -59,7 +59,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/60 px-2 py-2 shadow-[0_-2px_12px_-4px_rgba(0,0,0,0.06)]"
+      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/40 px-2 py-1.5 shadow-[0_-1px_8px_-2px_rgba(0,0,0,0.04)]"
     >
       <div className="flex justify-around items-center max-w-md mx-auto">
         {navItems.map((item) => {
@@ -72,14 +72,14 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
               onTouchStart={() => handlePreload(item.screen)}
               whileTap={{ scale: 0.92 }}
               className={`relative flex flex-col items-center gap-0.5 px-5 py-2.5 rounded-xl transition-colors duration-200 ${
-                isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary/70'
+                isActive ? 'text-amber' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {/* Animated pill indicator */}
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
-                  className="absolute inset-0 bg-primary/10 rounded-xl"
+                  className="absolute inset-0 bg-amber/10 rounded-xl"
                   initial={false}
                   transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
                 />
@@ -93,7 +93,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
                   initial={false}
                   style={{
                     background:
-                      'radial-gradient(ellipse at center bottom, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
+                      'radial-gradient(ellipse at center bottom, hsl(var(--amber) / 0.15) 0%, transparent 70%)',
                   }}
                   transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
                 />
