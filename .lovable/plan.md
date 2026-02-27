@@ -1,102 +1,145 @@
 
 
-# Full Visual Overhaul: Apply US4LESS Design to Stack
+# Comprehensive UI/UX Overhaul & Bug Fixes
 
-## Design Analysis
+## Bug Fixes
 
-The US4LESS app features a clean, professional design with these key visual characteristics:
+### 1. RewardsScreen crash - `Cannot read properties of undefined (reading 'toLocaleString')`
+The `transformRewards` function in `use-data-queries.ts` returns `achievements: []` and `recentEarnings: []` (empty arrays), but the `totalSaved` field is properly defaulted to `0`. The crash likely occurs when `rewards` is passed as a partially-undefined object from a stale query cache. Fix: add defensive defaults in the RewardsScreen component itself (e.g., `rewards.points?.toLocaleString() ?? '0'` and `rewards.lifetimePoints?.toLocaleString() ?? '0'`).
 
-- **Dark navy backgrounds** for hero/header sections (#1e293b / #0f172a range)
-- **Amber/gold accent** (#E8A838) for highlighted text and key CTAs
-- **Blue primary** buttons (clean, flat blue -- similar hue but less gradient-heavy)
-- **Light gray page background** (#f8fafc)
-- **Moderate border radius** (rounded-xl / rounded-2xl instead of the current rounded-3xl everywhere)
-- **Cleaner cards** with subtle borders, less shadow, more whitespace
-- **Labels above inputs** with clean bordered fields (no heavy background fill)
-- **Minimal gradients** -- mostly solid colors with occasional subtle gradient
-- **Clean typography** -- Inter/system font, bold headings, high contrast
+### 2. Missing defensive checks across screens
+Several screens directly access nested properties without null guards (e.g., `rewards.weeklyChallenge.title`). Add optional chaining throughout.
 
-The current Stack app uses very rounded corners (rounded-3xl), heavy gradients, golden/shimmer effects, and a blue-heavy palette. The overhaul will tone these down to match the US4LESS aesthetic while keeping all functionality intact.
+---
+
+## UI/UX Redesign - Modern, Clean Aesthetic
+
+The current design was partially updated but still has inconsistencies. This plan delivers a cohesive, polished experience across all screens.
+
+### Design Direction
+- **Cleaner headers**: Replace heavy golden gradient headers with a refined navy-to-slate gradient for screen headers (ScreenHeader component)
+- **Consistent card system**: All cards use `rounded-xl`, subtle border, minimal shadow
+- **Better whitespace**: More breathing room between sections
+- **Refined color usage**: Amber only for CTAs and highlights, not backgrounds of headers
+- **Modern bottom nav**: Cleaner with a floating pill style
+- **Better typography hierarchy**: Larger section titles, smaller labels
+
+---
 
 ## Implementation Plan
 
-### Phase 1: Update Design Tokens (index.css)
+### Phase 1: Fix Runtime Errors (3 files)
 
-Update the CSS custom properties to match the US4LESS palette:
-- Adjust `--background` to a lighter gray (#f8fafc)
-- Adjust `--card` to pure white
-- Add an `--amber` accent color variable for gold/amber highlights
-- Update gradient definitions to be more subtle and use amber accents
-- Reduce `--radius` from 1rem to 0.75rem
-- Update shadow values to be softer/more subtle
-- Update dark mode variables to use the US4LESS dark navy tones
-- Replace the gradient-golden and gradient-hero with amber-accented versions
-- Update component classes (btn-primary, card-elevated, card-interactive, etc.) to use less rounding and cleaner styles
-- Update input-modern to have bordered style instead of filled background
+**File: `src/components/stack/screens/RewardsScreen.tsx`**
+- Add defensive optional chaining on all `rewards` property accesses (`rewards?.points?.toLocaleString()`, `rewards?.lifetimePoints?.toLocaleString()`, etc.)
+- Add fallback values for `rewards.weeklyChallenge`, `rewards.achievements`, `rewards.recentEarnings`
 
-### Phase 2: Update Component Styles
+**File: `src/features/screens/RewardsScreen.tsx`**
+- Improve the null guard to also show a loading skeleton instead of returning `null`
 
-**Button component (button.tsx)**
-- Reduce rounding from rounded-3xl to rounded-xl
-- Add amber/gold gradient variant
-- Simplify the gradient variant to use amber accent
+**File: `src/hooks/use-data-queries.ts`**
+- Ensure `transformRewards` always returns complete objects with all required fields
 
-**Card component (card.tsx)**
-- Reduce rounding to rounded-xl
+### Phase 2: Redesign Core Layout Components (4 files)
 
-**BottomNav**
-- Update to match cleaner aesthetic with less rounding
+**File: `src/components/shared/ScreenHeader.tsx`**
+- Replace `bg-gradient-golden` with a refined navy gradient (`bg-[#0f172a]`) for a premium look
+- Update text colors to white with better opacity levels
+- Make the back button cleaner (subtle white/10 background)
+- Add a thin amber accent line at the bottom of the header
 
-### Phase 3: Update Key Screens
+**File: `src/components/stack/BottomNav.tsx`**
+- Add a floating pill style: rounded corners on the container, slight margin from edges
+- Use amber accent for active tab indicator instead of primary blue
+- Increase contrast and reduce visual noise
 
-**WelcomeScreen**
-- Keep dark background but add amber accent color for highlighted text (like "Ship to Your Door" in US4LESS)
-- Update CTA buttons to use amber accent for primary action
-- Reduce corner rounding on buttons and cards
-- Cleaner stat badges
+**File: `src/components/stack/PointsBadge.tsx`**
+- Update to use amber background with better contrast
+- Add a subtle glow effect
 
-**LoginScreen**
-- Match US4LESS login/signup design: centered card on light background
-- Clean form inputs with labels above
-- Blue primary CTA button
-- Less gradient, more clean solid colors
+**File: `src/index.css`**
+- Update `card-elevated` to use softer shadows
+- Update `card-interactive` hover to use amber border highlight
+- Refine `btn-gradient` to be more subtle
+- Update `input-modern` focus state to use amber ring
+- Add new utility class `header-gradient` for consistent navy headers
 
-**ConsumerHomeScreen**
-- Update header to cleaner style
-- Cards with less rounding, cleaner borders
-- Amber accent for rewards/points badges
-- Cleaner category grid
+### Phase 3: Redesign Key Screens (6 files)
 
-**VendorHomeScreen**
-- Update gradient header to use amber accents
-- Cleaner stat cards with less rounding
-- Priority action cards with amber highlights
+**File: `src/components/stack/screens/WelcomeScreen.tsx`**
+- Refine the hero section with better spacing
+- Add a subtle animated gradient mesh background
+- Improve stat badges with glass-morphism style
+- Better button spacing and sizing
 
-**Other screens** (Messages, Jobs, Profile, etc.)
-- Will inherit most changes from the CSS tokens update
-- Minor adjustments to match the cleaner aesthetic
+**File: `src/components/stack/screens/LoginScreen.tsx`**
+- Cleaner card layout with more padding
+- Better input field styling with labels
+- Add social login placeholder buttons (Google, Apple) for modern feel
+- Smoother transitions between login/signup/forgot states
 
-### Files to Modify
+**File: `src/components/stack/screens/ConsumerHomeScreen.tsx`**
+- Redesign the rewards card: use a cleaner navy card instead of full golden
+- Amber accent only for points number and CTA button
+- Cleaner category grid with subtle hover effects
+- Better vendor cards with more whitespace
+- Improve the "Post a Job" CTA section
+- Clean up filter UI for recommended pros
 
-1. `src/index.css` -- Design tokens, component classes, utility classes
-2. `src/components/ui/button.tsx` -- Reduce rounding, add amber variant
-3. `src/components/ui/card.tsx` -- Reduce rounding
-4. `src/components/stack/screens/WelcomeScreen.tsx` -- Amber accents, cleaner layout
-5. `src/components/stack/screens/LoginScreen.tsx` -- Clean card-on-light-bg design
-6. `src/components/stack/screens/ConsumerHomeScreen.tsx` -- Cleaner cards and header
-7. `src/components/stack/screens/VendorHomeScreen.tsx` -- Amber accents, cleaner metrics
-8. `src/components/stack/BottomNav.tsx` -- Reduce rounding, cleaner style
-9. `src/components/stack/ScreenWrapper.tsx` -- Minor padding adjustments
-10. `src/components/stack/AvailabilityToggle.tsx` -- Match new style
-11. `src/components/stack/PointsBadge.tsx` -- Amber accent
-12. `tailwind.config.ts` -- Add amber color to theme
+**File: `src/components/stack/screens/VendorHomeScreen.tsx`**
+- Refine the dark header to be more polished
+- Better priority action cards with cleaner borders
+- Improve the AI Price Check card design
+- Cleaner high-probability leads cards
+- Add subtle entry animations
 
-### Key Design Decisions
+**File: `src/components/stack/screens/RewardsScreen.tsx`**
+- Replace golden gradient header with navy gradient + amber accents
+- Better stat cards with icons and cleaner layout
+- Improve achievement grid with better earned/unearned states
+- Cleaner recent earnings list
 
-- **Amber accent (#E8A838)** replaces the current blue-only palette for highlights, CTAs, and badges
-- **Border radius reduced** from 1.5rem/rounded-3xl to 0.75rem/rounded-xl globally
-- **Gradients minimized** -- solid amber for CTAs, subtle navy gradients for headers
-- **Form inputs** switch from filled-background to bordered style
-- **Shadows softened** to match US4LESS's more subtle elevation
-- **All existing functionality preserved** -- only visual styling changes
+**File: `src/components/stack/screens/ProfileScreen.tsx`**
+- Redesign profile header with navy gradient
+- Better menu items with cleaner icons and spacing
+- Improve activity tab design
+- Add user avatar with amber ring accent
+
+### Phase 4: Enhance User Flow (2 files)
+
+**File: `src/components/stack/StackAppRouter.tsx`**
+- Improve transition animations: faster, smoother page transitions
+- Better loading states between screen changes
+
+**File: `src/components/stack/ScreenSkeleton.tsx`**
+- Update skeleton colors to match new design tokens
+- Make skeletons more representative of actual content layout
+
+---
+
+## Technical Details
+
+### Files Modified (Total: ~15 files)
+1. `src/index.css` - Updated design tokens and utility classes
+2. `src/components/shared/ScreenHeader.tsx` - Navy gradient header redesign
+3. `src/components/stack/BottomNav.tsx` - Floating pill bottom nav
+4. `src/components/stack/PointsBadge.tsx` - Amber accent badge
+5. `src/components/stack/screens/RewardsScreen.tsx` - Bug fix + redesign
+6. `src/components/stack/screens/WelcomeScreen.tsx` - Refined hero
+7. `src/components/stack/screens/LoginScreen.tsx` - Cleaner auth forms
+8. `src/components/stack/screens/ConsumerHomeScreen.tsx` - Modern home
+9. `src/components/stack/screens/VendorHomeScreen.tsx` - Polished vendor dashboard
+10. `src/components/stack/screens/ProfileScreen.tsx` - Clean profile
+11. `src/features/screens/RewardsScreen.tsx` - Loading state fix
+12. `src/hooks/use-data-queries.ts` - Defensive data transforms
+13. `src/components/stack/StackAppRouter.tsx` - Smoother transitions
+14. `src/components/stack/ScreenSkeleton.tsx` - Updated skeletons
+
+### Design Consistency Rules Applied
+- Headers: Navy gradient (#0f172a to #1e293b), white text
+- Cards: White bg, 1px border, rounded-xl, shadow-sm
+- CTAs: Amber gradient for primary, blue for secondary
+- Active states: Amber accent indicators
+- Typography: Syne for headings, Plus Jakarta Sans for body
+- Spacing: 16px horizontal padding, 24px vertical section gaps
 
