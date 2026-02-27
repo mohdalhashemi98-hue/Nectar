@@ -285,50 +285,36 @@ const VendorWorkScreen = ({ availableJobs, onBack, onNavigate, onSelectJob }: Ve
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-6"
-          >
-            <div className="flex-1">
-              <h1 className="font-display text-2xl font-bold">My Jobs</h1>
-              <p className="opacity-60 text-sm">Manage your pipeline & earnings</p>
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-              <Briefcase className="w-6 h-6" />
-            </div>
-          </motion.div>
+      <div className="bg-background border-b border-border px-4 py-4 pb-16">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="flex-1">
+            <h1 className="font-display text-xl font-bold text-foreground">My Jobs</h1>
+            <p className="text-sm text-muted-foreground">Manage your pipeline & earnings</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+            <Briefcase className="w-5 h-5 text-foreground" />
+          </div>
+        </div>
 
-          {/* Stats Row */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex gap-3"
-          >
-            {[
-              { icon: Zap, value: stats.newLeads, label: 'New Leads', highlight: true },
-              { icon: Timer, value: stats.activeJobs, label: 'Active' },
-              { icon: Wallet, value: `${stats.totalEarnings}`, label: 'Net Earnings' }
-            ].map((stat, idx) => (
-              <div key={idx} className={`flex-1 ${stat.highlight ? 'bg-white/25' : 'bg-white/15'} rounded-2xl p-3`}>
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-xl ${stat.highlight ? 'bg-white/30' : 'bg-white/20'} flex items-center justify-center`}>
-                    <stat.icon className="w-4 h-4 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <p className="font-display text-xl font-bold">{stat.value}</p>
-                    <p className="text-[10px] opacity-60">{stat.label}</p>
-                  </div>
+        {/* Stats Row */}
+        <div className="flex gap-3">
+          {[
+            { icon: Zap, value: stats.newLeads, label: 'New Leads' },
+            { icon: Timer, value: stats.activeJobs, label: 'Active' },
+            { icon: Wallet, value: `${stats.totalEarnings}`, label: 'Net Earnings' }
+          ].map((stat, idx) => (
+            <div key={idx} className="flex-1 card-elevated p-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <stat.icon className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold text-lg text-foreground">{stat.value}</p>
+                  <p className="text-[10px] text-muted-foreground">{stat.label}</p>
                 </div>
               </div>
-            ))}
-          </motion.div>
+            </div>
+          ))}
         </div>
       </div>
 
