@@ -11,11 +11,11 @@ const getThemeConfig = (userType: UserType) => {
   if (userType === 'vendor') {
     return {
       bgClass: 'bg-[#0f172a]',
-      gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e3a5f] to-[#0f172a]',
-      accentColor: 'bg-blue-500',
+      gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]',
+      accentColor: 'bg-amber',
       textPrimary: 'text-white',
-      textSecondary: 'text-blue-200/80',
-      backButtonBg: 'bg-blue-500/20 hover:bg-blue-500/30',
+      textSecondary: 'text-slate-400',
+      backButtonBg: 'bg-white/10 hover:bg-white/15',
       backButtonText: 'text-white',
       icon: Briefcase,
       title: 'Pro Login',
@@ -25,12 +25,12 @@ const getThemeConfig = (userType: UserType) => {
     };
   }
   return {
-    bgClass: 'bg-gradient-to-br from-sky-500 via-blue-500 to-blue-600',
-    gradientClass: 'bg-gradient-to-br from-sky-500 via-blue-500 to-blue-600',
-    accentColor: 'bg-white',
+    bgClass: 'bg-[#0f172a]',
+    gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]',
+    accentColor: 'bg-primary',
     textPrimary: 'text-white',
-    textSecondary: 'text-white/80',
-    backButtonBg: 'bg-white/20 hover:bg-white/30',
+    textSecondary: 'text-slate-400',
+    backButtonBg: 'bg-white/10 hover:bg-white/15',
     backButtonText: 'text-white',
     icon: Home,
     title: 'Welcome Back',
@@ -114,7 +114,6 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
       });
 
       if (authError) {
-        // User-friendly error messages
         if (authError.message.includes('Invalid login credentials')) {
           setError('Invalid email or password. Please try again.');
         } else if (authError.message.includes('Email not confirmed')) {
@@ -213,13 +212,22 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
 
   const clearError = () => setError(null);
 
+  const ErrorBanner = () => error ? (
+    <motion.div 
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
+    >
+      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+      <span>{error}</span>
+    </motion.div>
+  ) : null;
+
   // Forgot Password Screen
   if (authScreen === 'forgot-password') {
     return (
       <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        {/* Background decorations */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
         
         <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.button 
@@ -246,19 +254,10 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card rounded-3xl p-6"
+            className="bg-card rounded-xl p-6"
             style={{ boxShadow: 'var(--shadow-xl)' }}
           >
-            {error && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
-              >
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
-              </motion.div>
-            )}
+            <ErrorBanner />
 
             <div className="space-y-4">
               <div>
@@ -303,8 +302,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   if (authScreen === 'reset-sent') {
     return (
       <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
         
         <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.div 
@@ -316,9 +314,9 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4"
+              className="w-20 h-20 bg-amber/20 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <CheckCircle2 className="w-10 h-10 text-white" />
+              <CheckCircle2 className="w-10 h-10 text-amber" />
             </motion.div>
             <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>Check Your Email</h1>
             <p className={`${theme.textSecondary} mt-2 max-w-xs mx-auto`}>
@@ -330,7 +328,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card rounded-3xl p-6"
+            className="bg-card rounded-xl p-6"
             style={{ boxShadow: 'var(--shadow-xl)' }}
           >
             <div className="space-y-4">
@@ -362,8 +360,7 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   if (authScreen === 'signup') {
     return (
       <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
         
         <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
           <motion.button 
@@ -380,8 +377,8 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <theme.icon className="w-8 h-8 text-white" />
+            <div className="w-14 h-14 bg-amber/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <theme.icon className="w-7 h-7 text-amber" />
             </div>
             <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.signupTitle}</h1>
             <p className={`${theme.textSecondary} mt-1`}>{theme.signupSubtitle}</p>
@@ -391,19 +388,10 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card rounded-3xl p-6"
+            className="bg-card rounded-xl p-6"
             style={{ boxShadow: 'var(--shadow-xl)' }}
           >
-            {error && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
-              >
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
-              </motion.div>
-            )}
+            <ErrorBanner />
 
             <div className="space-y-4">
               <div>
@@ -490,9 +478,8 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
 
   return (
     <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-      {/* Background decorations */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/5 rounded-full blur-3xl" />
       
       <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
         {onBack && (
@@ -511,8 +498,8 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <theme.icon className="w-10 h-10 text-white" />
+          <div className="w-16 h-16 bg-amber/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <theme.icon className="w-8 h-8 text-amber" />
           </div>
           <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.title}</h1>
           <p className={`${theme.textSecondary} mt-1`}>{theme.subtitle}</p>
@@ -522,19 +509,10 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-3xl p-6"
+          className="bg-card rounded-xl p-6"
           style={{ boxShadow: 'var(--shadow-xl)' }}
         >
-          {error && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
-            >
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span>{error}</span>
-            </motion.div>
-          )}
+          <ErrorBanner />
 
           <div className="space-y-4">
             <div>

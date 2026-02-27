@@ -16,7 +16,6 @@ import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { VendorRefreshSkeleton } from '../RefreshSkeleton';
 import StackPattern from '../StackPattern';
 
-
 // Mock priority action data
 const priorityActions = {
   newRequests: 3,
@@ -90,7 +89,6 @@ const VendorHomeScreen = ({
   const [isAvailable, setIsAvailable] = useState(true);
 
   const handleRefresh = useCallback(async () => {
-    // Simulate refresh - in a real app this would refetch data
     await new Promise(resolve => setTimeout(resolve, 1000));
   }, []);
 
@@ -109,10 +107,10 @@ const VendorHomeScreen = ({
 
   return (
     <div className="w-full bg-background pb-24">
-      {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="absolute top-0 right-0 w-48 h-48 bg-primary-foreground/10 rounded-full blur-3xl" />
+      {/* Header - Navy with amber accents */}
+      <div className="bg-[#0f172a] text-white relative overflow-hidden">
+        <StackPattern opacity="0.04" color="ffffff" className="absolute inset-0" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-amber/10 rounded-full blur-3xl" />
         
         <div className="px-4 py-4 relative z-10">
           <motion.div 
@@ -121,13 +119,13 @@ const VendorHomeScreen = ({
             className="flex items-center justify-between mb-4"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-primary-foreground/20 flex items-center justify-center text-xl font-bold">
+              <div className="w-12 h-12 rounded-xl bg-amber/20 flex items-center justify-center text-xl font-bold text-amber">
                 AM
               </div>
               <div>
                 <h1 className="font-display text-xl font-bold">Ahmad Al-Mansouri</h1>
-                <div className="flex items-center gap-2 text-sm opacity-80">
-                  <Star className="w-4 h-4 fill-current" />
+                <div className="flex items-center gap-2 text-sm text-slate-400">
+                  <Star className="w-4 h-4 text-amber fill-amber" />
                   <span>{vendorStats.rating} • {vendorStats.reviews} reviews</span>
                 </div>
               </div>
@@ -136,18 +134,18 @@ const VendorHomeScreen = ({
               <ThemeToggle />
               <button 
                 onClick={() => onNavigate('notifications')} 
-                className="relative p-2.5 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+                className="relative p-2.5 bg-white/10 rounded-xl hover:bg-white/15 transition-colors"
               >
                 <Bell className="w-5 h-5" />
                 {(priorityActions.newRequests + priorityActions.unreadMessages) > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber rounded-full text-[10px] font-bold flex items-center justify-center text-amber-foreground">
                     {priorityActions.newRequests + priorityActions.unreadMessages}
                   </span>
                 )}
               </button>
               <button 
                 onClick={() => onNavigate('profile')} 
-                className="p-2.5 bg-primary-foreground/20 rounded-xl hover:bg-primary-foreground/30 transition-colors"
+                className="p-2.5 bg-white/10 rounded-xl hover:bg-white/15 transition-colors"
               >
                 <Settings className="w-5 h-5" />
               </button>
@@ -186,10 +184,10 @@ const VendorHomeScreen = ({
           transition={{ delay: 0.07 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onNavigate('vendor-onboarding' as ScreenType)}
-          className="w-full bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-4 flex items-center gap-4 text-left"
+          className="w-full bg-amber/5 border border-amber/20 rounded-xl p-4 flex items-center gap-4 text-left"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-golden flex items-center justify-center flex-shrink-0">
-            <Wand2 className="w-6 h-6 text-primary-foreground" />
+          <div className="w-12 h-12 rounded-xl bg-amber flex items-center justify-center flex-shrink-0">
+            <Wand2 className="w-6 h-6 text-amber-foreground" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground">Complete Your Expertise Profile</h3>
@@ -198,24 +196,23 @@ const VendorHomeScreen = ({
           <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
         </motion.button>
 
-        {/* Priority Action Cards - Horizontal Scroll */}
+        {/* Priority Action Cards */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
           <div className="grid grid-cols-3 gap-2">
-            {/* New Requests Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('transactions')}
-              className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-xl p-3"
+              className="bg-amber/5 border border-amber/15 rounded-xl p-3"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-primary-foreground" />
+                <div className="w-8 h-8 bg-amber rounded-lg flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-amber-foreground" />
                 </div>
-                <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full text-xs font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-amber text-amber-foreground rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.newRequests}
                 </span>
               </div>
@@ -223,17 +220,16 @@ const VendorHomeScreen = ({
               <div className="text-[10px] text-muted-foreground">Awaiting Quote</div>
             </motion.button>
 
-            {/* Unread Messages Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('messages-list')}
-              className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-xl p-3"
+              className="bg-primary/5 border border-primary/15 rounded-xl p-3"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <MessageSquare className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-xs font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.unreadMessages}
                 </span>
               </div>
@@ -241,17 +237,16 @@ const VendorHomeScreen = ({
               <div className="text-[10px] text-muted-foreground">Messages</div>
             </motion.button>
 
-            {/* Today's Bookings Card */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => onNavigate('transactions')}
-              className="bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 rounded-xl p-3"
+              className="bg-success/5 border border-success/15 rounded-xl p-3"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-success rounded-lg flex items-center justify-center">
                   <Calendar className="w-4 h-4 text-white" />
                 </div>
-                <span className="w-6 h-6 bg-green-500 text-white rounded-full text-xs font-bold flex items-center justify-center">
+                <span className="w-6 h-6 bg-success text-white rounded-full text-xs font-bold flex items-center justify-center">
                   {priorityActions.todaysBookings}
                 </span>
               </div>
@@ -261,7 +256,7 @@ const VendorHomeScreen = ({
           </div>
         </motion.div>
 
-        {/* Core Business Metrics (3 Cs) */}
+        {/* Core Business Metrics */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -275,22 +270,21 @@ const VendorHomeScreen = ({
           </div>
           
           <div className="grid grid-cols-3 gap-2">
-            {/* Quote Conversion Rate */}
-            <div className="bg-card rounded-2xl border border-border p-3 text-center">
-              <div className="w-8 h-8 mx-auto mb-2 bg-primary/10 rounded-xl flex items-center justify-center">
-                <Target className="w-4 h-4 text-primary" />
+            <div className="bg-card rounded-xl border border-border p-3 text-center">
+              <div className="w-8 h-8 mx-auto mb-2 bg-amber/10 rounded-xl flex items-center justify-center">
+                <Target className="w-4 h-4 text-amber" />
               </div>
               <div className="font-display text-xl font-bold text-foreground">
                 {kpiData.conversionRate.value}%
               </div>
               <div className="flex items-center justify-center gap-1 mb-1">
                 {kpiData.conversionRate.direction === 'up' ? (
-                  <TrendingUp className="w-3 h-3 text-green-500" />
+                  <TrendingUp className="w-3 h-3 text-success" />
                 ) : (
-                  <TrendingDown className="w-3 h-3 text-red-500" />
+                  <TrendingDown className="w-3 h-3 text-destructive" />
                 )}
                 <span className={`text-[10px] font-medium ${
-                  kpiData.conversionRate.direction === 'up' ? 'text-green-500' : 'text-red-500'
+                  kpiData.conversionRate.direction === 'up' ? 'text-success' : 'text-destructive'
                 }`}>
                   {kpiData.conversionRate.direction === 'up' ? '+' : ''}{kpiData.conversionRate.change}%
                 </span>
@@ -298,38 +292,36 @@ const VendorHomeScreen = ({
               <div className="text-[10px] text-muted-foreground">Conversion</div>
             </div>
 
-            {/* Response Time */}
-            <div className="bg-card rounded-2xl border border-border p-3 text-center">
-              <div className="w-8 h-8 mx-auto mb-2 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                <Clock className="w-4 h-4 text-blue-500" />
+            <div className="bg-card rounded-xl border border-border p-3 text-center">
+              <div className="w-8 h-8 mx-auto mb-2 bg-primary/10 rounded-xl flex items-center justify-center">
+                <Clock className="w-4 h-4 text-primary" />
               </div>
               <div className="font-display text-xl font-bold text-foreground">
                 {kpiData.responseTime.value}m
               </div>
               <div className="flex items-center justify-center gap-1 mb-1">
-                <TrendingDown className="w-3 h-3 text-green-500" />
-                <span className="text-[10px] font-medium text-green-500">
+                <TrendingDown className="w-3 h-3 text-success" />
+                <span className="text-[10px] font-medium text-success">
                   {kpiData.responseTime.change}m
                 </span>
               </div>
               <div className="text-[10px] text-muted-foreground">Avg Response</div>
             </div>
 
-            {/* Customer Satisfaction */}
             <button 
               onClick={() => onNavigate('profile')}
-              className="bg-card rounded-2xl border border-border p-3 text-center hover:border-primary/30 transition-colors"
+              className="bg-card rounded-xl border border-border p-3 text-center hover:border-amber/30 transition-colors"
             >
-              <div className="w-8 h-8 mx-auto mb-2 bg-primary/10 rounded-xl flex items-center justify-center">
-                <Star className="w-4 h-4 text-primary fill-primary" />
+              <div className="w-8 h-8 mx-auto mb-2 bg-amber/10 rounded-xl flex items-center justify-center">
+                <Star className="w-4 h-4 text-amber fill-amber" />
               </div>
               <div className="font-display text-xl font-bold text-foreground flex items-center justify-center gap-1">
                 {kpiData.satisfaction.value}
-                <Star className="w-3 h-3 text-primary fill-primary" />
+                <Star className="w-3 h-3 text-amber fill-amber" />
               </div>
               <div className="flex items-center justify-center gap-1 mb-1">
-                <CheckCircle2 className="w-3 h-3 text-green-500" />
-                <span className="text-[10px] font-medium text-green-500">Consistent</span>
+                <CheckCircle2 className="w-3 h-3 text-success" />
+                <span className="text-[10px] font-medium text-success">Consistent</span>
               </div>
               <div className="text-[10px] text-muted-foreground">CSAT</div>
             </button>
@@ -341,10 +333,10 @@ const VendorHomeScreen = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 rounded-2xl border border-primary/20 p-4 relative overflow-hidden"
+          className="bg-primary/3 rounded-xl border border-primary/15 p-4 relative overflow-hidden"
         >
           <div className="absolute top-2 right-2">
-            <Sparkles className="w-5 h-5 text-primary/40" />
+            <Sparkles className="w-5 h-5 text-primary/30" />
           </div>
           
           <div className="flex items-start gap-3 mb-3">
@@ -368,17 +360,17 @@ const VendorHomeScreen = ({
             </div>
             <div className="h-px bg-border my-2" />
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-primary" />
+              <AlertCircle className="w-4 h-4 text-amber" />
               <span className="text-xs text-foreground">
-                Your quote is <span className="font-bold text-primary">{aiPriceInsight.difference}</span> above benchmark. 
-                Adjust to {aiPriceInsight.benchmarkPrice} AED for <span className="font-bold text-green-500">{aiPriceInsight.adjustedWinChance}% higher</span> win chance.
+                Your quote is <span className="font-bold text-amber">{aiPriceInsight.difference}</span> above benchmark. 
+                Adjust to {aiPriceInsight.benchmarkPrice} AED for <span className="font-bold text-success">{aiPriceInsight.adjustedWinChance}% higher</span> win chance.
               </span>
             </div>
           </div>
           
           <button 
             onClick={() => onNavigate('market-benchmark')}
-            className="w-full flex items-center justify-center gap-2 py-2 bg-primary/10 text-primary rounded-xl text-sm font-medium hover:bg-primary/20 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2 bg-primary/10 text-primary rounded-xl text-sm font-medium hover:bg-primary/15 transition-colors"
           >
             View Full Market Analysis
             <ArrowUpRight className="w-4 h-4" />
@@ -393,7 +385,7 @@ const VendorHomeScreen = ({
         >
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Sparkles className="w-5 h-5 text-amber" />
               High Probability Leads
             </h3>
             <button 
@@ -412,7 +404,7 @@ const VendorHomeScreen = ({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + idx * 0.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-card rounded-2xl border border-border p-4 text-left hover:border-primary/30 transition-colors group cursor-pointer"
+                className="w-full bg-card rounded-xl border border-border p-4 text-left hover:border-amber/30 transition-colors group cursor-pointer"
                 onClick={() => {
                   const job = availableJobs.find(j => j.id === lead.id) || {
                     id: lead.id,
@@ -438,7 +430,7 @@ const VendorHomeScreen = ({
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold text-foreground text-sm">{lead.title}</h4>
                         {lead.urgent && (
-                          <span className="px-1.5 py-0.5 bg-primary text-primary-foreground rounded text-[10px] font-bold flex items-center gap-0.5">
+                          <span className="px-1.5 py-0.5 bg-amber text-amber-foreground rounded text-[10px] font-bold flex items-center gap-0.5">
                             <Zap className="w-2.5 h-2.5" />
                             URGENT
                           </span>
@@ -456,13 +448,13 @@ const VendorHomeScreen = ({
                   <div className="text-right">
                     <div className="text-sm font-bold text-foreground">{lead.estimatedPayout}</div>
                     <div className="flex items-center gap-1 justify-end">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      <span className="text-[10px] text-green-600 font-medium">{lead.winProbability}% match</span>
+                      <div className="w-2 h-2 rounded-full bg-success" />
+                      <span className="text-[10px] text-success font-medium">{lead.winProbability}% match</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="w-full mt-2 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
+                <div className="w-full mt-2 py-2 bg-amber text-amber-foreground rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
                   Quote Now
                   <ChevronRight className="w-4 h-4" />
                 </div>
@@ -481,7 +473,7 @@ const VendorHomeScreen = ({
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => onNavigate('vendor-schedule')}
-              className="bg-card rounded-2xl border border-border p-4 text-center hover:border-primary/30 transition-colors"
+              className="bg-card rounded-xl border border-border p-4 text-center hover:border-amber/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-2 bg-secondary rounded-xl flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-foreground" />
@@ -491,7 +483,7 @@ const VendorHomeScreen = ({
             
             <button
               onClick={() => onNavigate('company-profile')}
-              className="bg-card rounded-2xl border border-border p-4 text-center hover:border-primary/30 transition-colors"
+              className="bg-card rounded-xl border border-border p-4 text-center hover:border-amber/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-2 bg-secondary rounded-xl flex items-center justify-center">
                 <Settings className="w-6 h-6 text-foreground" />
@@ -501,7 +493,7 @@ const VendorHomeScreen = ({
             
             <button
               onClick={() => onNavigate('transactions')}
-              className="bg-card rounded-2xl border border-border p-4 text-center hover:border-primary/30 transition-colors"
+              className="bg-card rounded-xl border border-border p-4 text-center hover:border-amber/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-2 bg-secondary rounded-xl flex items-center justify-center">
                 <Wallet className="w-6 h-6 text-foreground" />

@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        amber: {
+          DEFAULT: "hsl(var(--amber))",
+          foreground: "hsl(var(--amber-foreground))",
+        },
         verified: {
           DEFAULT: "hsl(var(--verified))",
           foreground: "hsl(var(--verified-foreground))",
