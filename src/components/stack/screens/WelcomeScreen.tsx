@@ -37,12 +37,12 @@ const WelcomeScreen = ({
       <ThemeToggle />
     </div>
     
-    {/* Stack pattern background - covers entire screen */}
-    <StackPattern opacity="0.06" color="3b82f6" className="absolute inset-0" />
+    {/* Stack pattern background */}
+    <StackPattern opacity="0.04" color="3b82f6" className="absolute inset-0" />
     {/* Decorative elements */}
-    <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl" />
-    <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-sky-500/8 rounded-full blur-2xl" />
+    <div className="absolute top-0 right-0 w-80 h-80 bg-amber/10 rounded-full blur-3xl" />
+    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl" />
+    <div className="absolute top-1/3 left-1/4 w-48 h-48 bg-amber/5 rounded-full blur-2xl" />
     
     <div className="relative flex-1 flex flex-col justify-center items-center px-4 z-10">
       <motion.div initial={{
@@ -64,9 +64,9 @@ const WelcomeScreen = ({
         delay: 0.2,
         duration: 0.5
       }} className="mb-6 relative flex items-center justify-center">
-          <div className="absolute w-28 h-28 bg-blue-500/30 rounded-full blur-xl" />
+          <div className="absolute w-24 h-24 bg-amber/20 rounded-full blur-xl" />
           <motion.div animate={{
-          y: [0, -8, 0]
+          y: [0, -6, 0]
         }} transition={{
           duration: 4,
           repeat: Infinity,
@@ -76,7 +76,7 @@ const WelcomeScreen = ({
           </motion.div>
         </motion.div>
         <h1 className="font-display text-5xl font-bold text-white mb-3 tracking-tight">Stack</h1>
-        <p className="text-lg text-blue-200/90">Verified Pros. Guaranteed Value.</p>
+        <p className="text-lg text-amber/90">Verified Pros. <span className="text-amber font-semibold">Guaranteed Value.</span></p>
       </motion.div>
 
       <motion.div initial={{
@@ -105,8 +105,8 @@ const WelcomeScreen = ({
       }} transition={{
         delay: 0.5 + idx * 0.1
       }}>
-            <div className="font-display text-2xl font-bold text-white">{stat.value}</div>
-            <div className="text-xs text-blue-200/80 font-medium mt-0.5">{stat.label}</div>
+            <div className="font-display text-2xl font-bold text-amber">{stat.value}</div>
+            <div className="text-xs text-blue-200/70 font-medium mt-0.5">{stat.label}</div>
           </motion.div>)}
       </motion.div>
       
@@ -119,29 +119,30 @@ const WelcomeScreen = ({
     }} transition={{
       delay: 0.6,
       duration: 0.5
-    }} className="w-full max-w-sm space-y-4">
+    }} className="w-full max-w-sm space-y-3">
         {/* Primary CTA - I need help */}
         <motion.button whileHover={{
         scale: 1.02,
         y: -2
       }} whileTap={{
         scale: 0.98
-      }} onClick={() => handleSelectWithFeedback('consumer', onSelectUserType)} className="group w-full bg-primary-foreground text-primary py-5 px-5 rounded-3xl transition-all duration-300 hover:bg-white" style={{
-        boxShadow: '0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)'
+      }} onClick={() => handleSelectWithFeedback('consumer', onSelectUserType)} className="group w-full py-5 px-5 rounded-xl transition-all duration-300" style={{
+        background: 'linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 55%) 100%)',
+        boxShadow: '0 8px 24px -4px hsl(38 92% 56% / 0.35)'
       }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-sky-400 rounded-3xl flex items-center justify-center shadow-md">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                 <Home className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="font-display text-xl font-bold text-slate-900">I need help</div>
-                <div className="text-sm text-slate-600">Post a job & get offers</div>
+                <div className="font-display text-xl font-bold text-white">I need help</div>
+                <div className="text-sm text-white/80">Post a job & get offers</div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded-full">Popular</span>
-              <ChevronRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-all duration-300" />
+              <span className="text-xs font-semibold bg-white/20 text-white px-2.5 py-1 rounded-full">Popular</span>
+              <ChevronRight className="w-5 h-5 text-white/80 group-hover:translate-x-1 transition-all duration-300" />
             </div>
           </div>
         </motion.button>
@@ -151,20 +152,18 @@ const WelcomeScreen = ({
         scale: 1.02
       }} whileTap={{
         scale: 0.98
-      }} onClick={handleImAPro} className="group w-full bg-[#1e3a5f] hover:bg-[#254a75] border-2 border-blue-400/30 hover:border-blue-400/50 py-5 px-5 rounded-3xl transition-all duration-300" style={{
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-      }}>
+      }} onClick={handleImAPro} className="group w-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-amber/30 py-5 px-5 rounded-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-blue-500/20 rounded-3xl flex items-center justify-center group-hover:bg-blue-500/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-amber/20 transition-all duration-300">
                 <Briefcase className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
                 <div className="font-display text-xl font-bold text-white">I'm a Pro</div>
-                <div className="text-sm text-blue-200/80">Sign in to find jobs</div>
+                <div className="text-sm text-blue-200/70">Sign in to find jobs</div>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-blue-200/70 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+            <ChevronRight className="w-5 h-5 text-white/50 group-hover:text-amber group-hover:translate-x-1 transition-all duration-300" />
           </div>
         </motion.button>
         
@@ -174,7 +173,7 @@ const WelcomeScreen = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
           onClick={handleBecomeAPro}
-          className="w-full py-3 text-center text-blue-200 font-medium hover:text-white hover:underline flex items-center justify-center gap-2 transition-colors"
+          className="w-full py-3 text-center text-blue-200/70 font-medium hover:text-amber hover:underline flex items-center justify-center gap-2 transition-colors"
         >
           <Rocket className="w-4 h-4" />
           New here? Become a Pro today
@@ -198,8 +197,8 @@ const WelcomeScreen = ({
       }, {
         icon: Sparkles,
         label: 'Quality'
-      }].map((item, idx) => <div key={idx} className="flex items-center gap-2 text-blue-200/90">
-            <item.icon className="w-4 h-4" />
+      }].map((item, idx) => <div key={idx} className="flex items-center gap-2 text-blue-200/70">
+            <item.icon className="w-4 h-4 text-amber/70" />
             <span className="font-medium">{item.label}</span>
           </div>)}
       </motion.div>

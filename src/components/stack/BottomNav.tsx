@@ -59,7 +59,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/50 px-2 py-2 shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.1)]"
+      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/60 px-2 py-2 shadow-[0_-2px_12px_-4px_rgba(0,0,0,0.06)]"
     >
       <div className="flex justify-around items-center max-w-md mx-auto">
         {navItems.map((item) => {
@@ -71,7 +71,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
               onMouseEnter={() => handlePreload(item.screen)}
               onTouchStart={() => handlePreload(item.screen)}
               whileTap={{ scale: 0.92 }}
-              className={`relative flex flex-col items-center gap-0.5 px-5 py-2.5 rounded-2xl transition-colors duration-200 ${
+              className={`relative flex flex-col items-center gap-0.5 px-5 py-2.5 rounded-xl transition-colors duration-200 ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary/70'
               }`}
             >
@@ -79,7 +79,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
-                  className="absolute inset-0 bg-primary/12 rounded-2xl"
+                  className="absolute inset-0 bg-primary/10 rounded-xl"
                   initial={false}
                   transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
                 />
@@ -89,7 +89,7 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
               {isActive && (
                 <motion.div
                   layoutId="activeTabGlow"
-                  className="absolute inset-0 rounded-2xl"
+                  className="absolute inset-0 rounded-xl"
                   initial={false}
                   style={{
                     background:
