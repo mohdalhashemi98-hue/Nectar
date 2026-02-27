@@ -1,7 +1,10 @@
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Target, Trophy, Coins, Flame, Gift, Sparkles, Gem, Zap, Star, PiggyBank, Crown, LucideIcon } from 'lucide-react';
 import { Rewards, ScreenType, UserType } from '@/types/stack';
 import { tierConfig } from '@/data/stack-data';
+import { generatePointsGrowthData, type TimeRange } from '@/data/chart-data';
+import ValueChart from '../charts/ValueChart';
 import BottomNav from '../BottomNav';
 
 const achievementIcons: Record<string, LucideIcon> = { Trophy, Gem, Zap, Star, PiggyBank, Crown };
@@ -14,6 +17,8 @@ interface RewardsScreenProps {
 }
 
 const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenProps) => {
+  const [pointsRange, setPointsRange] = useState<TimeRange>('3M');
+
   const r = {
     ...rewards,
     points: rewards?.points ?? 0,
@@ -29,6 +34,11 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
     achievements: rewards?.achievements ?? [],
     recentEarnings: rewards?.recentEarnings ?? [],
   };
+
+  const pointsChart = useMemo(
+    () => generatePointsGrowthData(r.points, r.lifetimePoints, pointsRange),
+    [r.points, r.lifetimePoints, pointsRange]
+  );
 
   return (
     <div className="w-full bg-background pb-24">
@@ -91,6 +101,18 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
               <p className="text-[10px] text-muted-foreground">{stat.label}</p>
             </div>
           ))}
+        </div>
+
+        {/* Points Growth Chart */}
+        <div className="card-elevated p-4 mb-4">
+          <ValueChart
+            data={pointsChart.points}
+            summary={pointsChart.summary}
+            label="Points Growth"
+            valueSuffix=" pts"
+            selectedRange={pointsRange}
+            onRangeChange={setPointsRange}
+          />
         </div>
 
         {/* Weekly Challenge */}

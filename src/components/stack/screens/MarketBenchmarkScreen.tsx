@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, MapPin, Clock, Users, Sparkles, ChevronDown, ArrowRight, Zap, CheckCircle2 } from 'lucide-react';
 import { ScreenType } from '@/types/stack';
 import { categories } from '@/data/stack-data';
+import { generatePriceTrendData, type TimeRange } from '@/data/chart-data';
+import ValueChart from '../charts/ValueChart';
 import BottomNav from '../BottomNav';
 import { ScreenHeader } from '@/components/shared';
 
@@ -33,6 +35,12 @@ const MarketBenchmarkScreen = ({ onNavigate, onSelectCategory, onResetRequestFor
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [benchmarkData, setBenchmarkData] = useState<ReturnType<typeof generateBenchmarkData> | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [priceTimeRange, setPriceTimeRange] = useState<TimeRange>('3M');
+
+  const priceChart = useMemo(() =>
+    benchmarkData ? generatePriceTrendData(selectedCategory, selectedLocation, priceTimeRange) : null,
+    [benchmarkData, selectedCategory, selectedLocation, priceTimeRange]
+  );
 
   const handleAnalyze = () => {
     if (!selectedCategory || !selectedLocation) return;
@@ -122,6 +130,20 @@ const MarketBenchmarkScreen = ({ onNavigate, onSelectCategory, onResetRequestFor
                   <span className="text-sm font-semibold">AI Confidence: {benchmarkData.confidence}%</span>
                 </div>
               </div>
+
+              {/* Price Trend Chart */}
+              {priceChart && (
+                <div className="card-elevated p-4">
+                  <ValueChart
+                    data={priceChart.points}
+                    summary={priceChart.summary}
+                    label="Service Price Trend"
+                    valueSuffix=" AED"
+                    selectedRange={priceTimeRange}
+                    onRangeChange={setPriceTimeRange}
+                  />
+                </div>
+              )}
 
               {/* Price Range */}
               <div className="card-elevated p-5">

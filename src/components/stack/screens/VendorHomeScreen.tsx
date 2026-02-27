@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Star, Bell, Briefcase, MapPin, Clock, ChevronRight, Zap, TrendingUp,
@@ -6,6 +6,8 @@ import {
   Wallet, Settings, Sparkles, ArrowUpRight, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { VendorStats, AvailableJob, ScreenType } from '@/types/stack';
+import { generateEarningsTrendData, type TimeRange } from '@/data/chart-data';
+import ValueChart from '../charts/ValueChart';
 import BottomNav from '../BottomNav';
 import { VendorHomeSkeleton } from '../ScreenSkeleton';
 import { CategoryIcon } from '../utils/categoryIcons';
@@ -45,6 +47,8 @@ interface VendorHomeScreenProps {
 const VendorHomeScreen = ({ vendorStats, availableJobs, onNavigate, onSelectJob }: VendorHomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [earningsRange, setEarningsRange] = useState<TimeRange>('1M');
+  const earningsChart = useMemo(() => generateEarningsTrendData(vendorStats.totalEarnings, earningsRange), [vendorStats.totalEarnings, earningsRange]);
 
   const handleRefresh = useCallback(async () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -165,6 +169,23 @@ const VendorHomeScreen = ({ vendorStats, availableJobs, onNavigate, onSelectJob 
                 <div className="text-[10px] text-muted-foreground">CSAT</div>
               </button>
             </div>
+          </div>
+
+          {/* Earnings Trend */}
+          <div className="card-elevated p-4">
+            <h3 className="font-display text-base font-bold text-foreground mb-2 flex items-center gap-2">
+              <Wallet className="w-4 h-4 text-primary" /> Earnings
+            </h3>
+            <ValueChart
+              data={earningsChart.points}
+              summary={earningsChart.summary}
+              label="Revenue"
+              valueSuffix=" AED"
+              selectedRange={earningsRange}
+              onRangeChange={setEarningsRange}
+              compact
+              height={100}
+            />
           </div>
 
           {/* AI Price Check */}
