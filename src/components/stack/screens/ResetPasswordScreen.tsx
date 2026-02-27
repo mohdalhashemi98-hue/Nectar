@@ -101,15 +101,15 @@ const ResetPasswordScreen = () => {
   // Loading state while checking session
   if (isValidSession === null) {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
+      <div className="flex flex-col h-screen bg-background">
         <div className="flex-1 flex flex-col justify-center items-center px-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center"
           >
-            <div className="w-12 h-12 border-4 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-primary-foreground/70">Verifying reset link...</p>
+            <div className="w-12 h-12 border-4 border-muted-foreground/30 border-t-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Verifying reset link...</p>
           </motion.div>
         </div>
       </div>
@@ -119,7 +119,7 @@ const ResetPasswordScreen = () => {
   // Invalid or expired session
   if (isValidSession === false) {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
+      <div className="flex flex-col h-screen bg-background">
         <div className="flex-1 flex flex-col justify-center px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -127,10 +127,10 @@ const ResetPasswordScreen = () => {
             className="text-center mb-6"
           >
             <div className="w-20 h-20 bg-destructive/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <AlertCircle className="w-10 h-10 text-primary-foreground" />
+              <AlertCircle className="w-10 h-10 text-destructive" />
             </div>
-            <h1 className="font-display text-3xl font-bold text-primary-foreground">Link Expired</h1>
-            <p className="text-primary-foreground/70 mt-2 max-w-xs mx-auto">
+            <h1 className="font-display text-3xl font-bold text-foreground">Link Expired</h1>
+            <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
               This password reset link has expired or is invalid.
             </p>
           </motion.div>
@@ -165,7 +165,7 @@ const ResetPasswordScreen = () => {
   // Success state
   if (success) {
     return (
-      <div className="flex flex-col h-screen bg-gradient-golden">
+      <div className="flex flex-col h-screen bg-background">
         <div className="flex-1 flex flex-col justify-center px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -176,12 +176,12 @@ const ResetPasswordScreen = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-20 h-20 bg-primary-foreground/20 rounded-full flex items-center justify-center mx-auto mb-4"
+              className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <CheckCircle2 className="w-10 h-10 text-primary-foreground" />
+              <CheckCircle2 className="w-10 h-10 text-primary" />
             </motion.div>
-            <h1 className="font-display text-3xl font-bold text-primary-foreground">Password Updated!</h1>
-            <p className="text-primary-foreground/70 mt-2 max-w-xs mx-auto">
+            <h1 className="font-display text-3xl font-bold text-foreground">Password Updated!</h1>
+            <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
               Your password has been successfully updated. Redirecting to login...
             </p>
           </motion.div>
@@ -207,7 +207,7 @@ const ResetPasswordScreen = () => {
 
   // Password update form
   return (
-    <div className="flex flex-col h-screen bg-gradient-golden">
+    <div className="flex flex-col h-screen bg-background">
       <div className="flex-1 flex flex-col justify-center px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -215,8 +215,8 @@ const ResetPasswordScreen = () => {
           className="text-center mb-6"
         >
           <StackLogo size={64} className="mx-auto mb-4" />
-          <h1 className="font-display text-3xl font-bold text-primary-foreground">Set New Password</h1>
-          <p className="text-primary-foreground/70 mt-1">
+          <h1 className="font-display text-3xl font-bold text-foreground">Set New Password</h1>
+          <p className="text-muted-foreground mt-1">
             Create a strong password for your account
           </p>
         </motion.div>

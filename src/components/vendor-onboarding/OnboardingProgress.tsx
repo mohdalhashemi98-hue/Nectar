@@ -15,7 +15,7 @@ const OnboardingProgress = ({ currentStep, totalSteps, stepLabels }: OnboardingP
       {/* Progress bar */}
       <div className="relative h-2 bg-secondary rounded-full overflow-hidden mb-4">
         <motion.div
-          className="absolute inset-y-0 left-0 bg-gradient-golden rounded-full"
+          className="absolute inset-y-0 left-0 bg-primary rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.4, ease: 'easeOut' }}

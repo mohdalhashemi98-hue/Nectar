@@ -10,7 +10,7 @@ import CoreIdentityStep from './steps/CoreIdentityStep';
 import SkillsStep from './steps/SkillsStep';
 import CertificationsStep from './steps/CertificationsStep';
 import PortfolioStep from './steps/PortfolioStep';
-import StackPattern from '../stack/StackPattern';
+
 
 const STEP_LABELS = ['Identity', 'Skills', 'Credentials', 'Portfolio'];
 const TOTAL_STEPS = 4;
@@ -165,31 +165,27 @@ const VendorOnboardingScreen = ({ onComplete, onBack }: VendorOnboardingScreenPr
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground relative overflow-hidden">
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="px-4 py-5 relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <button
-              onClick={onBack}
-              className="w-10 h-10 rounded-2xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <h1 className="font-display text-xl font-bold">Expertise Builder</h1>
-              <p className="text-sm opacity-80">Step {currentStep} of {TOTAL_STEPS}</p>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSaveAndExit}
-              disabled={isSaving}
-              className="text-primary-foreground hover:bg-primary-foreground/20"
-            >
-              <Save className="w-4 h-4 mr-1.5" />
-              Save & Exit
-            </Button>
+      <div className="bg-background border-b border-border px-4 py-5">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onBack}
+            className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-foreground" />
+          </button>
+          <div className="flex-1">
+            <h1 className="font-display text-xl font-bold text-foreground">Expertise Builder</h1>
+            <p className="text-sm text-muted-foreground">Step {currentStep} of {TOTAL_STEPS}</p>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleSaveAndExit}
+            disabled={isSaving}
+          >
+            <Save className="w-4 h-4 mr-1.5" />
+            Save & Exit
+          </Button>
         </div>
       </div>
 
@@ -265,7 +261,7 @@ const VendorOnboardingScreen = ({ onComplete, onBack }: VendorOnboardingScreenPr
               size="lg"
               onClick={handleComplete}
               disabled={!stepValid || isSaving}
-              className="flex-1 h-14 rounded-2xl bg-gradient-golden"
+              className="flex-1 h-14 rounded-2xl bg-primary"
             >
               {isSaving ? (
                 <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />

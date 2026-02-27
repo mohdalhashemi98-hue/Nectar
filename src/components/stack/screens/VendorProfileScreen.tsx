@@ -10,7 +10,7 @@ import {
 import { Vendor, ScreenType, Conversation } from '@/types/stack';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import StackPattern from '../StackPattern';
+
 
 interface VendorProfileScreenProps {
   vendor: Vendor;
