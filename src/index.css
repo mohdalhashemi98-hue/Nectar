@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* STACK Design System - US4LESS Inspired */
+/* STACK Design System - Minimalist */
 
 @layer base {
   :root {
-    /* Stack Color Palette - Navy + Amber */
-    --background: 210 20% 98%;
+    --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -16,23 +15,23 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Primary - Trust Blue */
+    /* Primary - Brand Blue */
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Soft Gray */
+    /* Secondary - Light Gray */
     --secondary: 210 20% 96%;
     --secondary-foreground: 222 47% 20%;
 
-    /* Muted - Cool Gray */
+    /* Muted */
     --muted: 210 20% 94%;
     --muted-foreground: 215 16% 47%;
 
-    /* Accent - Deep Navy */
+    /* Accent */
     --accent: 222 47% 11%;
     --accent-foreground: 210 20% 98%;
 
-    /* Amber - Gold Accent */
+    /* Amber - only for ratings/stars */
     --amber: 38 92% 56%;
     --amber-foreground: 222 47% 11%;
 
@@ -46,7 +45,6 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Verified - Sky Blue for trust */
     --verified: 199 89% 48%;
     --verified-foreground: 0 0% 100%;
 
@@ -56,25 +54,13 @@
 
     --radius: 0.75rem;
 
-    /* Gradients - Navy + Amber accents */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(199 89% 48%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(210 20% 94%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(222 47% 10%) 0%, hsl(222 47% 14%) 50%, hsl(215 40% 18%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
-    --gradient-golden: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 60%) 50%, hsl(32 95% 55%) 100%);
-    --gradient-amber: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 55%) 100%);
-
-    /* Shadows - Softer */
-    --shadow-sm: 0 1px 3px 0 hsl(222 47% 11% / 0.04);
-    --shadow-md: 0 4px 12px -2px hsl(222 47% 11% / 0.06);
-    --shadow-lg: 0 8px 24px -4px hsl(222 47% 11% / 0.08);
-    --shadow-xl: 0 16px 40px -8px hsl(222 47% 11% / 0.1);
-    --shadow-glow: 0 0 32px hsl(38 92% 56% / 0.2);
-    --shadow-inner: inset 0 2px 4px 0 hsl(222 47% 11% / 0.03);
-    --shadow-golden: 0 8px 24px -4px hsl(38 92% 56% / 0.25);
+    /* Shadows - minimal */
+    --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.04);
+    --shadow-md: 0 2px 8px -2px hsl(222 47% 11% / 0.06);
+    --shadow-lg: 0 4px 16px -4px hsl(222 47% 11% / 0.08);
 
     /* Sidebar */
-    --sidebar-background: 210 20% 98%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 20%;
     --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -125,22 +111,9 @@
     --input: 217 33% 20%;
     --ring: 217 91% 60%;
 
-    /* Dark mode gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(199 89% 55%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(222 47% 8%) 0%, hsl(222 47% 11%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(222 47% 8%) 0%, hsl(222 47% 12%) 50%, hsl(215 40% 16%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(222 47% 12%) 0%, hsl(222 47% 10%) 100%);
-    --gradient-golden: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 60%) 50%, hsl(32 95% 55%) 100%);
-    --gradient-amber: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 55%) 100%);
-
-    /* Dark mode shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
-    --shadow-md: 0 4px 12px -2px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 8px 24px -4px hsl(0 0% 0% / 0.35);
-    --shadow-xl: 0 16px 40px -8px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 32px hsl(38 92% 56% / 0.25);
-    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.2);
-    --shadow-golden: 0 8px 24px -4px hsl(38 92% 56% / 0.3);
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.15);
+    --shadow-md: 0 2px 8px -2px hsl(0 0% 0% / 0.25);
+    --shadow-lg: 0 4px 16px -4px hsl(0 0% 0% / 0.3);
 
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 20% 90%;
@@ -168,7 +141,6 @@
     letter-spacing: -0.02em;
   }
 
-  /* Elegant scrollbar */
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
@@ -188,155 +160,43 @@
 }
 
 @layer components {
-  /* Animated gradient backgrounds */
-  .bg-gradient-primary {
-    background: var(--gradient-primary);
-  }
-
-  .bg-gradient-subtle {
-    background: var(--gradient-subtle);
-  }
-
-  .bg-gradient-hero {
-    background: var(--gradient-hero);
-  }
-
-  .bg-gradient-card {
-    background: var(--gradient-card);
-  }
-
-  .bg-gradient-golden {
-    background: var(--gradient-golden);
-  }
-
-  .bg-gradient-amber {
-    background: var(--gradient-amber);
-  }
-
-  /* Animated gradient - subtle shimmer effect */
-  .gradient-animated {
-    background: linear-gradient(
-      135deg,
-      hsl(38 92% 50%) 0%,
-      hsl(38 92% 60%) 50%,
-      hsl(32 95% 55%) 100%
-    );
-  }
-
-  /* Subtle gradient border */
-  .gradient-border {
-    position: relative;
-    background: hsl(var(--card));
-    z-index: 1;
-  }
-
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(
-      135deg,
-      hsl(38 92% 56%) 0%,
-      hsl(217 91% 60%) 100%
-    );
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .gradient-border:hover::before {
-    opacity: 1;
-  }
-
-  /* Glass effects */
-  .glass {
-    @apply bg-card/80 backdrop-blur-xl;
-  }
-
-  .glass-dark {
-    @apply bg-accent/5 backdrop-blur-xl;
-  }
-
-  /* Card styles */
+  /* Card styles - minimal */
   .card-elevated {
     @apply bg-card rounded-xl border border-border;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
   }
 
   .card-interactive {
-    @apply bg-card rounded-xl border border-border
-           transition-all duration-200 cursor-pointer;
+    @apply bg-card rounded-xl border border-border transition-all duration-200 cursor-pointer;
     box-shadow: var(--shadow-sm);
   }
 
   .card-interactive:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-1px);
-    border-color: hsl(38 92% 56% / 0.3);
-  }
-
-  /* Amber gradient card */
-  .card-gradient-animated {
-    @apply rounded-xl text-white relative overflow-hidden;
-    background: linear-gradient(
-      135deg,
-      hsl(38 92% 50%) 0%,
-      hsl(32 95% 55%) 100%
-    );
-    box-shadow: var(--shadow-golden);
-  }
-
-  /* Golden/Amber card */
-  .card-golden {
-    background: var(--gradient-golden);
-    @apply rounded-xl text-white;
-    box-shadow: var(--shadow-golden);
+    box-shadow: var(--shadow-md);
+    border-color: hsl(var(--primary) / 0.3);
   }
 
   /* Button styles */
   .btn-primary {
     @apply bg-primary text-primary-foreground 
-           font-semibold py-4 px-6 rounded-xl 
+           font-semibold py-3.5 px-6 rounded-xl 
            transition-all duration-200 
-           active:scale-[0.98];
+           active:scale-[0.98] hover:opacity-90;
     box-shadow: var(--shadow-sm);
-  }
-
-  .btn-primary:hover {
-    box-shadow: var(--shadow-md);
-    filter: brightness(1.05);
-  }
-
-  /* Amber button */
-  .btn-gradient {
-    @apply text-white font-semibold py-4 px-6 rounded-xl 
-           transition-all duration-200 active:scale-[0.98];
-    background: linear-gradient(
-      135deg,
-      hsl(38 92% 50%) 0%,
-      hsl(32 95% 55%) 100%
-    );
-    box-shadow: var(--shadow-golden);
-  }
-
-  .btn-gradient:hover {
-    box-shadow: 0 8px 24px -4px hsl(38 92% 56% / 0.4);
-    filter: brightness(1.05);
   }
 
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground 
-           font-semibold py-4 px-6 rounded-xl 
+           font-semibold py-3.5 px-6 rounded-xl 
            transition-all duration-200 
            hover:bg-secondary/80;
   }
 
   .btn-outline {
-    @apply bg-transparent text-accent border-2 border-accent/20
-           font-semibold py-4 px-6 rounded-xl 
+    @apply bg-transparent text-foreground border border-border
+           font-semibold py-3.5 px-6 rounded-xl 
            transition-all duration-200 
-           hover:border-primary hover:bg-primary hover:text-primary-foreground;
+           hover:border-primary hover:text-primary;
   }
 
   /* Badge styles */
@@ -360,22 +220,25 @@
     @apply bg-verified/10 text-verified px-3 py-1 rounded-full text-xs font-semibold;
   }
 
-  /* Verified icon glow */
-  .verified-glow {
-    filter: drop-shadow(0 0 4px hsl(199 89% 48% / 0.4));
+  /* Points badge - minimal blue chip */
+  .points-badge {
+    @apply inline-flex items-center gap-1.5 
+           px-2.5 py-1 rounded-full font-semibold text-xs;
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
   }
 
-  /* Input styles - bordered style like US4LESS */
+  /* Input styles */
   .input-modern {
-    @apply w-full px-4 py-3.5 bg-card border border-border 
-           rounded-xl text-base font-medium
+    @apply w-full px-4 py-3 bg-background border border-border 
+           rounded-xl text-base
            focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20
            transition-all duration-200 placeholder:text-muted-foreground;
   }
 
   /* Avatar styles */
   .avatar-primary {
-    @apply bg-primary text-primary-foreground 
+    @apply bg-primary/10 text-primary 
            rounded-xl flex items-center justify-center 
            font-bold;
   }
@@ -393,14 +256,6 @@
     @apply bg-primary/10 text-primary;
   }
 
-  /* Points badge - amber accent */
-  .points-badge {
-    @apply inline-flex items-center gap-1.5 
-           px-3 py-1.5 rounded-full font-semibold text-sm;
-    background: hsl(var(--amber));
-    color: hsl(var(--amber-foreground));
-  }
-
   /* Stat card */
   .stat-card {
     @apply bg-card rounded-xl p-4 border border-border;
@@ -408,10 +263,9 @@
   }
 
   /* ======================================
-     UNIFIED SCREEN LAYOUT SYSTEM - Mobile Optimized
+     UNIFIED SCREEN LAYOUT SYSTEM
      ====================================== */
   
-  /* Main app container - always full width */
   .screen-container {
     @apply w-full relative;
     min-height: 100vh;
@@ -423,7 +277,6 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Full height screen (no scroll) */
   .screen-container-fixed {
     @apply w-full relative;
     height: 100vh;
@@ -433,37 +286,31 @@
     overflow: hidden;
   }
 
-  /* Content area within screens */
   .screen-content {
     @apply flex flex-col w-full;
     min-height: 100%;
   }
 
-  /* Responsive horizontal padding for content */
   .screen-padded {
     @apply px-4 sm:px-6 md:px-8;
   }
 
-  /* When bottom nav is present, add padding to prevent content overlap */
   .has-bottom-nav {
     padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 
   /* ======================================
-     SAFE AREA UTILITIES (iOS/Android)
+     SAFE AREA UTILITIES
      ====================================== */
   
-  /* Safe area padding - bottom (for fixed footers/navs) */
   .safe-area-pb {
     padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
   }
 
-  /* Safe area padding - top (for headers under notch/dynamic island) */
   .safe-area-pt {
     padding-top: max(1rem, env(safe-area-inset-top, 0px));
   }
 
-  /* Safe area padding - all sides */
   .safe-area-inset {
     padding-top: env(safe-area-inset-top, 0px);
     padding-right: env(safe-area-inset-right, 0px);
@@ -471,18 +318,15 @@
     padding-left: env(safe-area-inset-left, 0px);
   }
 
-  /* Safe area margin - bottom */
   .safe-area-mb {
     margin-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Fixed bottom element with safe area */
   .fixed-bottom-safe {
     @apply fixed bottom-0 left-0 right-0;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Bottom navigation specific styling */
   .bottom-nav {
     @apply fixed bottom-0 left-0 right-0 z-50 mx-auto;
     width: 100%;
@@ -490,7 +334,6 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* iOS-specific touch optimizations */
   @supports (-webkit-touch-callout: none) {
     .screen-container {
       overscroll-behavior-y: contain;
@@ -504,18 +347,12 @@
 }
 
 @layer utilities {
-  /* Text utilities */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: var(--gradient-primary);
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--verified)));
   }
 
-  .text-golden {
-    @apply bg-clip-text text-transparent;
-    background-image: var(--gradient-golden);
-  }
-
-  /* Shimmer effect */
+  /* Shimmer for skeletons */
   .shimmer {
     background: linear-gradient(
       90deg,
@@ -530,46 +367,6 @@
   @keyframes shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
-  }
-
-  /* Pulse glow - amber */
-  .pulse-glow {
-    animation: pulse-glow 2.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 16px hsl(38 92% 56% / 0.15); }
-    50% { box-shadow: 0 0 32px hsl(38 92% 56% / 0.3); }
-  }
-
-  /* Float animation */
-  .float {
-    animation: float 4s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  /* Subtle bounce */
-  .animate-bounce-subtle {
-    animation: bounce-subtle 2.5s ease-in-out infinite;
-  }
-
-  @keyframes bounce-subtle {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
-  /* Scale pulse */
-  .animate-pulse-scale {
-    animation: pulse-scale 3s ease-in-out infinite;
-  }
-
-  @keyframes pulse-scale {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.05); opacity: 0.8; }
   }
 
   /* Scrollbar hide */

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Home, TrendingUp, Gift, MessageCircle, User, Building2, Briefcase } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { UserType, ScreenType } from '@/types/stack';
@@ -13,7 +13,6 @@ interface BottomNavProps {
   unreadMessages?: number;
 }
 
-// Map screen types to routes for preloading
 const screenToRoute: Record<string, string> = {
   'vendor-home': '/vendor',
   'consumer-home': '/consumer',
@@ -55,87 +54,48 @@ const BottomNav = ({ active, userType, onNavigate, pendingQuotes = 0, unreadMess
   };
 
   const nav = (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="bottom-nav bg-card/95 backdrop-blur-xl border-t border-border/40 px-2 py-1.5 shadow-[0_-1px_8px_-2px_rgba(0,0,0,0.04)]"
-    >
+    <div className="bottom-nav bg-background border-t border-border px-2 py-1.5">
       <div className="flex justify-around items-center max-w-md mx-auto">
         {navItems.map((item) => {
           const isActive = active === item.key;
           return (
-            <motion.button
+            <button
               key={item.key}
               onClick={() => handleNavClick(item.screen)}
               onMouseEnter={() => handlePreload(item.screen)}
               onTouchStart={() => handlePreload(item.screen)}
-              whileTap={{ scale: 0.92 }}
-              className={`relative flex flex-col items-center gap-0.5 px-5 py-2.5 rounded-xl transition-colors duration-200 ${
-                isActive ? 'text-amber' : 'text-muted-foreground hover:text-foreground'
+              className={`relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-150 ${
+                isActive ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
-              {/* Animated pill indicator */}
-              {isActive && (
-                <motion.div
-                  layoutId="activeTabPill"
-                  className="absolute inset-0 bg-amber/10 rounded-xl"
-                  initial={false}
-                  transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
-                />
-              )}
-
-              {/* Active glow effect */}
-              {isActive && (
-                <motion.div
-                  layoutId="activeTabGlow"
-                  className="absolute inset-0 rounded-xl"
-                  initial={false}
-                  style={{
-                    background:
-                      'radial-gradient(ellipse at center bottom, hsl(var(--amber) / 0.15) 0%, transparent 70%)',
-                  }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
-                />
-              )}
-
-              <div className="relative z-10">
-                <motion.div
-                  animate={isActive ? { y: -2, scale: 1.1 } : { y: 0, scale: 1 }}
-                  whileTap={{ scale: 0.85, rotate: -5 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                >
-                  <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
-                </motion.div>
+              <div className="relative">
+                <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.5px]'}`} />
                 <AnimatePresence>
                   {item.badge > 0 && (
                     <motion.span
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                      className="absolute -top-1.5 -right-2.5 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1 shadow-sm"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1"
                     >
                       {item.badge > 9 ? '9+' : item.badge}
                     </motion.span>
                   )}
                 </AnimatePresence>
               </div>
-
-              <motion.span
-                animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.8, y: 0 }}
-                className={`text-[10px] font-semibold relative z-10 ${isActive ? 'font-bold' : ''}`}
-              >
+              <span className={`text-[10px] ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {item.label}
-              </motion.span>
-            </motion.button>
+              </span>
+              {isActive && (
+                <div className="absolute -bottom-1 w-1 h-1 rounded-full bg-primary" />
+              )}
+            </button>
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 
-  // Render outside of animated/transformed containers so `fixed` stays viewport-fixed.
   if (typeof document === 'undefined') return null;
   return createPortal(nav, document.body);
 };

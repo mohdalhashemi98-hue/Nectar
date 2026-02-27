@@ -1,44 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle, CheckCircle2, ArrowLeft, Briefcase, Home } from 'lucide-react';
+import { Lock, Eye, EyeOff, User, Mail, ChevronLeft, AlertCircle, CheckCircle2, ArrowLeft, Phone } from 'lucide-react';
 import { UserType } from '@/types/stack';
 import StackLogo from '@/components/StackLogo';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
-
-// Theme configurations based on user type
-const getThemeConfig = (userType: UserType) => {
-  if (userType === 'vendor') {
-    return {
-      bgClass: 'bg-[#0f172a]',
-      gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]',
-      accentColor: 'bg-amber',
-      textPrimary: 'text-white',
-      textSecondary: 'text-slate-400',
-      backButtonBg: 'bg-white/10 hover:bg-white/15',
-      backButtonText: 'text-white',
-      icon: Briefcase,
-      title: 'Pro Login',
-      subtitle: 'Access your professional dashboard',
-      signupTitle: 'Join as a Pro',
-      signupSubtitle: 'Start earning with Stack today',
-    };
-  }
-  return {
-    bgClass: 'bg-[#0f172a]',
-    gradientClass: 'bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]',
-    accentColor: 'bg-primary',
-    textPrimary: 'text-white',
-    textSecondary: 'text-slate-400',
-    backButtonBg: 'bg-white/10 hover:bg-white/15',
-    backButtonText: 'text-white',
-    icon: Home,
-    title: 'Welcome Back',
-    subtitle: 'Find trusted professionals',
-    signupTitle: 'Create Account',
-    signupSubtitle: 'Join Stack and get things done',
-  };
-};
 
 interface LoginScreenProps {
   onLoginSuccess: () => void;
@@ -49,13 +15,11 @@ interface LoginScreenProps {
 
 type AuthScreen = 'login' | 'signup' | 'forgot-password' | 'reset-sent';
 
-// Validation schemas
-const emailSchema = z.string().trim().email('Please enter a valid email address').max(255, 'Email must be less than 255 characters');
+const emailSchema = z.string().trim().email('Please enter a valid email address').max(255);
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
-const nameSchema = z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name must be less than 100 characters');
+const nameSchema = z.string().trim().min(2, 'Name must be at least 2 characters').max(100);
 
 const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: LoginScreenProps) => {
-  const theme = getThemeConfig(userType || null);
   const [authScreen, setAuthScreen] = useState<AuthScreen>('login');
   const [authData, setAuthData] = useState({ email: '', password: '', name: '', phone: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -63,157 +27,86 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
   const [error, setError] = useState<string | null>(null);
   const [resetEmail, setResetEmail] = useState('');
 
+  const clearError = () => setError(null);
+
   const validateLogin = (): string | null => {
-    const emailResult = emailSchema.safeParse(authData.email);
-    if (!emailResult.success) {
-      return emailResult.error.errors[0].message;
-    }
-    
-    const passwordResult = passwordSchema.safeParse(authData.password);
-    if (!passwordResult.success) {
-      return passwordResult.error.errors[0].message;
-    }
-    
+    const e = emailSchema.safeParse(authData.email);
+    if (!e.success) return e.error.errors[0].message;
+    const p = passwordSchema.safeParse(authData.password);
+    if (!p.success) return p.error.errors[0].message;
     return null;
   };
 
   const validateSignup = (): string | null => {
-    const nameResult = nameSchema.safeParse(authData.name);
-    if (!nameResult.success) {
-      return nameResult.error.errors[0].message;
-    }
-    
-    const emailResult = emailSchema.safeParse(authData.email);
-    if (!emailResult.success) {
-      return emailResult.error.errors[0].message;
-    }
-    
-    const passwordResult = passwordSchema.safeParse(authData.password);
-    if (!passwordResult.success) {
-      return passwordResult.error.errors[0].message;
-    }
-    
+    const n = nameSchema.safeParse(authData.name);
+    if (!n.success) return n.error.errors[0].message;
+    const e = emailSchema.safeParse(authData.email);
+    if (!e.success) return e.error.errors[0].message;
+    const p = passwordSchema.safeParse(authData.password);
+    if (!p.success) return p.error.errors[0].message;
     return null;
   };
 
   const handleLogin = async () => {
     setError(null);
-    
-    const validationError = validateLogin();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
+    const v = validateLogin();
+    if (v) { setError(v); return; }
     setIsLoading(true);
-    
     try {
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: authData.email.trim(),
-        password: authData.password,
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: authData.email.trim(), password: authData.password,
       });
-
       if (authError) {
-        if (authError.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password. Please try again.');
-        } else if (authError.message.includes('Email not confirmed')) {
-          setError('Please check your email to confirm your account.');
-        } else {
-          setError(authError.message);
-        }
-        setIsLoading(false);
+        if (authError.message.includes('Invalid login credentials')) setError('Invalid email or password.');
+        else if (authError.message.includes('Email not confirmed')) setError('Please confirm your email first.');
+        else setError(authError.message);
         return;
       }
-
       onLoginSuccess();
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { setError('An unexpected error occurred.'); }
+    finally { setIsLoading(false); }
   };
 
   const handleSignup = async () => {
     setError(null);
-    
-    const validationError = validateSignup();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
+    const v = validateSignup();
+    if (v) { setError(v); return; }
     setIsLoading(true);
-    
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { data, error: authError } = await supabase.auth.signUp({
-        email: authData.email.trim(),
-        password: authData.password,
+      const { error: authError } = await supabase.auth.signUp({
+        email: authData.email.trim(), password: authData.password,
         options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            name: authData.name.trim(),
-            phone: authData.phone.trim(),
-          },
+          emailRedirectTo: `${window.location.origin}/`,
+          data: { name: authData.name.trim(), phone: authData.phone.trim() },
         },
       });
-
       if (authError) {
-        if (authError.message.includes('already registered')) {
-          setError('This email is already registered. Please log in instead.');
-        } else {
-          setError(authError.message);
-        }
-        setIsLoading(false);
+        if (authError.message.includes('already registered')) setError('Email already registered. Please log in.');
+        else setError(authError.message);
         return;
       }
-
       onSignupSuccess();
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { setError('An unexpected error occurred.'); }
+    finally { setIsLoading(false); }
   };
 
   const handleForgotPassword = async () => {
     setError(null);
-    
-    const emailResult = emailSchema.safeParse(resetEmail);
-    if (!emailResult.success) {
-      setError(emailResult.error.errors[0].message);
-      return;
-    }
-
+    const e = emailSchema.safeParse(resetEmail);
+    if (!e.success) { setError(e.error.errors[0].message); return; }
     setIsLoading(true);
-    
     try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-        resetEmail.trim(),
-        {
-          redirectTo: `${window.location.origin}/reset-password`,
-        }
-      );
-
-      if (resetError) {
-        setError(resetError.message);
-        setIsLoading(false);
-        return;
-      }
-
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (resetError) { setError(resetError.message); return; }
       setAuthScreen('reset-sent');
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { setError('An unexpected error occurred.'); }
+    finally { setIsLoading(false); }
   };
 
-  const clearError = () => setError(null);
-
   const ErrorBanner = () => error ? (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       className="flex items-center gap-2 p-3 mb-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm"
@@ -223,359 +116,181 @@ const LoginScreen = ({ onLoginSuccess, onSignupSuccess, onBack, userType }: Logi
     </motion.div>
   ) : null;
 
-  // Forgot Password Screen
+  // Forgot Password
   if (authScreen === 'forgot-password') {
     return (
-      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
-        
-        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
-            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
+      <div className="flex flex-col h-screen bg-[#0f172a]">
+        <div className="flex-1 flex flex-col justify-center px-6">
+          <button
+            onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }}
+            className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl"
           >
-            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
-          </motion.button>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-6"
-          >
-            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>Reset Password</h1>
-            <p className={theme.textSecondary + " mt-1"}>
-              Enter your email to receive a reset link
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-card rounded-xl p-6"
-            style={{ boxShadow: 'var(--shadow-xl)' }}
-          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <div className="text-center mb-8">
+            <h1 className="font-display text-2xl font-bold text-white">Reset Password</h1>
+            <p className="text-slate-400 text-sm mt-1">Enter your email to receive a reset link</p>
+          </div>
+          <div className="bg-card rounded-xl p-6">
             <ErrorBanner />
-
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={resetEmail}
-                    onChange={(e) => { setResetEmail(e.target.value); clearError(); }}
-                    className="input-modern pl-12"
-                  />
-                </div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+                <input type="email" placeholder="your@email.com" value={resetEmail}
+                  onChange={(e) => { setResetEmail(e.target.value); clearError(); }}
+                  className="input-modern" />
               </div>
-
-              <button
-                onClick={handleForgotPassword}
-                disabled={isLoading}
-                className="btn-primary w-full disabled:opacity-50"
-              >
+              <button onClick={handleForgotPassword} disabled={isLoading} className="btn-primary w-full disabled:opacity-50">
                 {isLoading ? 'Sending...' : 'Send Reset Link'}
               </button>
             </div>
-
             <div className="mt-6 text-center">
-              <button 
-                onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
-                className="text-muted-foreground font-medium hover:text-primary transition-colors flex items-center justify-center gap-2 w-full"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Login
+              <button onClick={() => { setAuthScreen('login'); clearError(); }}
+                className="text-muted-foreground text-sm hover:text-primary flex items-center justify-center gap-2 w-full">
+                <ArrowLeft className="w-4 h-4" /> Back to Login
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Reset Link Sent Confirmation Screen
+  // Reset Sent
   if (authScreen === 'reset-sent') {
     return (
-      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
-        
-        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-6"
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-20 h-20 bg-amber/20 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <CheckCircle2 className="w-10 h-10 text-amber" />
-            </motion.div>
-            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>Check Your Email</h1>
-            <p className={`${theme.textSecondary} mt-2 max-w-xs mx-auto`}>
-              We've sent a password reset link to <strong className="text-white">{resetEmail}</strong>
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-card rounded-xl p-6"
-            style={{ boxShadow: 'var(--shadow-xl)' }}
-          >
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground text-center">
-                Didn't receive the email? Check your spam folder or try again.
-              </p>
-
-              <button
-                onClick={() => { setAuthScreen('forgot-password'); clearError(); }}
-                className="btn-primary w-full"
-              >
-                Try Again
-              </button>
-
-              <button 
-                onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }} 
-                className="w-full py-3 text-muted-foreground font-medium hover:text-primary transition-colors flex items-center justify-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Login
-              </button>
+      <div className="flex flex-col h-screen bg-[#0f172a]">
+        <div className="flex-1 flex flex-col justify-center px-6">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-primary" />
             </div>
-          </motion.div>
+            <h1 className="font-display text-2xl font-bold text-white">Check Your Email</h1>
+            <p className="text-slate-400 text-sm mt-2">We sent a reset link to <strong className="text-white">{resetEmail}</strong></p>
+          </div>
+          <div className="bg-card rounded-xl p-6 space-y-4">
+            <p className="text-sm text-muted-foreground text-center">Didn't receive it? Check spam or try again.</p>
+            <button onClick={() => { setAuthScreen('forgot-password'); clearError(); }} className="btn-primary w-full">Try Again</button>
+            <button onClick={() => { setAuthScreen('login'); clearError(); setResetEmail(''); }}
+              className="w-full py-3 text-muted-foreground text-sm hover:text-primary flex items-center justify-center gap-2">
+              <ArrowLeft className="w-4 h-4" /> Back to Login
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Signup
   if (authScreen === 'signup') {
     return (
-      <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
-        
-        <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => { setAuthScreen('login'); clearError(); }} 
-            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
-          >
-            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
-          </motion.button>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-6"
-          >
-            <div className="w-14 h-14 bg-amber/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <theme.icon className="w-7 h-7 text-amber" />
-            </div>
-            <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.signupTitle}</h1>
-            <p className={`${theme.textSecondary} mt-1`}>{theme.signupSubtitle}</p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-card rounded-xl p-6"
-            style={{ boxShadow: 'var(--shadow-xl)' }}
-          >
+      <div className="flex flex-col h-screen bg-[#0f172a]">
+        <div className="flex-1 flex flex-col justify-center px-6">
+          <button onClick={() => { setAuthScreen('login'); clearError(); }}
+            className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl">
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <div className="text-center mb-8">
+            <h1 className="font-display text-2xl font-bold text-white">Create Account</h1>
+            <p className="text-slate-400 text-sm mt-1">Join Stack and get things done</p>
+          </div>
+          <div className="bg-card rounded-xl p-6">
             <ErrorBanner />
-
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    value={authData.name}
-                    onChange={(e) => { setAuthData({ ...authData, name: e.target.value }); clearError(); }}
-                    className="input-modern pl-12"
-                  />
-                </div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Full Name</label>
+                <input type="text" placeholder="Your name" value={authData.name}
+                  onChange={(e) => { setAuthData({ ...authData, name: e.target.value }); clearError(); }}
+                  className="input-modern" />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">Email</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={authData.email}
-                    onChange={(e) => { setAuthData({ ...authData, email: e.target.value }); clearError(); }}
-                    className="input-modern pl-12"
-                  />
-                </div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+                <input type="email" placeholder="your@email.com" value={authData.email}
+                  onChange={(e) => { setAuthData({ ...authData, email: e.target.value }); clearError(); }}
+                  className="input-modern" />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">Phone (optional)</label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="tel"
-                    placeholder="+971 50 123 4567"
-                    value={authData.phone}
-                    onChange={(e) => setAuthData({ ...authData, phone: e.target.value })}
-                    className="input-modern pl-12"
-                  />
-                </div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Phone (optional)</label>
+                <input type="tel" placeholder="+971 50 123 4567" value={authData.phone}
+                  onChange={(e) => setAuthData({ ...authData, phone: e.target.value })}
+                  className="input-modern" />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-foreground mb-2">Password</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create password (min 6 characters)"
+                  <input type={showPassword ? 'text' : 'password'} placeholder="Min 6 characters"
                     value={authData.password}
                     onChange={(e) => { setAuthData({ ...authData, password: e.target.value }); clearError(); }}
-                    className="input-modern pl-12 pr-12"
-                  />
-                  <button 
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)} 
-                    className="absolute right-4 top-1/2 -translate-y-1/2"
-                  >
+                    className="input-modern pr-12" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2">
                     {showPassword ? <EyeOff className="w-5 h-5 text-muted-foreground" /> : <Eye className="w-5 h-5 text-muted-foreground" />}
                   </button>
                 </div>
               </div>
-
-              <button
-                onClick={handleSignup}
-                disabled={isLoading}
-                className="btn-primary w-full disabled:opacity-50"
-              >
+              <button onClick={handleSignup} disabled={isLoading} className="btn-primary w-full disabled:opacity-50">
                 {isLoading ? 'Creating account...' : 'Create Account'}
               </button>
             </div>
-
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center text-sm">
               <span className="text-muted-foreground">Already have an account? </span>
-              <button onClick={() => { setAuthScreen('login'); clearError(); }} className="text-primary font-semibold hover:underline">Log In</button>
+              <button onClick={() => { setAuthScreen('login'); clearError(); }} className="text-primary font-semibold">Log In</button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Login (default)
   return (
-    <div className={`flex flex-col h-screen ${theme.gradientClass} relative overflow-hidden`}>
-      <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/5 rounded-full blur-3xl" />
-      
-      <div className="flex-1 flex flex-col justify-center px-4 relative z-10">
+    <div className="flex flex-col h-screen bg-[#0f172a]">
+      <div className="flex-1 flex flex-col justify-center px-6">
         {onBack && (
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={onBack} 
-            className={`absolute top-6 left-6 p-2 ${theme.backButtonBg} rounded-xl transition-colors`}
-          >
-            <ChevronLeft className={`w-6 h-6 ${theme.backButtonText}`} />
-          </motion.button>
+          <button onClick={onBack} className="absolute top-6 left-6 p-2 bg-white/10 rounded-xl">
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
         )}
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="w-16 h-16 bg-amber/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <theme.icon className="w-8 h-8 text-amber" />
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <StackLogo size={56} />
           </div>
-          <h1 className={`font-display text-3xl font-bold ${theme.textPrimary}`}>{theme.title}</h1>
-          <p className={`${theme.textSecondary} mt-1`}>{theme.subtitle}</p>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl p-6"
-          style={{ boxShadow: 'var(--shadow-xl)' }}
-        >
+          <h1 className="font-display text-2xl font-bold text-white">Welcome Back</h1>
+          <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+        </div>
+        <div className="bg-card rounded-xl p-6">
           <ErrorBanner />
-
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-foreground mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={authData.email}
-                  onChange={(e) => { setAuthData({ ...authData, email: e.target.value }); clearError(); }}
-                  className="input-modern pl-12"
-                />
-              </div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+              <input type="email" placeholder="your@email.com" value={authData.email}
+                onChange={(e) => { setAuthData({ ...authData, email: e.target.value }); clearError(); }}
+                className="input-modern" />
             </div>
-
             <div>
-              <label className="block text-sm font-semibold text-foreground mb-2">Password</label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter password"
+                <input type={showPassword ? 'text' : 'password'} placeholder="Enter password"
                   value={authData.password}
                   onChange={(e) => { setAuthData({ ...authData, password: e.target.value }); clearError(); }}
-                  className="input-modern pl-12 pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
-                >
+                  className="input-modern pr-12" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2">
                   {showPassword ? <EyeOff className="w-5 h-5 text-muted-foreground" /> : <Eye className="w-5 h-5 text-muted-foreground" />}
                 </button>
               </div>
             </div>
-
-            <button 
-              onClick={() => { setAuthScreen('forgot-password'); clearError(); }}
-              className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors"
-            >
+            <button onClick={() => { setAuthScreen('forgot-password'); clearError(); }}
+              className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Forgot password?
             </button>
-
-            <button
-              onClick={handleLogin}
-              disabled={isLoading}
-              className="btn-primary w-full disabled:opacity-50"
-            >
+            <button onClick={handleLogin} disabled={isLoading} className="btn-primary w-full disabled:opacity-50">
               {isLoading ? 'Logging in...' : 'Log In'}
             </button>
           </div>
-
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>
-            <button
-              onClick={() => { setAuthScreen('signup'); clearError(); }}
-              className="text-primary font-semibold hover:underline"
-            >
-              Sign Up
-            </button>
+            <button onClick={() => { setAuthScreen('signup'); clearError(); }} className="text-primary font-semibold">Sign Up</button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

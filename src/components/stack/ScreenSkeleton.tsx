@@ -1,182 +1,105 @@
 import React from 'react';
 
-// Golden shimmer skeleton component
-const GoldenSkeleton = ({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div 
-    className={`rounded-md bg-primary/10 shimmer ${className}`} 
-    {...props} 
-  />
+const Skel = ({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={`rounded-xl bg-muted shimmer ${className}`} {...props} />
 );
 
-// Screen type to skeleton mapping
 export type SkeletonType = 'consumer-home' | 'vendor-home' | 'messages' | 'profile' | 'list' | 'detail' | 'chat' | 'default';
 
-/**
- * Get the appropriate skeleton component based on route/screen type
- */
 export const getSkeletonForRoute = (path: string): React.ReactNode => {
-  if (path === '/consumer' || path.startsWith('/consumer')) {
-    return <ConsumerHomeSkeleton />;
-  }
-  if (path === '/vendor' || path.startsWith('/vendor')) {
-    return <VendorHomeSkeleton />;
-  }
-  if (path === '/messages' || path.startsWith('/chat')) {
-    return <MessagesSkeleton />;
-  }
-  if (path === '/profile' || path === '/rewards') {
-    return <ProfileSkeleton />;
-  }
-  if (path === '/jobs' || path === '/notifications' || path === '/services') {
-    return <ListSkeleton />;
-  }
-  if (path.startsWith('/job/') || path.startsWith('/request/') || path.startsWith('/quote-management/')) {
-    return <DetailSkeleton />;
-  }
+  if (path === '/consumer' || path.startsWith('/consumer')) return <ConsumerHomeSkeleton />;
+  if (path === '/vendor' || path.startsWith('/vendor')) return <VendorHomeSkeleton />;
+  if (path === '/messages' || path.startsWith('/chat')) return <MessagesSkeleton />;
+  if (path === '/profile' || path === '/rewards') return <ProfileSkeleton />;
+  if (path === '/jobs' || path === '/notifications' || path === '/services') return <ListSkeleton />;
+  if (path.startsWith('/job/') || path.startsWith('/request/') || path.startsWith('/quote-management/')) return <DetailSkeleton />;
   return <DefaultSkeleton />;
 };
 
-// Default loading skeleton
 export const DefaultSkeleton = () => (
   <div className="flex flex-col h-screen bg-background items-center justify-center">
-    <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center animate-pulse">
-      <div className="w-6 h-6 rounded-lg bg-primary/40" />
-    </div>
+    <div className="w-10 h-10 rounded-xl bg-muted animate-pulse" />
   </div>
 );
 
-// List skeleton for jobs, notifications, services
 export const ListSkeleton = () => (
   <div className="flex flex-col h-screen bg-background p-4 space-y-4">
     <div className="flex items-center gap-3 pt-12 pb-4">
-      <GoldenSkeleton className="h-10 w-10 rounded-full" />
-      <GoldenSkeleton className="h-6 w-32 rounded-lg" />
+      <Skel className="h-10 w-10 rounded-full" />
+      <Skel className="h-5 w-28" />
     </div>
-    <GoldenSkeleton className="h-12 w-full rounded-2xl" />
+    <Skel className="h-10 w-full" />
     <div className="flex gap-2">
-      {[1, 2, 3].map(i => (
-        <GoldenSkeleton key={i} className="h-8 w-20 rounded-full" />
-      ))}
+      {[1, 2, 3].map(i => <Skel key={i} className="h-7 w-16 rounded-full" />)}
     </div>
-    <div className="space-y-3 flex-1">
-      {[1, 2, 3, 4, 5].map(i => (
-        <div key={i} className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border">
-          <GoldenSkeleton className="h-14 w-14 rounded-2xl" />
-          <div className="flex-1 space-y-2">
-            <GoldenSkeleton className="h-4 w-3/4 rounded-lg" />
-            <GoldenSkeleton className="h-3 w-1/2 rounded-lg" />
+    <div className="space-y-2 flex-1">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+          <Skel className="h-12 w-12 rounded-xl" />
+          <div className="flex-1 space-y-1.5">
+            <Skel className="h-4 w-3/4" />
+            <Skel className="h-3 w-1/2" />
           </div>
-          <GoldenSkeleton className="h-4 w-12 rounded-lg" />
         </div>
       ))}
     </div>
   </div>
 );
 
-// Detail skeleton for job details, request details
 export const DetailSkeleton = () => (
-  <div className="flex flex-col h-screen bg-background p-4 space-y-6">
+  <div className="flex flex-col h-screen bg-background p-4 space-y-5">
     <div className="flex items-center gap-3 pt-12">
-      <GoldenSkeleton className="h-10 w-10 rounded-full" />
-      <GoldenSkeleton className="h-6 w-24 rounded-lg" />
+      <Skel className="h-10 w-10 rounded-full" />
+      <Skel className="h-5 w-20" />
     </div>
-    <GoldenSkeleton className="h-48 w-full rounded-3xl" />
-    <div className="space-y-3">
-      <GoldenSkeleton className="h-7 w-3/4 rounded-lg" />
-      <GoldenSkeleton className="h-4 w-full rounded-lg" />
-      <GoldenSkeleton className="h-4 w-2/3 rounded-lg" />
+    <Skel className="h-40 w-full rounded-xl" />
+    <div className="space-y-2">
+      <Skel className="h-6 w-3/4" />
+      <Skel className="h-4 w-full" />
+      <Skel className="h-4 w-2/3" />
     </div>
-    <div className="flex gap-4">
+    <div className="flex gap-3">
       {[1, 2, 3].map(i => (
-        <div key={i} className="flex-1 p-4 rounded-2xl bg-card border border-border">
-          <GoldenSkeleton className="h-6 w-12 rounded-lg mb-2" />
-          <GoldenSkeleton className="h-3 w-16 rounded-lg" />
+        <div key={i} className="flex-1 p-3 rounded-xl bg-card border border-border">
+          <Skel className="h-5 w-10 mb-1.5" />
+          <Skel className="h-3 w-14" />
         </div>
       ))}
     </div>
-    <div className="space-y-3">
-      <GoldenSkeleton className="h-5 w-28 rounded-lg" />
-      <GoldenSkeleton className="h-4 w-full rounded-lg" />
-      <GoldenSkeleton className="h-4 w-full rounded-lg" />
-      <GoldenSkeleton className="h-4 w-3/4 rounded-lg" />
-    </div>
     <div className="mt-auto pb-6">
-      <GoldenSkeleton className="h-14 w-full rounded-2xl" />
+      <Skel className="h-12 w-full rounded-xl" />
     </div>
   </div>
 );
 
 export const ConsumerHomeSkeleton = () => (
   <div className="flex flex-col h-screen bg-background">
-    {/* Header Skeleton */}
-    <div className="bg-card border-b border-border px-6 py-5">
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <GoldenSkeleton className="w-10 h-10 rounded-2xl" />
-          <div>
-            <GoldenSkeleton className="h-7 w-32 mb-2 rounded-lg" />
-            <GoldenSkeleton className="h-4 w-48 rounded-lg" />
-          </div>
+    <div className="border-b border-border px-4 py-4">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <Skel className="h-6 w-28 mb-1.5" />
+          <Skel className="h-4 w-40" />
         </div>
-        <GoldenSkeleton className="w-11 h-11 rounded-3xl" />
+        <div className="flex gap-2">
+          <Skel className="w-10 h-10 rounded-xl" />
+          <Skel className="w-10 h-10 rounded-xl" />
+        </div>
       </div>
-      <GoldenSkeleton className="h-12 w-full rounded-xl" />
+      <Skel className="h-10 w-full rounded-xl" />
     </div>
-
-    {/* Content Skeleton */}
-    <div className="flex-1 overflow-hidden px-6 py-5 space-y-6">
-      {/* Rewards Card Skeleton - Golden gradient background */}
-      <div className="h-44 w-full rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border border-primary/20 p-5 relative overflow-hidden pulse-glow">
-        <div className="flex items-center justify-between mb-4 relative z-10">
-          <div className="flex items-center gap-3">
-            <GoldenSkeleton className="w-12 h-12 rounded-3xl" />
-            <div>
-              <GoldenSkeleton className="h-5 w-28 mb-2 rounded-lg" />
-              <GoldenSkeleton className="h-4 w-20 rounded-lg" />
-            </div>
-          </div>
-          <div className="text-right">
-            <GoldenSkeleton className="h-7 w-16 mb-1 rounded-lg" />
-            <GoldenSkeleton className="h-3 w-12 rounded-lg" />
-          </div>
-        </div>
-        <GoldenSkeleton className="h-8 w-full rounded-2xl mb-3" />
-        <GoldenSkeleton className="h-12 w-full rounded-2xl" />
+    <div className="flex-1 px-4 py-4 space-y-5">
+      <div className="bg-card rounded-xl border border-border p-4">
+        <Skel className="h-5 w-44 mb-2" />
+        <Skel className="h-4 w-56 mb-3" />
+        <Skel className="h-12 w-full rounded-xl" />
       </div>
-
-      {/* Quick Action Skeleton */}
-      <div className="bg-card rounded-3xl p-5 border border-border shadow-sm">
-        <GoldenSkeleton className="h-6 w-48 mb-2 rounded-lg" />
-        <GoldenSkeleton className="h-4 w-56 mb-4 rounded-lg" />
-        <GoldenSkeleton className="h-12 w-full rounded-xl" />
-      </div>
-
-      {/* Quick Re-hire Skeleton */}
       <div>
-        <div className="flex justify-between mb-4">
-          <GoldenSkeleton className="h-5 w-28 rounded-lg" />
-          <GoldenSkeleton className="h-4 w-16 rounded-lg" />
-        </div>
-        <div className="flex gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="w-32 h-40 rounded-2xl flex-shrink-0 bg-card border border-border p-4 flex flex-col items-center">
-              <GoldenSkeleton className="w-12 h-12 rounded-full mb-3" />
-              <GoldenSkeleton className="h-4 w-20 mb-2 rounded-lg" />
-              <GoldenSkeleton className="h-3 w-12 mb-3 rounded-lg" />
-              <GoldenSkeleton className="h-8 w-full rounded-xl" />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Categories Skeleton */}
-      <div>
-        <GoldenSkeleton className="h-5 w-36 mb-4 rounded-lg" />
-        <div className="grid grid-cols-3 gap-3">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-24 rounded-2xl bg-card border border-border p-4 flex flex-col items-center justify-center">
-              <GoldenSkeleton className="w-10 h-10 rounded-2xl mb-2" />
-              <GoldenSkeleton className="h-3 w-14 rounded-lg" />
+        <Skel className="h-4 w-24 mb-3" />
+        <div className="grid grid-cols-3 gap-2">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-20 rounded-xl bg-card border border-border p-3 flex flex-col items-center justify-center">
+              <Skel className="w-9 h-9 rounded-xl mb-1.5" />
+              <Skel className="h-3 w-12" />
             </div>
           ))}
         </div>
@@ -187,92 +110,43 @@ export const ConsumerHomeSkeleton = () => (
 
 export const VendorHomeSkeleton = () => (
   <div className="flex flex-col h-screen bg-background">
-    {/* Header Skeleton - Navy */}
-    <div className="bg-[#0f172a] px-6 py-5 relative overflow-hidden">
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 shimmer" />
-            <div>
-              <div className="h-7 w-44 mb-2 rounded-lg bg-white/10 shimmer" />
-              <div className="h-5 w-32 rounded-lg bg-white/10 shimmer" />
-            </div>
+    <div className="border-b border-border px-4 py-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Skel className="w-10 h-10 rounded-xl" />
+          <div>
+            <Skel className="h-5 w-36 mb-1.5" />
+            <Skel className="h-4 w-24" />
           </div>
-          <div className="w-11 h-11 rounded-xl bg-white/10 shimmer" />
+        </div>
+        <div className="flex gap-2">
+          <Skel className="w-10 h-10 rounded-xl" />
+          <Skel className="w-10 h-10 rounded-xl" />
         </div>
       </div>
     </div>
-
-    {/* Content Skeleton */}
-    <div className="flex-1 overflow-hidden px-6 py-5 space-y-6">
-      {/* Performance Cards */}
-      <div>
-        <GoldenSkeleton className="h-5 w-48 mb-3 rounded-lg" />
-        <div className="grid grid-cols-2 gap-3">
-          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <GoldenSkeleton className="w-10 h-10 rounded-xl" />
-              <GoldenSkeleton className="h-3 w-16 rounded-lg" />
-            </div>
-            <GoldenSkeleton className="h-6 w-24 rounded-lg mb-1" />
-            <GoldenSkeleton className="h-3 w-20 rounded-lg" />
-          </div>
-          <div className="h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 pulse-glow p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <GoldenSkeleton className="w-10 h-10 rounded-xl" />
-              <GoldenSkeleton className="h-3 w-16 rounded-lg" />
-            </div>
-            <GoldenSkeleton className="h-6 w-24 rounded-lg mb-1" />
-            <GoldenSkeleton className="h-3 w-20 rounded-lg" />
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-3">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-20 rounded-2xl bg-card border border-border p-3 flex flex-col justify-center items-center">
-            <GoldenSkeleton className="w-8 h-8 rounded-lg mb-2" />
-            <GoldenSkeleton className="h-5 w-10 mb-1 rounded-lg" />
-            <GoldenSkeleton className="h-3 w-14 rounded-lg" />
+    <div className="flex-1 px-4 py-4 space-y-4">
+      <Skel className="h-14 w-full rounded-xl" />
+      <div className="grid grid-cols-3 gap-2">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="h-20 rounded-xl bg-card border border-border p-3">
+            <Skel className="w-8 h-8 rounded-lg mb-1.5" />
+            <Skel className="h-3 w-14" />
           </div>
         ))}
       </div>
-
-      {/* Weekly Trend */}
-      <div className="h-28 rounded-3xl bg-card border border-border p-4">
-        <GoldenSkeleton className="h-4 w-32 mb-3 rounded-lg" />
-        <div className="flex gap-2 h-16 items-end">
-          {[40, 60, 45, 70, 55, 80, 65].map((h, i) => (
-            <div key={i} className="flex-1 rounded-t-lg bg-primary/20 shimmer" style={{ height: `${h}%` }} />
-          ))}
-        </div>
-      </div>
-
-      {/* Available Jobs */}
-      <div>
-        <div className="flex justify-between mb-4">
-          <GoldenSkeleton className="h-5 w-32 rounded-lg" />
-          <GoldenSkeleton className="h-6 w-16 rounded-full" />
-        </div>
-        <div className="space-y-3">
-          {[1, 2].map((i) => (
-            <div key={i} className="h-24 rounded-2xl bg-card border border-border p-4">
-              <div className="flex gap-3 mb-2">
-                <GoldenSkeleton className="w-10 h-10 rounded-xl flex-shrink-0" />
-                <div className="flex-1">
-                  <GoldenSkeleton className="h-5 w-40 rounded-lg mb-2" />
-                  <GoldenSkeleton className="h-3 w-24 rounded-lg" />
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <GoldenSkeleton className="h-4 w-20 rounded-lg" />
-                <GoldenSkeleton className="h-4 w-16 rounded-lg" />
-                <GoldenSkeleton className="h-4 w-16 rounded-lg" />
+      <div className="space-y-2">
+        {[1, 2].map(i => (
+          <div key={i} className="h-20 rounded-xl bg-card border border-border p-3">
+            <div className="flex gap-2.5 mb-2">
+              <Skel className="w-9 h-9 rounded-xl" />
+              <div className="flex-1">
+                <Skel className="h-4 w-36 mb-1.5" />
+                <Skel className="h-3 w-20" />
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   </div>
@@ -280,19 +154,18 @@ export const VendorHomeSkeleton = () => (
 
 export const MessagesSkeleton = () => (
   <div className="flex flex-col h-screen bg-background">
-    <div className="bg-card border-b border-border px-6 py-5">
-      <GoldenSkeleton className="h-7 w-28 mb-4 rounded-lg" />
-      <GoldenSkeleton className="h-10 w-full rounded-xl" />
+    <div className="border-b border-border px-4 py-4">
+      <Skel className="h-6 w-24 mb-3" />
+      <Skel className="h-10 w-full rounded-xl" />
     </div>
-    <div className="flex-1 px-6 py-4 space-y-3">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="flex gap-3 p-3 bg-card rounded-2xl border border-border">
-          <GoldenSkeleton className="w-12 h-12 rounded-full flex-shrink-0" />
+    <div className="flex-1 px-4 py-3 space-y-2">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="flex gap-3 p-3 bg-card rounded-xl border border-border">
+          <Skel className="w-10 h-10 rounded-full" />
           <div className="flex-1">
-            <GoldenSkeleton className="h-5 w-32 mb-2 rounded-lg" />
-            <GoldenSkeleton className="h-4 w-full rounded-lg" />
+            <Skel className="h-4 w-28 mb-1.5" />
+            <Skel className="h-3 w-full" />
           </div>
-          <GoldenSkeleton className="h-4 w-12 rounded-lg" />
         </div>
       ))}
     </div>
@@ -301,19 +174,23 @@ export const MessagesSkeleton = () => (
 
 export const ProfileSkeleton = () => (
   <div className="flex flex-col h-screen bg-background">
-    <div className="bg-[#0f172a] px-6 py-8">
-      <div className="flex flex-col items-center">
-        <div className="w-24 h-24 rounded-xl mb-4 bg-white/10 shimmer" />
-        <div className="h-6 w-36 mb-2 rounded-lg bg-white/10 shimmer" />
-        <div className="h-4 w-44 rounded-lg bg-white/10 shimmer" />
+    <div className="border-b border-border px-4 py-5">
+      <Skel className="h-6 w-16 mb-4" />
+      <div className="bg-secondary/50 rounded-xl p-4">
+        <div className="flex items-center gap-4">
+          <Skel className="w-14 h-14 rounded-xl" />
+          <div className="flex-1">
+            <Skel className="h-5 w-32 mb-1.5" />
+            <Skel className="h-4 w-24" />
+          </div>
+        </div>
       </div>
     </div>
-    <div className="flex-1 px-6 py-5 space-y-4">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="h-14 rounded-2xl bg-card border border-border p-4 flex items-center gap-3">
-          <GoldenSkeleton className="w-6 h-6 rounded-lg" />
-          <GoldenSkeleton className="h-4 flex-1 rounded-lg" />
-          <GoldenSkeleton className="w-5 h-5 rounded-lg" />
+    <div className="flex-1 px-4 py-4 space-y-2">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="h-12 rounded-xl p-3 flex items-center gap-3">
+          <Skel className="w-5 h-5" />
+          <Skel className="h-4 flex-1" />
         </div>
       ))}
     </div>

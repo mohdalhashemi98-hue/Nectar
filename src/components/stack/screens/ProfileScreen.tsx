@@ -6,7 +6,6 @@ import { initialTransactions, initialJobs } from '@/data/stack-data';
 import { Transaction } from '@/types/stack';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../BottomNav';
-import StackPattern from '../StackPattern';
 
 interface ProfileScreenProps {
   userProfile: UserProfile;
@@ -17,14 +16,7 @@ interface ProfileScreenProps {
   onSelectJob?: (job: Job) => void;
 }
 
-const ProfileScreen = ({
-  userProfile,
-  rewards,
-  userType,
-  onNavigate,
-  onLogout,
-  onSelectJob
-}: ProfileScreenProps) => {
+const ProfileScreen = ({ userProfile, rewards, userType, onNavigate, onLogout, onSelectJob }: ProfileScreenProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'activity'>('overview');
   const [transactions] = useState<Transaction[]>(initialTransactions);
   const [jobs] = useState<Job[]>(initialJobs);
@@ -38,22 +30,14 @@ const ProfileScreen = ({
     { icon: HelpCircle, label: 'Help & Support', screen: 'help' as ScreenType }
   ];
 
-  const totalSpent = transactions
-    .filter(t => t.status === 'completed')
-    .reduce((sum, t) => sum + t.amount + t.serviceFee, 0);
-
-  const totalPointsEarned = transactions
-    .reduce((sum, t) => sum + t.pointsEarned, 0);
-
-  const handleDownloadReceipt = (transaction: Transaction) => {
-    console.log('Downloading receipt for:', transaction.receiptId);
-  };
+  const totalSpent = transactions.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.amount + t.serviceFee, 0);
+  const totalPointsEarned = transactions.reduce((sum, t) => sum + t.pointsEarned, 0);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle2 className="w-5 h-5 text-green-600" />;
-      case 'refunded': return <XCircle className="w-5 h-5 text-red-600" />;
-      case 'processing': return <Clock className="w-5 h-5 text-primary" />;
+      case 'completed': return <CheckCircle2 className="w-4 h-4 text-success" />;
+      case 'refunded': return <XCircle className="w-4 h-4 text-destructive" />;
+      case 'processing': return <Clock className="w-4 h-4 text-primary" />;
       default: return null;
     }
   };
@@ -66,344 +50,211 @@ const ProfileScreen = ({
 
   return (
     <div className="w-full bg-background pb-32">
-      {/* Header - Navy gradient */}
-      <div className="bg-[#0f172a] text-white px-4 py-6 pb-20 relative overflow-hidden">
-        <StackPattern opacity="0.04" color="ffffff" className="absolute inset-0" />
-        <div className="absolute top-0 right-0 w-40 h-40 bg-amber/10 rounded-full blur-3xl" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-6"
-          >
-            <h1 className="font-display text-2xl font-bold">Profile</h1>
-            <button 
-              onClick={() => onNavigate('settings')}
-              className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-all"
-            >
-              <Settings className="w-5 h-5" />
-            </button>
-          </motion.div>
+      {/* Header */}
+      <div className="bg-background border-b border-border px-4 py-5">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="font-display text-xl font-bold text-foreground">Profile</h1>
+          <button onClick={() => onNavigate('settings')} className="p-2.5 rounded-xl hover:bg-secondary transition-colors">
+            <Settings className="w-5 h-5 text-muted-foreground" />
+          </button>
+        </div>
 
-          {/* Profile Card */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-amber/20 rounded-xl flex items-center justify-center text-2xl font-bold text-amber ring-2 ring-amber/30">
-                {userProfile.avatar}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold">{userProfile.name}</h3>
-                <p className="text-slate-400 text-sm">{userProfile.phone}</p>
-              </div>
-              <div className="flex items-center gap-1.5 bg-amber/20 px-3 py-1.5 rounded-full">
-                <Sparkles className="w-4 h-4 text-amber" />
-                <span className="font-semibold text-sm text-amber">{rewards?.points?.toLocaleString() ?? '0'}</span>
-              </div>
+        {/* Profile Card */}
+        <div className="bg-secondary/50 rounded-xl p-4">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-xl font-bold text-primary">
+              {userProfile.avatar}
             </div>
-          </motion.div>
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-foreground">{userProfile.name}</h3>
+              <p className="text-sm text-muted-foreground">{userProfile.phone}</p>
+            </div>
+            <div className="points-badge">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{rewards?.points?.toLocaleString() ?? '0'}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="px-4 -mt-8 relative z-10">
-        <div className="flex gap-2 bg-card rounded-2xl p-1 shadow-sm border border-border">
+      <div className="px-4 pt-4">
+        <div className="flex border-b border-border">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-              activeTab === 'overview'
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'text-muted-foreground'
+            className={`flex-1 pb-3 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground'
             }`}
           >
-            <User className="w-4 h-4" />
             Overview
           </button>
           <button
             onClick={() => setActiveTab('activity')}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-              activeTab === 'activity'
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'text-muted-foreground'
+            className={`flex-1 pb-3 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'activity' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground'
             }`}
           >
-            <Briefcase className="w-4 h-4" />
             Activity
           </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4 relative z-10 space-y-3">
+      <div className="p-4 space-y-2">
         {activeTab === 'overview' && (
           <>
-            {/* Rewards Quick Access */}
             {userType === 'consumer' && (
-              <motion.button 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                whileHover={{ y: -2 }}
-                onClick={() => onNavigate('rewards')} 
-                className="w-full card-interactive p-4 flex items-center justify-between"
-              >
+              <button onClick={() => onNavigate('rewards')} className="w-full card-interactive p-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-primary-foreground" />
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Trophy className="w-5 h-5 text-primary" />
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-foreground">{rewards.tier} Member</div>
-                    <div className="text-sm text-muted-foreground">{rewards.cashbackRate}% cashback</div>
+                    <div className="font-medium text-foreground text-sm">{rewards.tier} Member</div>
+                    <div className="text-xs text-muted-foreground">{rewards.cashbackRate}% cashback</div>
                   </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
             )}
 
-
-            {/* Menu Items */}
             {menuItems.map((item, i) => (
-              <motion.button
+              <button
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.03 }}
-                whileHover={{ y: -2 }}
                 onClick={() => item.screen && onNavigate(item.screen)}
-                className="w-full card-interactive p-4 flex items-center justify-between"
+                className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-colors"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                  <span className="font-semibold text-foreground">{item.label}</span>
+                <div className="flex items-center gap-3">
+                  <item.icon className="w-5 h-5 text-muted-foreground" />
+                  <span className="font-medium text-foreground text-sm">{item.label}</span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
             ))}
 
-            {/* Logout */}
-            <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              whileHover={{ y: -2 }}
-              onClick={onLogout}
-              className="w-full bg-card rounded-2xl border border-destructive/20 p-4 flex items-center gap-4 hover:bg-destructive/5 transition-all"
-              style={{ boxShadow: 'var(--shadow-sm)' }}
-            >
-              <div className="w-10 h-10 bg-destructive/10 rounded-xl flex items-center justify-center">
-                <LogOut className="w-5 h-5 text-destructive" />
-              </div>
-              <span className="font-semibold text-destructive">Log Out</span>
-            </motion.button>
+            <div className="pt-2">
+              <button onClick={onLogout} className="w-full flex items-center gap-3 p-3 rounded-xl text-destructive hover:bg-destructive/5 transition-colors">
+                <LogOut className="w-5 h-5" />
+                <span className="font-medium text-sm">Log Out</span>
+              </button>
+            </div>
           </>
         )}
 
         {activeTab === 'activity' && (
           <>
-            {/* Active Jobs Section */}
             {userType === 'consumer' && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-4"
-              >
-                <h3 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-primary" />
-                  Active Jobs
+              <div className="mb-4">
+                <h3 className="font-display text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-primary" /> Active Jobs
                 </h3>
-                <div className="space-y-3">
-                  {jobs.filter(j => j.status === 'Pending' || j.status === 'In Progress' || j.status === 'Awaiting Completion').map((job, index) => (
-                    <motion.button
+                <div className="space-y-2">
+                  {jobs.filter(j => j.status === 'Pending' || j.status === 'In Progress' || j.status === 'Awaiting Completion').map((job) => (
+                    <button
                       key={job.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ y: -2 }}
                       onClick={() => {
                         if (onSelectJob) onSelectJob(job);
-                        if (job.status === 'Pending' && job.offersCount && job.offersCount > 0) {
-                          onNavigate('quote-management');
-                        } else {
-                          onNavigate('job-detail');
-                        }
+                        if (job.status === 'Pending' && job.offersCount && job.offersCount > 0) onNavigate('quote-management');
+                        else onNavigate('job-detail');
                       }}
-                      className="w-full bg-card rounded-2xl p-4 border border-border text-left hover:border-primary/30 transition-all"
-                      style={{ boxShadow: 'var(--shadow-sm)' }}
+                      className="w-full bg-card rounded-xl p-3 border border-border text-left"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{job.title}</h4>
-                        <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-medium text-foreground text-sm">{job.title}</h4>
+                        <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                           job.status === 'Pending' ? 'bg-warning/10 text-warning' :
-                          job.status === 'In Progress' ? 'bg-primary/10 text-primary' :
-                          'bg-muted text-muted-foreground'
-                        }`}>
-                          {job.status}
-                        </span>
+                          job.status === 'In Progress' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+                        }`}>{job.status}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">
-                          {job.status === 'Pending' && job.offersCount 
-                            ? `${job.offersCount} quotes received`
-                            : job.vendor || 'Awaiting quotes'
-                          }
+                        <span className="text-xs text-muted-foreground">
+                          {job.status === 'Pending' && job.offersCount ? `${job.offersCount} quotes` : job.vendor || 'Awaiting quotes'}
                         </span>
-                        <div className="flex items-center gap-2">
-                          {job.status === 'Pending' && job.offersCount && job.offersCount > 0 && (
-                            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-                              Compare Quotes
-                            </span>
-                          )}
-                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
                       </div>
-                    </motion.button>
+                    </button>
                   ))}
                   {jobs.filter(j => j.status === 'Pending' || j.status === 'In Progress' || j.status === 'Awaiting Completion').length === 0 && (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Briefcase className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                    <div className="text-center py-6 text-muted-foreground">
+                      <Briefcase className="w-10 h-10 mx-auto mb-2 opacity-30" />
                       <p className="text-sm">No active jobs</p>
                     </div>
                   )}
                 </div>
-              </motion.div>
+              </div>
             )}
 
-            {/* Payment History Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <h3 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-primary" />
-                Payment History
+            <div>
+              <h3 className="font-display text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-primary" /> Payment History
               </h3>
 
-              {/* Stats Summary */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="w-4 h-4 text-primary" />
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="bg-card rounded-xl p-3 border border-border">
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="w-3.5 h-3.5 text-primary" />
                     <span className="text-xs text-muted-foreground">Total Spent</span>
                   </div>
-                  <p className="text-2xl font-bold text-foreground">{totalSpent}</p>
+                  <p className="text-xl font-bold text-foreground">{totalSpent}</p>
                   <p className="text-xs text-muted-foreground">AED</p>
                 </div>
-
-                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-primary" />
-                    <span className="text-xs text-muted-foreground">Points Earned</span>
+                <div className="bg-card rounded-xl p-3 border border-border">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Sparkles className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-xs text-muted-foreground">Points</span>
                   </div>
-                  <p className="text-2xl font-bold text-primary">{totalPointsEarned}</p>
+                  <p className="text-xl font-bold text-primary">{totalPointsEarned}</p>
                   <p className="text-xs text-muted-foreground">Stack Points</p>
                 </div>
               </div>
 
-              {/* Transactions List */}
-              {transactions.map((transaction, index) => (
-                <motion.div
-                  key={transaction.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + index * 0.05 }}
-                  className="bg-card rounded-2xl p-4 shadow-sm border border-border mb-3"
-                >
-                  {/* Transaction Header */}
-                  <div className="flex items-start justify-between mb-3">
+              {transactions.map((transaction) => (
+                <div key={transaction.id} className="bg-card rounded-xl p-3 border border-border mb-2">
+                  <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">{transaction.jobTitle}</h3>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <h3 className="font-medium text-foreground text-sm">{transaction.jobTitle}</h3>
                         {getStatusIcon(transaction.status)}
                       </div>
-                      <p className="text-sm text-muted-foreground">{transaction.vendor}</p>
+                      <p className="text-xs text-muted-foreground">{transaction.vendor}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-lg text-foreground">
+                      <p className="font-bold text-foreground">
                         {transaction.status === 'refunded' ? '-' : ''}{transaction.amount + transaction.serviceFee}
                       </p>
                       <p className="text-xs text-muted-foreground">AED</p>
                     </div>
                   </div>
-
-                  {/* Transaction Details */}
-                  <div className="grid grid-cols-2 gap-3 mb-3 p-3 bg-muted/50 rounded-xl">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-muted-foreground" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Date</p>
-                        <p className="text-sm font-medium text-foreground">
-                          {new Date(transaction.date).toLocaleDateString('en-GB', { 
-                            day: 'numeric', 
-                            month: 'short', 
-                            year: 'numeric' 
-                          })}
-                        </p>
-                      </div>
+                  <div className="grid grid-cols-2 gap-2 mb-2 p-2 bg-secondary/30 rounded-lg text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">
+                        {new Date(transaction.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       {getPaymentIcon(transaction.paymentMethod)}
-                      <div>
-                        <p className="text-xs text-muted-foreground">Payment</p>
-                        <p className="text-sm font-medium text-foreground">{transaction.paymentMethod}</p>
-                      </div>
+                      <span className="text-muted-foreground">{transaction.paymentMethod}</span>
                     </div>
                   </div>
-
-                  {/* Price Breakdown */}
-                  <div className="space-y-1 mb-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Service Amount</span>
-                      <span className="text-foreground">{transaction.amount} AED</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Service Fee</span>
-                      <span className="text-foreground">{transaction.serviceFee} AED</span>
-                    </div>
-                    {transaction.pointsEarned > 0 && (
-                      <div className="flex justify-between text-primary">
-                        <span>Points Earned</span>
-                        <span className="font-medium">+{transaction.pointsEarned}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Actions */}
                   <div className="flex gap-2">
-                    <Button
-                      onClick={() => handleDownloadReceipt(transaction)}
-                      variant="outline"
-                      className="flex-1 h-10"
-                      disabled={transaction.status === 'refunded'}
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Receipt
+                    <Button onClick={() => console.log('Receipt:', transaction.receiptId)} variant="outline" className="flex-1 h-8 text-xs" disabled={transaction.status === 'refunded'}>
+                      <Download className="w-3 h-3 mr-1" /> Receipt
                     </Button>
-                    <div className="px-3 py-2 bg-muted rounded-xl text-xs text-muted-foreground">
+                    <div className="px-2 py-1 bg-secondary rounded-lg text-[10px] text-muted-foreground flex items-center">
                       #{transaction.receiptId}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </>
         )}
       </div>
 
-      <BottomNav 
-        active="profile"
-        onNavigate={onNavigate}
-        userType={userType}
+      <BottomNav active="profile" onNavigate={onNavigate} userType={userType}
         pendingQuotes={userType === 'consumer' ? jobs.filter(j => j.status === 'Pending' && j.offersCount && j.offersCount > 0).length : 0}
-        unreadMessages={2}
-      />
+        unreadMessages={2} />
     </div>
   );
 };
