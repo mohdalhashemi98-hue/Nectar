@@ -66,10 +66,10 @@ const ProfileScreen = ({
 
   return (
     <div className="w-full bg-background pb-32">
-      {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
+      {/* Header - Navy gradient */}
+      <div className="bg-[#0f172a] text-white px-4 py-6 pb-20 relative overflow-hidden">
+        <StackPattern opacity="0.04" color="ffffff" className="absolute inset-0" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-amber/10 rounded-full blur-3xl" />
         
         <div className="relative z-10">
           <motion.div 
@@ -80,7 +80,7 @@ const ProfileScreen = ({
             <h1 className="font-display text-2xl font-bold">Profile</h1>
             <button 
               onClick={() => onNavigate('settings')}
-              className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-all"
+              className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/15 transition-all"
             >
               <Settings className="w-5 h-5" />
             </button>
@@ -91,19 +91,19 @@ const ProfileScreen = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-primary-foreground/20 backdrop-blur-sm rounded-3xl p-4 border border-primary-foreground/10"
+            className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10"
           >
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-primary-foreground/30 rounded-3xl flex items-center justify-center text-2xl font-bold">
+              <div className="w-16 h-16 bg-amber/20 rounded-xl flex items-center justify-center text-2xl font-bold text-amber ring-2 ring-amber/30">
                 {userProfile.avatar}
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold">{userProfile.name}</h3>
-                <p className="opacity-70 text-sm">{userProfile.phone}</p>
+                <p className="text-slate-400 text-sm">{userProfile.phone}</p>
               </div>
-              <div className="flex items-center gap-1.5 bg-primary-foreground/20 px-3 py-1.5 rounded-full">
-                <Sparkles className="w-4 h-4" />
-                <span className="font-semibold text-sm">{rewards.points.toLocaleString()}</span>
+              <div className="flex items-center gap-1.5 bg-amber/20 px-3 py-1.5 rounded-full">
+                <Sparkles className="w-4 h-4 text-amber" />
+                <span className="font-semibold text-sm text-amber">{rewards?.points?.toLocaleString() ?? '0'}</span>
               </div>
             </div>
           </motion.div>

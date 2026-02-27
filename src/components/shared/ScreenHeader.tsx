@@ -31,15 +31,14 @@ const ScreenHeader = ({
     <div
       className={`px-4 py-6 relative overflow-hidden ${
         gradient
-          ? 'bg-gradient-golden text-primary-foreground'
+          ? 'bg-[#0f172a] text-white'
           : 'bg-card text-foreground border-b border-border'
       }`}
     >
       {gradient && (
         <>
-          <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/10 rounded-full blur-xl" />
+          <StackPattern opacity="0.04" color="ffffff" className="absolute inset-0" />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-amber/10 rounded-full blur-3xl" />
         </>
       )}
 
@@ -52,9 +51,9 @@ const ScreenHeader = ({
           {onBack && (
             <button
               onClick={onBack}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
                 gradient
-                  ? 'bg-primary-foreground/20 hover:bg-primary-foreground/30'
+                  ? 'bg-white/10 hover:bg-white/15'
                   : 'bg-secondary hover:bg-secondary/80'
               }`}
             >
@@ -65,7 +64,7 @@ const ScreenHeader = ({
           <div className="flex-1 min-w-0">
             <h1 className="font-display text-2xl font-bold truncate">{title}</h1>
             {subtitle && (
-              <p className={`text-sm mt-0.5 ${gradient ? 'opacity-70' : 'text-muted-foreground'}`}>
+              <p className={`text-sm mt-0.5 ${gradient ? 'text-slate-400' : 'text-muted-foreground'}`}>
                 {subtitle}
               </p>
             )}
@@ -73,8 +72,8 @@ const ScreenHeader = ({
 
           {Icon && (
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                gradient ? 'bg-primary-foreground/20 backdrop-blur-sm' : 'bg-secondary'
+              className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                gradient ? 'bg-amber/20' : 'bg-secondary'
               }`}
             >
               <Icon className="w-6 h-6" />

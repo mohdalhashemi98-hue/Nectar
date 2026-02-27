@@ -17,12 +17,28 @@ interface RewardsScreenProps {
 }
 
 const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenProps) => {
+  const safeRewards = {
+    ...rewards,
+    points: rewards?.points ?? 0,
+    tier: rewards?.tier ?? 'Bronze',
+    tierProgress: rewards?.tierProgress ?? 0,
+    pointsToNextTier: rewards?.pointsToNextTier ?? 1000,
+    nextTier: rewards?.nextTier ?? 'Silver',
+    cashbackRate: rewards?.cashbackRate ?? 2,
+    streak: rewards?.streak ?? 0,
+    totalSaved: rewards?.totalSaved ?? 0,
+    lifetimePoints: rewards?.lifetimePoints ?? 0,
+    weeklyChallenge: rewards?.weeklyChallenge ?? { title: 'Complete 3 Platform Payments', progress: 0, target: 3, reward: 150, endsIn: '3 days' },
+    achievements: rewards?.achievements ?? [],
+    recentEarnings: rewards?.recentEarnings ?? [],
+  };
+
   return (
     <div className="w-full bg-background pb-24">
-      {/* Header */}
-      <div className="bg-gradient-golden text-primary-foreground px-4 py-6 pb-20 relative overflow-hidden">
-        <StackPattern opacity="0.08" color="ffffff" className="absolute inset-0" />
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-foreground/10 rounded-full blur-2xl" />
+      {/* Header - Navy gradient */}
+      <div className="bg-[#0f172a] text-white px-4 py-6 pb-20 relative overflow-hidden">
+        <StackPattern opacity="0.04" color="ffffff" className="absolute inset-0" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-amber/10 rounded-full blur-3xl" />
         
         <div className="relative z-10">
           <motion.div 
@@ -32,10 +48,10 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
           >
             <div className="flex-1">
               <h1 className="font-display text-2xl font-bold">My Rewards</h1>
-              <p className="opacity-70 text-sm">{rewards.cashbackRate}% cashback rate</p>
+              <p className="text-slate-400 text-sm">{safeRewards.cashbackRate}% cashback rate</p>
             </div>
-            <div className="w-12 h-12 rounded-3xl bg-primary-foreground/20 flex items-center justify-center">
-              <Gift className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-xl bg-amber/20 flex items-center justify-center">
+              <Gift className="w-6 h-6 text-amber" />
             </div>
           </motion.div>
 
@@ -44,37 +60,38 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-primary-foreground/20 backdrop-blur-sm rounded-3xl p-4 border border-primary-foreground/10"
+            className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{tierConfig[rewards.tier].icon}</span>
+                <span className="text-3xl">{tierConfig[safeRewards.tier]?.icon ?? '🥉'}</span>
                 <div>
-                  <div className="text-xl font-bold">{rewards.tier}</div>
-                  <div className="opacity-70 text-sm">Member</div>
+                  <div className="text-xl font-bold">{safeRewards.tier}</div>
+                  <div className="text-slate-400 text-sm">Member</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold">{rewards.points.toLocaleString()}</div>
-                <div className="opacity-70 text-sm">points</div>
+                <div className="text-2xl font-bold text-amber">{safeRewards.points.toLocaleString()}</div>
+                <div className="text-slate-400 text-sm">points</div>
               </div>
             </div>
 
             <div className="mb-2">
-              <div className="flex justify-between text-xs mb-1.5 opacity-70">
-                <span>{rewards.tier}</span>
-                <span>{rewards.nextTier}</span>
+              <div className="flex justify-between text-xs mb-1.5 text-slate-400">
+                <span>{safeRewards.tier}</span>
+                <span>{safeRewards.nextTier}</span>
               </div>
-              <div className="h-2 bg-primary-foreground/30 rounded-full overflow-hidden">
+              <div className="h-2 bg-white/20 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
-                  animate={{ width: `${rewards.tierProgress}%` }}
+                  animate={{ width: `${safeRewards.tierProgress}%` }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="h-full bg-primary-foreground rounded-full" 
+                  className="h-full rounded-full" 
+                  style={{ background: 'linear-gradient(90deg, hsl(38 92% 50%), hsl(32 95% 55%))' }}
                 />
               </div>
             </div>
-            <div className="text-xs opacity-70">{rewards.pointsToNextTier} pts to {rewards.nextTier}</div>
+            <div className="text-xs text-slate-400">{safeRewards.pointsToNextTier} pts to {safeRewards.nextTier}</div>
           </motion.div>
         </div>
       </div>
@@ -88,9 +105,9 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
           className="grid grid-cols-3 gap-2"
         >
           {[
-            { icon: Flame, value: `${rewards.streak} Day`, label: 'Streak' },
-            { icon: Coins, value: rewards.totalSaved, label: 'AED Saved' },
-            { icon: Sparkles, value: rewards.lifetimePoints.toLocaleString(), label: 'Lifetime' }
+            { icon: Flame, value: `${safeRewards.streak} Day`, label: 'Streak' },
+            { icon: Coins, value: safeRewards.totalSaved, label: 'AED Saved' },
+            { icon: Sparkles, value: safeRewards.lifetimePoints.toLocaleString(), label: 'Lifetime' }
           ].map((stat, idx) => (
             <div key={idx} className="bg-card rounded-2xl p-3 border border-border" style={{ boxShadow: 'var(--shadow-md)' }}>
               <div className="flex flex-col items-center text-center">
@@ -119,21 +136,21 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
               <Target className="w-5 h-5 text-primary-foreground" />
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-foreground">{rewards.weeklyChallenge.title}</div>
-              <div className="text-xs text-muted-foreground">Ends in {rewards.weeklyChallenge.endsIn}</div>
+              <div className="font-semibold text-foreground">{safeRewards.weeklyChallenge.title}</div>
+              <div className="text-xs text-muted-foreground">Ends in {safeRewards.weeklyChallenge.endsIn}</div>
             </div>
-            <div className="text-primary font-bold">+{rewards.weeklyChallenge.reward}</div>
+            <div className="text-amber font-bold">+{safeRewards.weeklyChallenge.reward}</div>
           </div>
           <div className="h-2 bg-secondary rounded-full overflow-hidden">
             <motion.div 
               initial={{ width: 0 }}
-              animate={{ width: `${(rewards.weeklyChallenge.progress / rewards.weeklyChallenge.target) * 100}%` }}
+              animate={{ width: `${safeRewards.weeklyChallenge.target > 0 ? (safeRewards.weeklyChallenge.progress / safeRewards.weeklyChallenge.target) * 100 : 0}%` }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="h-full bg-primary rounded-full" 
+              className="h-full bg-amber rounded-full" 
             />
           </div>
           <div className="text-xs text-muted-foreground mt-2">
-            {rewards.weeklyChallenge.progress}/{rewards.weeklyChallenge.target} completed
+            {safeRewards.weeklyChallenge.progress}/{safeRewards.weeklyChallenge.target} completed
           </div>
         </motion.div>
 
@@ -149,7 +166,7 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             Achievements
           </h3>
           <div className="grid grid-cols-3 gap-3">
-            {rewards.achievements.map((a) => {
+            {safeRewards.achievements.map((a) => {
               const IconComponent = achievementIcons[a.icon] || Trophy;
               const progressPercent = a.progress && a.target ? Math.min((a.progress / a.target) * 100, 100) : 0;
               return (
@@ -211,7 +228,7 @@ const RewardsScreen = ({ rewards, userType, onBack, onNavigate }: RewardsScreenP
             Recent Earnings
           </h3>
           <div className="space-y-3">
-            {rewards.recentEarnings.map((e, idx) => (
+            {safeRewards.recentEarnings.map((e, idx) => (
               <div key={idx} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                 <div>
                   <div className="font-medium text-foreground text-sm">{e.description}</div>
